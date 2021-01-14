@@ -1,6 +1,6 @@
 <template>
 
-<div>积分总览工具</div>
+<div>客户年龄分布</div>
 
 </template>
 

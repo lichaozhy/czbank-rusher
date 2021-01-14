@@ -20,7 +20,9 @@ customer:
   overview:
     label: 客户总览
   register:
-    lable: 手工登记新客户
+    label: 手工登记新客户
+  detail:
+    label: 客户详情
 
 database:
   label: 数据维护
@@ -37,12 +39,14 @@ manager:
   
 point:
   label: 积分
-  justify:
-    label: 积分调整工具
+  adjustment:
+    label: 人工调整
     description:
   overview:
     label: 客户积分总览
     description:
+  history:
+    label: 操作历史
   
 present:
   label: 礼品

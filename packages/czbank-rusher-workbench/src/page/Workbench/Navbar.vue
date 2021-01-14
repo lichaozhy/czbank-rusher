@@ -8,27 +8,44 @@
 		:to="{ name: 'home' }"
 	>CZB<b
 		class="ml-1"
-	>Pusher</b></b-navbar-brand>
+	>Rusher</b></b-navbar-brand>
 
 	<b-navbar-nav>
 		<b-nav-item
 			:to="{ name: 'workbench.analysis' }"
-		>{{ $t('menu.analysis.label') }}</b-nav-item>
+		><b-icon-graph-up
+			class="mr-1"
+		/>{{ $t('menu.analysis.label') }}</b-nav-item>
+
 		<b-nav-item
-			:to="{ name: 'home' }"
-		>{{ $t('menu.customer.label') }}</b-nav-item>
+			:to="{ name: 'workbench.customer' }"
+		><b-icon-people-fill
+			class="mr-1"
+		/>{{ $t('menu.customer.label') }}</b-nav-item>
+
 		<b-nav-item
 			:to="{ name: 'workbench.present' }"
-		>{{ $t('menu.present.label') }}</b-nav-item>
+		><b-icon-gift-fill
+			class="mr-1"
+		/>{{ $t('menu.present.label') }}</b-nav-item>
+
 		<b-nav-item
-			:to="{ name: 'home' }"
-		>{{ $t('menu.point.label') }}</b-nav-item>
+			:to="{ name: 'workbench.point' }"
+		><b-icon-star-fill
+			class="mr-1"
+		/>{{ $t('menu.point.label') }}</b-nav-item>
+
 		<b-nav-item
-			:to="{ name: 'home' }"
-		>{{ $t('menu.manager.label') }}</b-nav-item>
+			:to="{ name: 'workbench.manager' }"
+		><b-icon-person-badge
+			class="mr-1"
+		/>{{ $t('menu.manager.label') }}</b-nav-item>
+
 		<b-nav-item
 			:to="{ name: 'workbench.database' }"
-		>{{ $t('menu.database.label') }}</b-nav-item>
+		><b-icon-server
+			class="mr-1"
+		/>{{ $t('menu.database.label') }}</b-nav-item>
 	</b-navbar-nav>
 </b-navbar>
 

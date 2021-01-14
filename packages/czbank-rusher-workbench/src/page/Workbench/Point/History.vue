@@ -1,6 +1,6 @@
 <template>
 
-<div>积分总览工具</div>
+<div>积分操作历史</div>
 
 </template>
 

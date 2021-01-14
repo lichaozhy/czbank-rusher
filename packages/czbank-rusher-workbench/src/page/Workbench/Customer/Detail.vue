@@ -1,6 +1,6 @@
 <template>
 
-<div>积分总览工具</div>
+<div>客户详情</div>
 
 </template>
 
