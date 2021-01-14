@@ -1,0 +1,54 @@
+analysis:
+  label: 商业分析
+  CustomerGenderRate:
+    label: 客户性别分布
+  CustomerAgeDistribution:
+    label: 客户年龄分布
+  CustomerAsset:
+    label: 客户资产分析
+  CustomerAssetDistribution:
+    label: 客户资产分布
+  CustomerRelation:
+    label: 客户关系挖掘
+  ManagerCustomerContributionValueDistribution:
+    label: 客户经理客户贡献值分布
+  ManagerContributionValueDistribution:
+    label: 客户经理贡献值分布
+
+customer:
+  label: 客户
+  overview:
+    label: 客户总览
+  register:
+    lable: 手工登记新客户
+
+database:
+  label: 数据维护
+  importer:
+    label: 导入账户数据
+    description: 导入从KPI系统导出的“客户经理账户时点统计表”
+
+manager:
+  label: 客户经理
+  overview:
+    label: 客户经理总览
+  register:
+    label: 登记新客户经理
+  
+point:
+  label: 积分
+  justify:
+    label: 积分调整工具
+    description:
+  overview:
+    label: 客户积分总览
+    description:
+  
+present:
+  label: 礼品
+  overview:
+    label: 礼品总览
+    description:
+  register:
+    label: 登记新礼品
+    description:
