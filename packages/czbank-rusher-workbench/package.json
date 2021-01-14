@@ -1,20 +1,65 @@
 {
   "name": "@czbank/czbank-rusher-workbench",
   "version": "1.0.0",
+  "private": true,
   "description": "> TODO: description",
-  "author": "ChaosLee <chaos2lee@qq.com>",
+  "author": {
+    "name": "ChaosLee",
+    "email": "chaos2lee@qq.com"
+  },
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "core-js": "^3.8.2",
+    "vue": "^2.6.12"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.10",
+    "@vue/cli-plugin-eslint": "~4.5.10",
+    "@vue/cli-service": "~4.5.10",
+    "axios": "^0.21.1",
+    "babel-eslint": "^10.1.0",
+    "bootstrap-vue": "^2.21.2",
+    "bootswatch": "^4.5.3",
+    "echarts": "^4.9.0",
+    "eslint": "^7.17.0",
+    "eslint-plugin-vue": "^7.4.1",
+    "node-sass": "^5.0.0",
+    "sass-loader": "^10.1.1",
+    "vue-template-compiler": "^2.6.12"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "_id": "@czbank/czbank-rusher-workbench@1.0.0",
+  "bugs": {
+    "url": "https://github.com/lichaozhy/czbank-rusher/issues"
+  },
   "homepage": "https://github.com/lichaozhy/czbank-rusher/tree/master/packages/czbank-rusher-workbench#readme",
   "license": "MIT",
-  "main": "index.js",
-  "private": true,
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lichaozhy/czbank-rusher.git"
-  },
-  "scripts": {
-    
-  },
-  "bugs": {
-    "url": "https://github.com/lichaozhy/czbank-rusher/issues"
   }
 }
