@@ -1,0 +1,20 @@
+{
+  "name": "@czbank/czbank-rusher-workbench",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "ChaosLee <chaos2lee@qq.com>",
+  "homepage": "https://github.com/lichaozhy/czbank-rusher/tree/master/packages/czbank-rusher-workbench#readme",
+  "license": "MIT",
+  "main": "index.js",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lichaozhy/czbank-rusher.git"
+  },
+  "scripts": {
+    
+  },
+  "bugs": {
+    "url": "https://github.com/lichaozhy/czbank-rusher/issues"
+  }
+}

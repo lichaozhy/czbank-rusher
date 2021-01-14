@@ -1,0 +1,28 @@
+{
+  "name": "@czbank/czbank-rusher",
+  "version": "0.1.0",
+  "description": "CZBank BI",
+  "main": "index.js",
+  "scripts": {
+    "dev:server": "node ./script/debug",
+    "deps:install": "npm install && lerna bootstrap",
+    "deps:clean": "lerna clean -y",
+    "build:workbench": "lerna run --scope=@plumber-hub/workbench build",
+    "build:pkg": "node ./script/build.js",
+    "build": "npm run deps:install && npm run build:workbench && npm run build:pkg"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lichaozhy/czbank-rusher.git"
+  },
+  "author": "ChaosLee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lichaozhy/czbank-rusher/issues"
+  },
+  "homepage": "https://github.com/lichaozhy/czbank-rusher#readme",
+  "devDependencies": {
+    "lerna": "^3.22.1",
+    "pkg": "^4.4.9"
+  }
+}
