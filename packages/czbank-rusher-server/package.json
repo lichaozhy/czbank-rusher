@@ -11,10 +11,23 @@
     "type": "git",
     "url": "git+https://github.com/lichaozhy/czbank-rusher.git"
   },
-  "scripts": {
-    
-  },
+  "scripts": {},
   "bugs": {
     "url": "https://github.com/lichaozhy/czbank-rusher/issues"
+  },
+  "dependencies": {
+    "@koa/router": "^10.0.0",
+    "@produck/duck": "^0.6.2",
+    "@produck/duck-log": "^0.3.2",
+    "@produck/duck-web": "^0.2.4",
+    "@produck/duck-web-koa": "^0.3.4",
+    "@produck/duck-web-koa-router": "^0.2.4",
+    "commander": "^6.2.1",
+    "koa": "^2.13.0",
+    "koa-bodyparser": "^4.3.0",
+    "koa-compress": "^5.0.1",
+    "koa-send": "^5.0.1",
+    "sequelize": "^6.3.5",
+    "sqlite3": "^5.0.1"
   }
 }
