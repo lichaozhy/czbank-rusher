@@ -10,10 +10,9 @@ module.exports = function AccountData(sequelize, namespace) {
 			primaryKey: true
 		},
 		name: DataTypes.CHAR(32),
-		RMBPrice: DataTypes.FLOAT,
-		pointPrice: DataTypes.FLOAT,
+		code: DataTypes.CHAR(64),
 		description: DataTypes.STRING,
 	}, {
-		tableName: `${namespace}present`
+		tableName: `${namespace}product`
 	});
 }
