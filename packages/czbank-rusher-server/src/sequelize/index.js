@@ -4,13 +4,17 @@ const path = require('path');
 const Model = {
 	Account: require('./model/Account'),
 	AccountData: require('./model/AccountData'),
+	AccountDataFile: require('./model/AccountDataFile'),
 	AccountDataPlan: require('./model/AccountDataPlan'),
+	AccountProductData: require('./model/AccountProductData'),
 	Customer: require('./model/Customer'),
+	CustomerPoint: require('./model/CustomerPoint'),
+	CustomerPointAdjustment: require('./model/CustomerPointAdjustment'),
 	CustomerRelation: require('./model/CustomerRelation'),
 	Manager: require('./model/Manager'),
 	Present: require('./model/Present'),
-	PointAdjustment: require('./model/PointAdjustment'),
-	Point: require('./model/Point')
+	Product: require('./model/Product'),
+	ProductAccountDataSetting: require('./model/ProductAccountDataSetting')
 };
 
 function normalize(_options) {
@@ -47,8 +51,8 @@ module.exports = function CZBankRusherSequelize(options) {
 		logging: finalOptions.onLog
 	});
 
-	Object.keys(Models).forEach(modelName => {
-		Models[modelName](sequelize, finalOptions.namespace);
+	Object.keys(Model).forEach(modelName => {
+		Model[modelName](sequelize, finalOptions.namespace);
 	});
 
 	return sequelize;

@@ -1,6 +1,7 @@
 const Duck = require('@produck/duck');
 const DuckWeb = require('@produck/duck-web');
 const DuckLog = require('@produck/duck-log');
+const DuckWorkspace = require('./lib/workspace');
 const http = require('http');
 const https = require('https');
 
@@ -15,6 +16,7 @@ module.exports = Duck({
 	namespace: 'czbr',
 	description: meta.description,
 	components: [
+		DuckWorkspace(),
 		DuckWeb([
 			{
 				id: 'rusher',
@@ -31,11 +33,13 @@ module.exports = Duck({
 			},
 		})
 	]
-}, function CZBankRusher({
-	injection, Log, Web
+}, async function CZBankRusher({
+	injection, Log, Web, Workspace, product
 }, options) {
 	const finalOption = normlize(options);
-	const sequelize = RusherSequelize();
+	const sequelize = RusherSequelize({
+		namespace: product.meta.namespace
+	});
 
 	injection.Sequelize = sequelize;
 	injection.options = finalOption;
@@ -43,13 +47,15 @@ module.exports = Duck({
 	Log();
 
 	const app = Web.Application('rusher');
-	const appWithLog =  DuckLog.Adapter.HttpServer(app, _ => Log.access(_));
+	const requestListener =  DuckLog.Adapter.HttpServer(app, _ => Log.access(_));
+
+	await Workspace.buildAll();
 
 	return {
 		Server() {
 			const server = {
-				http: http.createServer(appWithLog),
-				https: https.createServer(appWithLog)
+				http: http.createServer(requestListener),
+				https: https.createServer(requestListener)
 			}
 
 			return server;
