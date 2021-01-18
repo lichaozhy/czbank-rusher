@@ -14,7 +14,10 @@ const Model = {
 	Manager: require('./model/Manager'),
 	Present: require('./model/Present'),
 	Product: require('./model/Product'),
-	ProductAccountDataSetting: require('./model/ProductAccountDataSetting')
+	ProductAccountDataSetting: require('./model/ProductAccountDataSetting'),
+	AdjustmentReasonCustomer: require('./model/AdjustmentReason/Customer'),
+	AdjustmentReasonManual: require('./model/AdjustmentReason/Manual'),
+	AdjustmentReasonPresent: require('./model/AdjustmentReason/Present')
 };
 
 function normalize(_options) {

@@ -15,12 +15,8 @@ module.exports = function ProduckWorkspace() {
 		async buildRoot() {
 			return fs.ensureDir(workspace.root);
 		},
-		async build(name) {
-			const pathnmae = workspace.map[name];
-
-			if (pathnmae) {
-				return fs.ensureDir(workspace.map[name]);
-			}
+		async build(name, pathname = '') {
+			return fs.ensureDir(Method.resolve(name, pathname));
 		},
 		set root(pathname) {
 			workspace.root = path.resolve(pathname);
@@ -30,15 +26,24 @@ module.exports = function ProduckWorkspace() {
 		},
 		setPath(name, pathname, fromRoot = true) {
 			if (fromRoot) {
-				map[name] = path.join(workspace.root, pathname);
+				workspace.map[name] = path.join(workspace.root, pathname);
 			} else {
-				map[name] = path.resolve(pathname);
+				workspace.map[name] = path.resolve(pathname);
 			}
 		},
 		getPath(name) {
-			return map[name];
+			const pathname = workspace.map[name];
+
+			if (!pathname) {
+				throw new Error(`The path named ${name} is NOT existed.`);
+			}
+
+			return pathname;
+		},
+		resolve(name, pathname) {
+			return path.join(Method.getPath(name), pathname);
 		}
-	}
+	};
 
 	return {
 		id: 'org.produck.workspace',

@@ -4,3 +4,5 @@ const rusher = CZBRusher();
 const server = rusher.Server();
 
 console.log(server);
+
+rusher.install();

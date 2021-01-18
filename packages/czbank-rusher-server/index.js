@@ -33,12 +33,18 @@ module.exports = Duck({
 			},
 		})
 	]
-}, async function CZBankRusher({
+}, function CZBankRusher({
 	injection, Log, Web, Workspace, product
 }, options) {
 	const finalOption = normlize(options);
+
+	Workspace.root = finalOption.workspace.root;
+	Workspace.setPath('database', finalOption.workspace.database);
+	Workspace.setPath('log', finalOption.workspace.log);
+
 	const sequelize = RusherSequelize({
-		namespace: product.meta.namespace
+		namespace: product.meta.namespace,
+		storage: Workspace.resolve('database', finalOption.database.rusher)
 	});
 
 	injection.Sequelize = sequelize;
@@ -49,16 +55,16 @@ module.exports = Duck({
 	const app = Web.Application('rusher');
 	const requestListener =  DuckLog.Adapter.HttpServer(app, _ => Log.access(_));
 
-	await Workspace.buildAll();
-
 	return {
 		Server() {
-			const server = {
+			return {
 				http: http.createServer(requestListener),
 				https: https.createServer(requestListener)
-			}
-
-			return server;
+			};
+		},
+		async install(options) {
+			await Workspace.buildAll();
+			await sequelize.sync();
 		}
 	}
 });

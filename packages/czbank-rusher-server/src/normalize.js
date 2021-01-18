@@ -1,19 +1,20 @@
 const path = require('path');
 
-module.exports = function normalize(_options) {
+module.exports = function normalize(_options = {}) {
 	const options = {
+		database: {
+			rusher: 'czbrusher.sqlite',
+			file: 'file'
+		},
 		workspace: {
-			root: path.resolve(),
-			database: {
-				rusher: 'db/czbrusher.sqlite',
-				file: 'db/file'
-			},
-			log: 'log'
+			root: path.resolve('public'),
+			log: 'log',
+			database: 'db'
 		}
 	};
 
 	const {
-		database: _database = options.database
+
 	} = _options;
 
 	return options;
