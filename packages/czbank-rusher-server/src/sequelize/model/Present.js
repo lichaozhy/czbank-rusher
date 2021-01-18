@@ -3,8 +3,8 @@ const { DataTypes } = require('sequelize');
 /**
  * @param {import('sequelize').Sequelize} sequelize
  */
-module.exports = function AccountData(sequelize, namespace) {
-	sequelize.define('Product', {
+module.exports = function Present(sequelize, namespace) {
+	sequelize.define('Present', {
 		id: {
 			type: DataTypes.CHAR(32),
 			primaryKey: true

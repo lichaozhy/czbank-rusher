@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 /**
  * @param {import('sequelize').Sequelize} sequelize
  */
-module.exports = function AccountData(sequelize, namespace) {
+module.exports = function Product(sequelize, namespace) {
 	sequelize.define('Product', {
 		id: {
 			type: DataTypes.CHAR(32),

@@ -43,7 +43,7 @@ module.exports = Duck({
 	Workspace.setPath('log', finalOption.workspace.log);
 
 	const sequelize = RusherSequelize({
-		namespace: product.meta.namespace,
+		namespace: `${product.meta.namespace}_`,
 		storage: Workspace.resolve('database', finalOption.database.rusher)
 	});
 
