@@ -5,7 +5,8 @@ const Resource = {
 		return {
 			id: data.id,
 			name: data.name,
-			code: data.code
+			code: data.code,
+			customerNumber: 0
 		};
 	}
 };
@@ -54,6 +55,12 @@ module.exports = Router(function CZBankRusherManagerRouter(router, {
 		}
 
 		await manager.save();
+
+		ctx.body = Resource.Manager(manager);
+	}).delete('/:managerId', async function deleteManager(ctx) {
+		const { manager } = ctx.state;
+
+		await manager.destroy();
 
 		ctx.body = Resource.Manager(manager);
 	});

@@ -8,10 +8,8 @@
 		"xxl"
 	],
   "formControls": {
-    "size": "sm"
   },
   "BButton": {
-    "size": "sm",
     "variant": "secondary"
   },
   "BToast": {

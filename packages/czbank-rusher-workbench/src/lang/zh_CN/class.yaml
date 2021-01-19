@@ -1,0 +1,11 @@
+manager:
+  className: 客户经理
+  name: 姓名
+  code: 工号
+  customerNumber: 客户数
+
+base:
+  create: 创建
+  update: 更新
+  query: 查询
+  delete: 删除

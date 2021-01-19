@@ -1,8 +1,8 @@
-@import '~bootswatch/dist/yeti/variables.scss';
+@import '~bootswatch/dist/lumen/variables.scss';
 
-$border-radius: 0px !default;
-$border-radius-lg: 0px !default;
-$border-radius-sm: 0px !default;
+// $border-radius: 0px !default;
+// $border-radius-lg: 0px !default;
+// $border-radius-sm: 0px !default;
 
 $grid-breakpoints: (
   xs: 0,
@@ -22,7 +22,7 @@ $container-max-widths: (
 ) !default;
 
 @import '~bootstrap/scss/bootstrap.scss';
-@import '~bootswatch/dist/yeti/bootswatch.scss';
+@import '~bootswatch/dist/lumen/bootswatch.scss';
 @import '~bootstrap-vue/src/index.scss';
 
 html, body {
@@ -37,9 +37,13 @@ table.table.b-table td {
 	vertical-align: middle;
 }
 
-#czbank-rusher-workbench {
-	.nav-link .b-icon.bi {
-		font-size: 100%;
-		vertical-align: middle;
-	}
+.col-blank {
+	width: 2em;
 }
+
+// #czbank-rusher-workbench {
+// 	.nav-link .b-icon.bi {
+// 		font-size: 100%;
+// 		vertical-align: middle;
+// 	}
+// }

@@ -3,6 +3,14 @@
 <b-container
 	class="mt-3"
 >
+	<b-breadcrumb>
+    <b-breadcrumb-item
+			:to="{ name: 'home' }"
+		>{{ $t('u.home') }}</b-breadcrumb-item>
+    <b-breadcrumb-item
+			active
+		>{{ $t('c.manager.className') }}</b-breadcrumb-item>
+	</b-breadcrumb>
 	<b-row>
 		<b-col
 			xxl="2"
@@ -11,10 +19,10 @@
 			<b-list-group>
 				<b-list-group-item
 					:to="{ name: 'workbench.manager.overview' }"
-				>{{ $t('menu.manager.overview.label') }}</b-list-group-item>
+				>{{ $t('m.manager.overview.label') }}</b-list-group-item>
 				<b-list-group-item
 					:to="{ name: 'workbench.manager.register' }"
-				>{{ $t('menu.manager.register.label') }}</b-list-group-item>
+				>{{ $t('m.manager.register.label') }}</b-list-group-item>
 			</b-list-group>
 		</b-col>
 		<b-col
@@ -31,7 +39,7 @@
 <script>
 export default {
 
-}
+};
 </script>
 
 <style>

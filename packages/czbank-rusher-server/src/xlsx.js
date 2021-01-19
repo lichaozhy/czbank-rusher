@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const DATA_START_ROW = 7;
 const PAGINATION_STINRG = '账户号';
 const ROW_SAFE_LIMITATION = 100000;
-const IGNORE_NAME_REG = /资产池保证金/
+const IGNORE_NAME_REG = /资产池保证金/;
 
 function toNumber(string) {
 	return Number(string.replace(',', ''));
@@ -62,7 +62,7 @@ function normalize(_options = []) {
 		product.balanceIndex = _balanceIndex;
 		product.averageDespositIndex = _averageDespositIndex;
 
-		options.push(product)
+		options.push(product);
 	});
 
 	return options;
@@ -173,11 +173,9 @@ module.exports = function CZBankAccountDataFileReader(options = []) {
 			});
 		});
 
-		console.log(Result)
-
 		return {
 			date,
 			result: Result
 		};
-	}
-}
+	};
+};
