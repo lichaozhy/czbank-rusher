@@ -6,10 +6,10 @@ const { DataTypes } = require('sequelize');
 module.exports = function AccountProductData(sequelize, namespace) {
 	sequelize.define('AccountProductData', {
 		dataId: {
-			type: DataTypes.CHAR(32),
+			type: DataTypes.CHAR(64),
 			primaryKey: true
 		},
-		productId: DataTypes.CHAR(32),
+		productId: DataTypes.CHAR(64),
 		averageDeposit: DataTypes.DOUBLE,
 		balance: DataTypes.DOUBLE
 	}, {

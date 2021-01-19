@@ -6,11 +6,11 @@ const { DataTypes } = require('sequelize');
 module.exports = function AccountDataFile(sequelize, namespace) {
 	sequelize.define('AccountDataFile', {
 		id: {
-			type: DataTypes.CHAR(32),
+			type: DataTypes.CHAR(64),
 			primaryKey: true
 		},
-		planId: DataTypes.CHAR(32),
-		managerId: DataTypes.CHAR(32),
+		planId: DataTypes.CHAR(64),
+		managerId: DataTypes.CHAR(64),
 		description: DataTypes.STRING,
 		createdAt: DataTypes.DATE
 	}, {

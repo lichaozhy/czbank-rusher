@@ -6,11 +6,11 @@ const { DataTypes } = require('sequelize');
 module.exports = function AdjustmentReasonPresent(sequelize, namespace) {
 	sequelize.define('AdjustmentReasonPresent', {
 		id: {
-			type: DataTypes.CHAR(32),
+			type: DataTypes.CHAR(64),
 			primaryKey: true
 		},
-		adjustmentId: DataTypes.CHAR(32),
-		presentId: DataTypes.CHAR(32),
+		adjustmentId: DataTypes.CHAR(64),
+		presentId: DataTypes.CHAR(64),
 		amount: DataTypes.INTEGER,
 		description: DataTypes.STRING
 	}, {

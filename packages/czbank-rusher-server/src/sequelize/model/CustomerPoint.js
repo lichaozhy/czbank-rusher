@@ -6,7 +6,7 @@ const { DataTypes } = require('sequelize');
 module.exports = function CustomerPoint(sequelize, namespace) {
 	sequelize.define('CustomerPoint', {
 		customerId: {
-			type: DataTypes.CHAR(32),
+			type: DataTypes.CHAR(64),
 			primaryKey: true
 		},
 		pointTotal: DataTypes.INTEGER

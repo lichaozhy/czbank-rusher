@@ -24,13 +24,20 @@ module.exports = Duck({
 			}
 		]),
 		DuckLog({
-			access: {
-				format: DuckLog.Format.ApacheCLF(),
-				AppenderList: [
-					DuckLog.Appender.Console(),
-					// DuckLog.Appender.File()
-				]
+			access({ Workspace }) {
+				return {
+					format: DuckLog.Format.ApacheCLF(),
+					AppenderList: [
+						DuckLog.Appender.Console(),
+						DuckLog.Appender.File({
+							file: { pathname: Workspace.resolve('log', 'access.log') }
+						})
+					]
+				}
 			},
+			DB: {
+				label: 'DB'
+			}
 		})
 	]
 }, function CZBankRusher({
@@ -42,25 +49,27 @@ module.exports = Duck({
 	Workspace.setPath('database', finalOption.workspace.database);
 	Workspace.setPath('log', finalOption.workspace.log);
 
+	Log();
+
 	const sequelize = RusherSequelize({
 		namespace: `${product.meta.namespace}_`,
-		storage: Workspace.resolve('database', finalOption.database.rusher)
+		storage: Workspace.resolve('database', finalOption.database.rusher),
+		onLog: message => Log.DB(message)
 	});
 
 	injection.Sequelize = sequelize;
 	injection.options = finalOption;
 
-	Log();
 
 	const app = Web.Application('rusher');
 	const requestListener =  DuckLog.Adapter.HttpServer(app, _ => Log.access(_));
 
 	return {
-		Server() {
-			return {
-				http: http.createServer(requestListener),
-				https: https.createServer(requestListener)
-			};
+		HttpServer() {
+			return http.createServer(requestListener);
+		},
+		HttpsServer() {
+			return https.createServer(requestListener);
 		},
 		async install(options) {
 			await Workspace.buildAll();

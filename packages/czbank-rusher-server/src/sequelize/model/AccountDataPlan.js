@@ -6,7 +6,7 @@ const { DataTypes } = require('sequelize');
 module.exports = function AccountDataPlan(sequelize, namespace) {
 	sequelize.define('AccountDataPlan', {
 		id: {
-			type: DataTypes.CHAR(32),
+			type: DataTypes.CHAR(64),
 			primaryKey: true
 		},
 		name: DataTypes.CHAR(64),

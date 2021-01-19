@@ -6,7 +6,7 @@ const { DataTypes } = require('sequelize');
 module.exports = function ProductAccountDataSetting(sequelize, namespace) {
 	sequelize.define('ProductAccountDataSetting', {
 		productId: {
-			type: DataTypes.CHAR(32),
+			type: DataTypes.CHAR(64),
 			primaryKey: true
 		},
 		fieldIndexOfAverageDeposit: DataTypes.TINYINT,

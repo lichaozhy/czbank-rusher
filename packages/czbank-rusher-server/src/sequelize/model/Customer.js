@@ -6,10 +6,10 @@ const { DataTypes } = require('sequelize');
 module.exports = function Customer(sequelize, namespace) {
 	sequelize.define('Customer', {
 		id: {
-			type: DataTypes.CHAR(32),
+			type: DataTypes.CHAR(64),
 			primaryKey: true
 		},
-		managerId: DataTypes.CHAR(32),
+		managerId: DataTypes.CHAR(64),
 		name: DataTypes.STRING,
 		gender: DataTypes.TINYINT,
 		mobilePhone: DataTypes.CHAR(16),

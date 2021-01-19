@@ -6,10 +6,10 @@ const { DataTypes } = require('sequelize');
 module.exports = function PointAdjustment(sequelize, namespace) {
 	sequelize.define('PointAdjustment', {
 		id: {
-			type: DataTypes.CHAR(32),
+			type: DataTypes.CHAR(64),
 			primaryKey: true
 		},
-		customerId: DataTypes.CHAR(32),
+		customerId: DataTypes.CHAR(64),
 		value: DataTypes.INTEGER,
 		type: DataTypes.INTEGER,
 		createdAt: DataTypes.DATE

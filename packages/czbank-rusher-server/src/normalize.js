@@ -4,7 +4,8 @@ module.exports = function normalize(_options = {}) {
 	const options = {
 		database: {
 			rusher: 'czbrusher.sqlite',
-			file: 'file'
+			file: 'file',
+			onLog: _ => console.log(_)
 		},
 		workspace: {
 			root: path.resolve('public'),

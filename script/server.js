@@ -1,8 +1,8 @@
 const CZBRusher = require('../packages/czbank-rusher-server');
 
 const rusher = CZBRusher();
-const server = rusher.Server();
+const server = rusher.HttpServer();
 
-console.log(server);
 
-rusher.install();
+server.listen(8080);
+// rusher.install();

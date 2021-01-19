@@ -6,11 +6,11 @@ const { DataTypes } = require('sequelize');
 module.exports = function Account(sequelize, namespace) {
 	sequelize.define('Account', {
 		id: {
-			type: DataTypes.CHAR(32),
+			type: DataTypes.CHAR(64),
 			primaryKey: true
 		},
-		customerId: DataTypes.CHAR(32),
-		internalCode: DataTypes.CHAR(),
+		customerId: DataTypes.CHAR(64),
+		internalCode: DataTypes.CHAR(22),
 		assetTotal: DataTypes.DOUBLE,
 	}, {
 		tableName: `${namespace}account`
