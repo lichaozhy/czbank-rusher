@@ -8,6 +8,7 @@ const https = require('https');
 const meta = require('./package.json');
 const normlize = require('./src/normalize');
 const RusherSequelize = require('./src/sequelize');
+const utils = require('./src/utils');
 
 module.exports = Duck({
 	id: 'com.czbank.tianjin.rusher',
@@ -33,7 +34,7 @@ module.exports = Duck({
 							file: { pathname: Workspace.resolve('log', 'access.log') }
 						})
 					]
-				}
+				};
 			},
 			DB: {
 				label: 'DB'
@@ -43,13 +44,13 @@ module.exports = Duck({
 }, function CZBankRusher({
 	injection, Log, Web, Workspace, product
 }, options) {
+	injection.Utils = utils;
+
 	const finalOption = normlize(options);
 
 	Workspace.root = finalOption.workspace.root;
 	Workspace.setPath('database', finalOption.workspace.database);
 	Workspace.setPath('log', finalOption.workspace.log);
-
-	Log();
 
 	const sequelize = RusherSequelize({
 		namespace: `${product.meta.namespace}_`,
@@ -60,6 +61,7 @@ module.exports = Duck({
 	injection.Sequelize = sequelize;
 	injection.options = finalOption;
 
+	Log();
 
 	const app = Web.Application('rusher');
 	const requestListener =  DuckLog.Adapter.HttpServer(app, _ => Log.access(_));
@@ -75,5 +77,5 @@ module.exports = Duck({
 			await Workspace.buildAll();
 			await sequelize.sync();
 		}
-	}
+	};
 });

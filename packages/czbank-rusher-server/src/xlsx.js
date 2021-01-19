@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const DATA_START_ROW = 7;
 const PAGINATION_STINRG = '账户号';
 const ROW_SAFE_LIMITATION = 100000;
+const IGNORE_NAME_REG = /资产池保证金/
 
 function toNumber(string) {
 	return Number(string.replace(',', ''));
@@ -107,6 +108,8 @@ module.exports = function CZBankAccountDataFileReader(options = []) {
 		while (state.row < ROW_SAFE_LIMITATION) {
 			const { row } = state;
 			const Ax = sheet[`A${row}`];
+			const Bx = sheet[`B${row}`];
+			const Cx = sheet[`C${row}`];
 
 			if (Ax === undefined) {
 				break;
@@ -117,9 +120,14 @@ module.exports = function CZBankAccountDataFileReader(options = []) {
 				continue;
 			}
 
-			const internalCode = Ax.v;
-			const name = sheet[`B${row}`].v;
-			const desensitizedIDCardNumber = sheet[`C${row}`].v;
+			if (Cx.w.trim().length === 16 || IGNORE_NAME_REG.test(Bx.w)) {
+				state.row += 1;
+				continue;
+			}
+
+			const internalCode = Ax.w;
+			const name = Bx.w;
+			const desensitizedIDCardNumber = Cx.w;
 
 			if (!desensitizedIDCardNumber) {
 				/**

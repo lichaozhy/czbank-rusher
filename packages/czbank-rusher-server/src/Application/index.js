@@ -9,13 +9,18 @@ module.exports = DuckWebKoa(function CZBankRusherApplication(app, {
 }) {
 	app
 		.use(Bodyparser())
-		.use(AppRouter().routes())
+		.use(AppRouter().routes());
 }, {
 	plugins: [
 		DuckWebKoaRouter({
 			prefix: '/api',
 			Router: Router.ApiRouter,
-			use: []
+			use: [
+				{
+					prefix: '/manager',
+					Router: Router.ManagerRouter
+				}
+			]
 		})
 	]
 });

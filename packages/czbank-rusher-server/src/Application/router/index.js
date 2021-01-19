@@ -1,3 +1,4 @@
 module.exports = {
-	ApiRouter: require('./Api')
+	ApiRouter: require('./Api'),
+	ManagerRouter: require('./Manager')
 };
