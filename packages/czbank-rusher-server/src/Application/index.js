@@ -17,8 +17,24 @@ module.exports = DuckWebKoa(function CZBankRusherApplication(app, {
 			Router: Router.ApiRouter,
 			use: [
 				{
+					prefix: '/account',
+					Router: Router.AccountRouter
+				},
+				{
+					prefix: '/account/data',
+					Router: Router.AccountDataRouter
+				},
+				{
+					prefix: '/account/data/plan',
+					Router: Router.AccountDataPlanRouter
+				},
+				{
 					prefix: '/manager',
 					Router: Router.ManagerRouter
+				},
+				{
+					prefix: '/product',
+					Router: Router.Product
 				}
 			]
 		})

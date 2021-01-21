@@ -120,6 +120,7 @@ export default {
 			this.managerList = await this.$rusher.backend.Manager.query();
 		},
 		async deleteManager(managerId) {
+			this.selectedManagerId = null;
 			await this.$rusher.backend.Manager(managerId).delete();
 			await this.getManagerList();
 		}

@@ -43,6 +43,34 @@ export default {
 						code
 					}).then(pickData);
 				}
+			}),
+			Product: Object.assign(function IProduct(productId) {
+				return {
+					get() {
+						return agent.get(`/product/${productId}`).then(pickData);
+					},
+					update(options) {
+						const { name, code, description } = options;
+
+						return agent.put(`/product/${productId}`, {
+							name, code, description
+						}).then(pickData);
+					},
+					delete() {
+						return agent.delete(`/product/${productId}`).then(pickData);
+					}
+				};
+			}, {
+				query() {
+					return agent.get('/product').then(pickData);
+				},
+				create(options) {
+					const { name, code, description } = options;
+
+					return agent.post('/product', {
+						name, code, description
+					}).then(pickData);
+				}
 			})
 		});
 

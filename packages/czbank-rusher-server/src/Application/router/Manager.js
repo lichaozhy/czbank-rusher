@@ -32,7 +32,7 @@ module.exports = Router(function CZBankRusherManagerRouter(router, {
 		});
 
 		if (!manager) {
-			return ctx.throw(404);
+			return ctx.throw(404, 'The manager is NOT existed.');
 		}
 
 		ctx.state.manager = manager;

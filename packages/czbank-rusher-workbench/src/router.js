@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import VueRouter from 'vue-router'
+import VueRouter from 'vue-router';
 
 import Page from './page';
 
@@ -89,6 +89,11 @@ export default new VueRouter({
 							name: 'workbench.database.account-data-importer',
 							path: 'account-data-importer',
 							component: Page.Workbench.Database.AccountDataImporter
+						},
+						{
+							name: 'workbench.database.product',
+							path: 'product',
+							component: Page.Workbench.Database.Product
 						}
 					]
 				},

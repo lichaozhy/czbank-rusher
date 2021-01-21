@@ -15,4 +15,4 @@ module.exports = function Product(sequelize, namespace) {
 	}, {
 		tableName: `${namespace}product`
 	});
-}
+};

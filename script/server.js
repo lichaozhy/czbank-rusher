@@ -1,6 +1,10 @@
 const CZBRusher = require('../packages/czbank-rusher-server');
 
-const rusher = CZBRusher();
+const rusher = CZBRusher({
+	database: {
+		onLog: () => {}
+	}
+});
 const server = rusher.HttpServer();
 
 

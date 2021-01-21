@@ -90,7 +90,7 @@ export default {
 			return '';
 		},
 		invalidCodeFeedback() {
-			const { required, minLength, maxLength } = this.$v.form.name;
+			const { required, minLength, maxLength } = this.$v.form.code;
 
 			if (!required) {
 				return '必须填写一个正确的工号';

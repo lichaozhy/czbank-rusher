@@ -9,6 +9,7 @@ const meta = require('./package.json');
 const normlize = require('./src/normalize');
 const RusherSequelize = require('./src/sequelize');
 const utils = require('./src/utils');
+const AccountDataResolver = require('./src/AccountDataResolver');
 
 module.exports = Duck({
 	id: 'com.czbank.tianjin.rusher',
@@ -45,6 +46,7 @@ module.exports = Duck({
 	injection, Log, Web, Workspace, product
 }, options) {
 	injection.Utils = utils;
+	injection.AccountDataResolver = AccountDataResolver;
 
 	const finalOption = normlize(options);
 

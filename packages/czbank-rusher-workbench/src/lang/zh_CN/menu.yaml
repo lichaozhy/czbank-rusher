@@ -29,6 +29,9 @@ database:
   importer:
     label: 导入账户数据
     description: 导入从KPI系统导出的“客户经理账户时点统计表”
+  product:
+    label: 产品
+    description: 维护系统中需要被理解的产品设定
 
 manager:
   label: 客户经理

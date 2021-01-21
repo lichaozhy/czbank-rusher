@@ -4,7 +4,17 @@ manager:
   code: 工号
   customerNumber: 客户数
 
+product:
+  className: 产品
+  name: 产品名
+  code: 代码
+  description: 描述
+
+database:
+  className: 数据维护
+
 base:
+  id: ID
   create: 创建
   update: 更新
   query: 查询
