@@ -31,7 +31,7 @@ function normalize(_options) {
 		storage: _storage = options.storage,
 		namespace: _namespace = options.namespace,
 		onLog: _onLog = options.onLog
-	} = _options
+	} = _options;
 
 	options.storage = _storage;
 	options.namespace = _namespace;
@@ -39,6 +39,11 @@ function normalize(_options) {
 
 	return options;
 }
+
+const ASSOCIATION_BASIC_OPTIONS = {
+	foreignKeyConstraint: false,
+	constraints: false
+};
 
 module.exports = function CZBankRusherSequelize(options) {
 	const finalOptions = normalize(options);
@@ -57,6 +62,15 @@ module.exports = function CZBankRusherSequelize(options) {
 	Object.keys(Model).forEach(modelName => {
 		Model[modelName](sequelize, finalOptions.namespace);
 	});
+
+	const Product = sequelize.model('Product');
+	const ProductAccountDataSetting = sequelize.model('ProductAccountDataSetting');
+
+	Product.hasOne(ProductAccountDataSetting, Object.assign({
+		foreignKey: 'productId'
+	}, ASSOCIATION_BASIC_OPTIONS));
+
+	ProductAccountDataSetting.belongsTo(Product, ASSOCIATION_BASIC_OPTIONS);
 
 	return sequelize;
 };

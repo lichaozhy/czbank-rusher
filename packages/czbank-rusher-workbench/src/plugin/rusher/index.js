@@ -50,10 +50,10 @@ export default {
 						return agent.get(`/product/${productId}`).then(pickData);
 					},
 					update(options) {
-						const { name, code, description } = options;
+						const { name, code, description, fieldIndex } = options;
 
 						return agent.put(`/product/${productId}`, {
-							name, code, description
+							name, code, description, fieldIndex
 						}).then(pickData);
 					},
 					delete() {

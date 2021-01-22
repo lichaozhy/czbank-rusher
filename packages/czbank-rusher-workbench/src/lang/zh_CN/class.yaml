@@ -9,6 +9,10 @@ product:
   name: 产品名
   code: 代码
   description: 描述
+  fieldIndex:
+    label: 字段索引
+    averageDeposit: 日均存款列号
+    balance: 余额列号
 
 database:
   className: 数据维护

@@ -17,7 +17,7 @@
 	<b-form-group
 		:label="$t('c.product.code')"
 		:description="$t('d.product.code')"
-		valid-feedback="合法的产品名"
+		valid-feedback="合法的代号"
 	>
 		<b-form-input
 			v-model="form.code"
@@ -30,7 +30,7 @@
 	<b-form-group
 		:label="$t('c.product.description')"
 		:description="$t('d.product.description')"
-		valid-feedback="合法的产品名"
+		valid-feedback="合法的描述"
 	>
 		<b-form-textarea
 			v-model="form.description"
@@ -46,7 +46,7 @@
 
 <script>
 export default {
-	name: 'ProductCreating',
+	name: 'ProductCUpdating',
 	data() {
 		return {
 			form: {

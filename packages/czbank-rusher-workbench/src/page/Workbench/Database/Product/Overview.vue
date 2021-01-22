@@ -27,6 +27,7 @@
 			variant="primary"
 			class="mr-auto"
 			:disabled="selectedProductId === null"
+			@click="requestProductSetting"
 		>设置解析配置</b-button>
 
 		<b-button
@@ -59,17 +60,19 @@
 		selectable
 		select-mode="single"
 		@row-selected="selectProduct"
+		:filter="keyword"
 	>
 		<template #cell(averageDepositFieldIndex)="row">
-			{{ row.item.averageDepositFieldIndex === null ? '未设定' : row.item.averageDepositFieldIndex }}
+			{{ row.item.averageDepositFieldIndex === null ? '&lt;!未设定>' : row.item.averageDepositFieldIndex }}
 		</template>
 
 		<template #cell(balanceFieldIndex)="row">
-			{{ row.item.balanceFieldIndex === null ? '未设定' : row.item.balanceFieldIndex }}
+			{{ row.item.balanceFieldIndex === null ? '&lt;!未设定>' : row.item.balanceFieldIndex }}
 		</template>
 	</b-table>
 
 	<b-modal
+		centered
 		title="创建产品设定"
 		ref="create"
 		:ok-title="$t('u.ok')"
@@ -82,7 +85,8 @@
 	</b-modal>
 
 	<b-modal
-		title="创建产品设定"
+		centered
+		title="更新产品设定"
 		ref="updating"
 		:ok-title="$t('u.ok')"
 		:cancel-title="$t('u.cancel')"
@@ -93,6 +97,21 @@
 			:product-id="selectedProductId"
 		/>
 	</b-modal>
+
+	<b-modal
+		v-if="selectedProduct !== null"
+		centered
+		:title="`解析配置 - 产品：${selectedProduct.name}`"
+		ref="setting"
+		:ok-title="$t('u.ok')"
+		:cancel-title="$t('u.cancel')"
+		@ok="updateProductSetting($event)"
+	>
+		<ProductSettingForm
+			ref="product-setting-form"
+			:product-id="selectedProductId"
+		/>
+	</b-modal>
 </div>
 
 </template>
@@ -100,6 +119,7 @@
 <script>
 import ProductCreatingForm from './Creating';
 import ProductUpdatingForm from './Updating';
+import ProductSettingForm from './Setting';
 
 export default {
 	data() {
@@ -135,7 +155,7 @@ export default {
 		requestUpdateProduct() {
 			this.$refs.updating.show();
 		},
-		async updateProduct() {
+		async updateProduct(event) {
 			try {
 				await this.$refs['product-updating-form'].update();
 				await this.getProductList();
@@ -145,13 +165,23 @@ export default {
 			}
 		},
 		requestProductSetting() {
-
+			this.$refs.setting.show();
 		},
-		async updateProductSetting() {
-
+		async updateProductSetting(event) {
+			try {
+				await this.$refs['product-setting-form'].update();
+				await this.getProductList();
+			} catch (err) {
+				console.log(err);
+				event.preventDefault();
+			}
 		}
 	},
 	computed: {
+		selectedProduct() {
+			return this.productList
+				.find(product => product.id === this.selectedProductId) || {};
+		},
 		productFieldList() {
 			return [
 				{
@@ -192,13 +222,15 @@ export default {
 		},
 		productItemList() {
 			return this.productList.map(product => {
+				const { fieldIndex } = product;
+
 				return {
 					id: product.id,
 					name: product.name,
 					code: product.code,
 					description: product.description,
-					averageDepositFieldIndex: null,
-					balanceFieldIndex: null
+					averageDepositFieldIndex: fieldIndex.averageDeposit,
+					balanceFieldIndex: fieldIndex.balance
 				};
 			});
 		}
@@ -208,7 +240,8 @@ export default {
 	},
 	components: {
 		ProductCreatingForm,
-		ProductUpdatingForm
+		ProductUpdatingForm,
+		ProductSettingForm
 	},
 };
 </script>
