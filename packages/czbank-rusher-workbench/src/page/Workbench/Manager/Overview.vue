@@ -112,9 +112,7 @@ export default {
 	},
 	methods: {
 		selectManager(rows) {
-			if (rows.length > 0) {
-				this.selectedManagerId = rows[0].id;
-			}
+			this.selectedManagerId = rows.length > 0 ? rows[0].id : null;
 		},
 		async getManagerList() {
 			this.managerList = await this.$rusher.backend.Manager.query();

@@ -93,7 +93,7 @@ export default new VueRouter({
 						{
 							name: 'workbench.database.product',
 							path: 'product',
-							component: Page.Workbench.Database.Product
+							component: Page.Workbench.Database.Product.Overview
 						}
 					]
 				},

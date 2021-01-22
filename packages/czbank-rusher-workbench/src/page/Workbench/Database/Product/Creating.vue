@@ -32,11 +32,12 @@
 		:description="$t('d.product.description')"
 		valid-feedback="合法的产品名"
 	>
-		<b-form-input
+		<b-form-textarea
 			v-model="form.description"
 			trim
 			name="product-description"
 			autocomplete="off"
+			style="height: 8em"
 		/>
 	</b-form-group>
 </b-form>
@@ -45,6 +46,7 @@
 
 <script>
 export default {
+	name: 'ProductCreating',
 	data() {
 		return {
 			form: {
@@ -56,7 +58,11 @@ export default {
 	},
 	methods: {
 		async create() {
-
+			await this.$rusher.backend.Product.create({
+				name: this.form.name,
+				code: this.form.code,
+				description: this.form.description
+			});
 		}
 	}
 };

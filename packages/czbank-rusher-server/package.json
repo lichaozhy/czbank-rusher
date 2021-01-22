@@ -24,12 +24,12 @@
     "@produck/duck-web-koa-router": "^0.3.0",
     "ajv": "^7.0.3",
     "commander": "^7.0.0",
-    "fs-extra": "^9.0.1",
+    "fs-extra": "^9.1.0",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
     "koa-compress": "^5.0.1",
     "koa-send": "^5.0.1",
-    "sequelize": "^6.3.5",
+    "sequelize": "^6.4.0",
     "sqlite3": "^5.0.1",
     "xlsx": "^0.16.9"
   }

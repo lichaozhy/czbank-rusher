@@ -35,6 +35,8 @@ module.exports = Router(function CZBankRusherAPIRouter(router, {
 			return ctx.throw(404, 'The product is NOT existed.');
 		}
 
+		ctx.state.product = product;
+
 		return next();
 	}).get('/:productId', async function getProduct(ctx) {
 		const { product } = ctx.state;
