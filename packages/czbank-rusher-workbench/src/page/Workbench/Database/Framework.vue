@@ -19,7 +19,7 @@
 		>
 			<b-list-group>
 				<b-list-group-item
-					:to="{ name: 'workbench.database.account-data-importer' }"
+					:to="{ name: 'workbench.database.account-data-plan' }"
 				>{{ $t('m.database.importer.label') }}</b-list-group-item>
 				<b-list-group-item
 					:to="{ name: 'workbench.database.product' }"

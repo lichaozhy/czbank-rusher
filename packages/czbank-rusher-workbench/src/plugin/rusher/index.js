@@ -1,4 +1,18 @@
 import axios from 'axios';
+import dateformat from 'dateformat';
+
+export function localDatetime(value) {
+	return dateformat(value, 'yyyy-mm-dd HH:MM:ss');
+}
+
+export function localDate(value) {
+	return dateformat(value, 'yyyy-mm-dd');
+}
+
+export function localTime(value) {
+	return dateformat(value, 'HH:MM:ss');
+}
+
 
 function pickData(res) {
 	return res.data;
@@ -6,6 +20,10 @@ function pickData(res) {
 
 export default {
 	install(Vue) {
+		Vue.filter('localDatetime', localDatetime);
+		Vue.filter('localDate', localDate);
+		Vue.filter('localTime', localTime);
+
 		const agent = axios.create({ baseURL: '/api' });
 
 		const backend = Object.assign(function IApi() {
@@ -69,6 +87,37 @@ export default {
 
 					return agent.post('/product', {
 						name, code, description
+					}).then(pickData);
+				}
+			}),
+			AccountDataPlan: Object.assign(function IAccountDataPlan(planId) {
+				return {
+					get() {
+						return agent.get(`/account/data/plan/${planId}`).then(pickData);
+					},
+					update(options) {
+						const { name, description } = options;
+
+						return agent.put(`/account/data/plan/${planId}`, {
+							name, description
+						}).then(pickData);
+					},
+					delete() {
+						return agent.delete(`/account/data/plan/${planId}`).then(pickData);
+					},
+					resolve() {
+						return agent.post(`/account/data/plan/${planId}/result`, {}).then(pickData);
+					}
+				};
+			}, {
+				query() {
+					return agent.get('/account/data/plan').then(pickData);
+				},
+				create(options) {
+					const { name, description, dateAs } = options;
+
+					return agent.post('/account/data/plan', {
+						name, dateAs, description
 					}).then(pickData);
 				}
 			})

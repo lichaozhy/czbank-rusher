@@ -6,6 +6,7 @@
   "scripts": {
     "dev:server": "node ./script/server",
     "dev:xls": "node ./script/xlsx.js",
+    "dev:db": "node ./script/db.js",
     "deps:install": "npm install && lerna bootstrap",
     "deps:clean": "lerna clean -y",
     "build:workbench": "lerna run --scope=@plumber-hub/workbench build",

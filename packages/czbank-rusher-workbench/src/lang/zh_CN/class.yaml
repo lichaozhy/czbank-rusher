@@ -23,3 +23,16 @@ base:
   update: 更新
   query: 查询
   delete: 删除
+  createdAt: 创建于
+  description: 描述
+
+account:
+  className: 账户
+  data:
+    className: 账户数据
+    plan:
+      className: 账户数据导入计划
+      name: 计划名称
+      dateAs: 时点
+      description: 描述
+      fileNumber: 文件数

@@ -9,3 +9,11 @@ product:
   description: 产品的介绍，少于255字
   averageDepositFieldIndex: 该产品的日均存款值在XLS报表中的列坐标
   balanceFieldIndex: 该产品余额值在XLS报表中的列坐标
+
+database:
+  importer: 导入来自总行系统输出的零售数据报表*.xls，以整理每个客户经理的营销情况。是本系统重要的数据据来源。
+
+plan:
+  name: 计划名称，用于总览时索引
+  dateAs: 规定作为客户账户数据统计日的时刻
+  description: 如果有其他情况可以在此编辑，长度不超过255个字

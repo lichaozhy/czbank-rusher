@@ -81,14 +81,14 @@ export default new VueRouter({
 					name: 'workbench.database',
 					path: 'database',
 					redirect: {
-						name: 'workbench.database.account-data-importer',
+						name: 'workbench.database.account-data-plan',
 					},
 					component: Page.Workbench.Database.Framework,
 					children: [
 						{
-							name: 'workbench.database.account-data-importer',
-							path: 'account-data-importer',
-							component: Page.Workbench.Database.AccountDataImporter
+							name: 'workbench.database.account-data-plan',
+							path: 'account-data-plan',
+							component: Page.Workbench.Database.AccountDataPlan.Overview
 						},
 						{
 							name: 'workbench.database.product',

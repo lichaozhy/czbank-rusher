@@ -1,10 +1,12 @@
 const { Router } = require('@produck/duck-web-koa-router');
 
 module.exports = Router(function CZBankRusherAPIRouter(router, {
-	Sequelize, Utils,
+	Sequelize, Utils
 }) {
 	const AccountDataPlan = Sequelize.model('AccountDataPlan');
 	const AccountData = Sequelize.model('AccountData');
+	const Product = Sequelize.model('Product');
+	const ProductAccountDataSetting = Sequelize.model('ProductAccountDataSetting');
 
 	const Resource = {
 		AccountDataPlan(planData) {
@@ -13,17 +15,33 @@ module.exports = Router(function CZBankRusherAPIRouter(router, {
 				name: planData.name,
 				description: planData.description,
 				dateAs: planData.dateAs,
-				setting: planData.setting,
-				resolved: planData.resolved,
+				fileNumber: 0,
 				createdAt: planData.createdAt
 			};
 		},
 		AccountDataPlanResult() {
 			return {
 
-			}
+			};
 		}
 	};
+
+	async function PlanSetting() {
+		const list = await Product.findAll({
+			include: [ProductAccountDataSetting]
+		});
+
+		const setting = list.map(product => {
+			return {
+				name: product.name,
+				code: product.code,
+				balance: product.ProductAccountDataSetting.fieldIndexOfBalance,
+				averageDeposit: product.ProductAccountDataSetting.fieldIndexOfAverageDeposit
+			};
+		});
+
+		return JSON.stringify(setting);
+	}
 
 	router.get('/', async function getPlanList(ctx) {
 		const list = await AccountDataPlan.findAll();
@@ -36,8 +54,8 @@ module.exports = Router(function CZBankRusherAPIRouter(router, {
 			id: Utils.encodeSHA256(`${name}${dateAs}${Date.now()}`),
 			name, description,
 			dateAs: new Date(dateAs),
-			setting: '',
-			resolved: false,
+			setting: await PlanSetting(),
+			// resolved: false,
 			createdAt: new Date()
 		});
 
@@ -81,12 +99,5 @@ module.exports = Router(function CZBankRusherAPIRouter(router, {
 		await plan.destroy();
 
 		ctx.body = Resource.AccountDataPlan(plan);
-	}).post('/:planId/account/data', async function writeAllAccountData(ctx) {
-		const { plan } = ctx.state;
-
-		plan.resolved = true;
-		await plan.save();
-
-		ctx.body = {}
 	});
 });

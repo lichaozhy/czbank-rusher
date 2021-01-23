@@ -13,7 +13,7 @@ module.exports = function AccountDataPlan(sequelize, namespace) {
 		description: DataTypes.STRING,
 		dateAs: DataTypes.DATEONLY,
 		setting: DataTypes.TEXT,
-		resolved: DataTypes.BOOLEAN,
+		// resolved: DataTypes.BOOLEAN,
 		createdAt: DataTypes.DATE
 	}, {
 		tableName: `${namespace}account_data_plan`

@@ -1,9 +1,9 @@
 import Framework from './Framework';
-import AccountDataImporter from './AccountDataImporter';
+import AccountDataPlan from './AccountDataPlan';
 import Product from './Product';
 
 export default {
 	Framework,
-	AccountDataImporter,
+	AccountDataPlan,
 	Product
 };
