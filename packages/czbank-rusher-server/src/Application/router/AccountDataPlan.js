@@ -1,10 +1,9 @@
 const { Router } = require('@produck/duck-web-koa-router');
 
-module.exports = Router(function CZBankRusherAPIRouter(router, {
+module.exports = Router(function CZBankRusherAccountDataPlanRouter(router, {
 	Sequelize, Utils
 }) {
 	const AccountDataPlan = Sequelize.model('AccountDataPlan');
-	const AccountData = Sequelize.model('AccountData');
 	const Product = Sequelize.model('Product');
 	const ProductAccountDataSetting = Sequelize.model('ProductAccountDataSetting');
 

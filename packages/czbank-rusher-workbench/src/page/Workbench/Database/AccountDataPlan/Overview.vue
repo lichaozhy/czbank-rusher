@@ -24,6 +24,7 @@
 			variant="primary"
 			class="mr-auto"
 			:disabled="selectedPlanId === null"
+			@click="requestUploadingFile"
 		>上传到计划</b-button>
 
 		<b-button
@@ -94,6 +95,20 @@
 			ref="plan-updating-form"
 		/>
 	</b-modal>
+
+	<b-modal
+		centered
+		:title="`上传XLS到：${selectedPlan.name}`"
+		ref="uploader"
+		:ok-title="$t('u.ok')"
+		:cancel-title="$t('u.cancel')"
+		@ok="uploadFile($event)"
+	>
+		<FileUploader
+			ref="uploader-form"
+			:plan-id="selectedPlanId"
+		/>
+	</b-modal>
 </div>
 
 </template>
@@ -101,6 +116,7 @@
 <script>
 import PlanCreating from './Creating';
 import PlanUpdating from './Updating';
+import FileUploader from './Uploader';
 
 export default {
 	data() {
@@ -144,6 +160,18 @@ export default {
 		async deletePlan() {
 			await this.$rusher.backend.AccountDataPlan(this.selectedPlanId).delete();
 			this.getPlanList();
+		},
+		requestUploadingFile() {
+			this.$refs.uploader.show();
+		},
+		async uploadFile(event) {
+			try {
+				await this.$refs['uploader-form'].upload();
+				await this.getPlanList();
+			} catch (err) {
+				console.log(err);
+				event.preventDefault();
+			}
 		}
 	},
 	mounted() {
@@ -151,9 +179,13 @@ export default {
 	},
 	components: {
 		PlanCreating,
-		PlanUpdating
+		PlanUpdating,
+		FileUploader
 	},
 	computed: {
+		selectedPlan() {
+			return this.planList.find(plan => plan.id === this.selectedPlanId) || {};
+		},
 		planItemList() {
 			return this.planList.map(plan => {
 				return {

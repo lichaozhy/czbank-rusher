@@ -1,14 +1,21 @@
 const DuckWebKoa = require('@produck/duck-web-koa');
 const DuckWebKoaRouter = require('@produck/duck-web-koa-router');
-const Bodyparser = require('koa-bodyparser');
+const koaBody = require('koa-body');
 
 const Router = require('./router');
 
 module.exports = DuckWebKoa(function CZBankRusherApplication(app, {
-	AppRouter
+	AppRouter, Workspace
 }) {
+	const bodyparser = koaBody({
+		multipart: true,
+		formidable: {
+			uploadDir: Workspace.getPath('temp')
+		}
+	});
+
 	app
-		.use(Bodyparser())
+		.use(bodyparser)
 		.use(AppRouter().routes());
 }, {
 	plugins: [
@@ -29,12 +36,16 @@ module.exports = DuckWebKoa(function CZBankRusherApplication(app, {
 					Router: Router.AccountDataPlanRouter
 				},
 				{
+					prefix: '/account/data/file',
+					Router: Router.AccountDataFileRouter
+				},
+				{
 					prefix: '/manager',
 					Router: Router.ManagerRouter
 				},
 				{
 					prefix: '/product',
-					Router: Router.Product
+					Router: Router.ProductRouter
 				}
 			]
 		})

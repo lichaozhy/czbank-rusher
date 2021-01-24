@@ -7,7 +7,7 @@ const ROW_SAFE_LIMITATION = 100000;
 const IGNORE_NAME_REG = /资产池保证金/;
 
 function toNumber(string) {
-	return Number(string.replace(',', ''));
+	return Number(string.replace(/,/g, ''));
 }
 
 function getDataSheet(workbook) {
@@ -54,13 +54,13 @@ function normalize(_options = []) {
 			name: _name,
 			code: _code,
 			balanceIndex: _balanceIndex,
-			averageDespositIndex: _averageDespositIndex
+			averageDepositIndex: _averageDepositIndex
 		} = _product;
 
 		product.name = _name;
 		product.code = _code;
 		product.balanceIndex = _balanceIndex;
-		product.averageDespositIndex = _averageDespositIndex;
+		product.averageDepositIndex = _averageDepositIndex;
 
 		options.push(product);
 	});
@@ -95,7 +95,7 @@ module.exports = function CZBankAccountDataFileReader(options = []) {
 				data[product.code] = {
 					name: product.name,
 					balance: toNumber(sheet[`${product.balanceIndex}${row}`].w),
-					averageDesposit: toNumber(sheet[`${product.averageDespositIndex}${row}`].w)
+					averageDeposit: toNumber(sheet[`${product.averageDepositIndex}${row}`].w)
 				};
 			});
 
@@ -169,7 +169,7 @@ module.exports = function CZBankAccountDataFileReader(options = []) {
 
 			Object.keys(productData).forEach(code => {
 				accountData.data[code].balance += productData[code].balance;
-				accountData.data[code].averageDesposit += productData[code].averageDesposit;
+				accountData.data[code].averageDeposit += productData[code].averageDeposit;
 			});
 		});
 

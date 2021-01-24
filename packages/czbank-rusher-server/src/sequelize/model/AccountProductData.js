@@ -5,14 +5,16 @@ const { DataTypes } = require('sequelize');
  */
 module.exports = function AccountProductData(sequelize, namespace) {
 	sequelize.define('AccountProductData', {
-		dataId: {
-			type: DataTypes.CHAR(64),
+		id: {
+			autoIncrement: true,
+			type: DataTypes.INTEGER,
 			primaryKey: true
 		},
-		productId: DataTypes.CHAR(64),
+		dataId: DataTypes.CHAR(64),
+		productCode: DataTypes.CHAR(64),
 		averageDeposit: DataTypes.DOUBLE,
 		balance: DataTypes.DOUBLE
 	}, {
 		tableName: `${namespace}account_product_data`
 	});
-}
+};

@@ -5,12 +5,13 @@ module.exports = function normalize(_options = {}) {
 		database: {
 			rusher: 'czbrusher.sqlite',
 			file: 'file',
-			onLog: _ => console.log(_)
 		},
 		workspace: {
 			root: path.resolve('public'),
 			log: 'log',
-			database: 'db'
+			database: 'db',
+			file: 'xls',
+			temp: 'temp'
 		}
 	};
 

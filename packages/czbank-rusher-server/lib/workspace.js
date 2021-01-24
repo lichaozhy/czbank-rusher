@@ -22,7 +22,7 @@ module.exports = function ProduckWorkspace() {
 			workspace.root = path.resolve(pathname);
 		},
 		get root() {
-			return workspace.root
+			return workspace.root;
 		},
 		setPath(name, pathname, fromRoot = true) {
 			if (fromRoot) {
@@ -51,5 +51,5 @@ module.exports = function ProduckWorkspace() {
 		install(injection) {
 			injection.Workspace = Method;
 		}
-	}
-}
+	};
+};

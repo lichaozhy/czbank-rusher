@@ -90,6 +90,20 @@ export default {
 					}).then(pickData);
 				}
 			}),
+			File: Object.assign(function IAccountDataFile() {
+
+			}, {
+				create(options) {
+					const { planId, managerId, raw } = options;
+					const formdata = new FormData();
+
+					formdata.append('planId', planId);
+					formdata.append('managerId', managerId);
+					formdata.append('raw', raw);
+
+					return agent.post('/account/data/file', formdata).then(pickData);
+				}
+			}),
 			AccountDataPlan: Object.assign(function IAccountDataPlan(planId) {
 				return {
 					get() {

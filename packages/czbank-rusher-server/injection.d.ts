@@ -1,4 +1,4 @@
-import Sequelize, { Utils } from 'sequelize'
+import Sequelize from 'sequelize'
 
 declare module '@produck/duck' {
 	interface InstalledInjection {

@@ -16,4 +16,4 @@ module.exports = function AccountDataFile(sequelize, namespace) {
 	}, {
 		tableName: `${namespace}account_data_file`
 	});
-}
+};

@@ -11,8 +11,6 @@ const RusherSequelize = require('./src/sequelize');
 const utils = require('./src/utils');
 const AccountDataResolver = require('./src/AccountDataResolver');
 
-/** @type {import('./injection')} */
-
 module.exports = Duck({
 	id: 'com.czbank.tianjin.rusher',
 	name: meta.name,
@@ -50,20 +48,22 @@ module.exports = Duck({
 	injection.Utils = utils;
 	injection.AccountDataResolver = AccountDataResolver;
 
-	const finalOption = normlize(options);
+	const finalOptions = normlize(options);
 
-	Workspace.root = finalOption.workspace.root;
-	Workspace.setPath('database', finalOption.workspace.database);
-	Workspace.setPath('log', finalOption.workspace.log);
+	Workspace.root = finalOptions.workspace.root;
+	Workspace.setPath('database', finalOptions.workspace.database);
+	Workspace.setPath('log', finalOptions.workspace.log);
+	Workspace.setPath('file', finalOptions.workspace.file);
+	Workspace.setPath('temp', finalOptions.workspace.temp);
 
 	const sequelize = RusherSequelize({
 		namespace: `${product.meta.namespace}_`,
-		storage: Workspace.resolve('database', finalOption.database.rusher),
-		onLog: message => Log.DB(message)
+		storage: Workspace.resolve('database', finalOptions.database.rusher),
+		onLog: () => {}
 	});
 
 	injection.Sequelize = sequelize;
-	injection.options = finalOption;
+	injection.options = finalOptions;
 
 	Log();
 
@@ -79,7 +79,7 @@ module.exports = Duck({
 		},
 		async install(options) {
 			await Workspace.buildAll();
-			await sequelize.sync();
+			await sequelize.sync({ force: true });
 		}
 	};
 });
