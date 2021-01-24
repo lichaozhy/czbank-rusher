@@ -34,58 +34,67 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 		const { date, result } = resolved;
 		const { accountMap, customerMap, dataList } = result;
 
-		for(const accountId in accountMap) {
+		await Account.bulkCreate(Object.keys(accountMap).map(accountId => {
 			const account = accountMap[accountId];
 
-			await Account.findOrCreate({
-				where: { id: accountId },
-				defaults: {
-					id: accountId,
-					customerId: account.customerId,
-					internalCode: account.internalCode,
-					assetTotal: 0
-				}
-			});
-		}
+			return {
+				id: accountId,
+				customerId: account.customerId,
+				internalCode: account.internalCode,
+				assetTotal: 0
+			};
+		}), {
+			ignoreDuplicates: true
+		});
 
-		for(const customerId in customerMap) {
+		await Customer.bulkCreate(Object.keys(customerMap).map(customerId => {
 			const customer = customerMap[customerId];
 
-			await Customer.findOrCreate({
-				where: { id: customerId },
-				defaults: {
-					id: customerId,
-					managerId: managerId,
-					name: customer.name,
-					identificationCode: customer.desensitizedIDCardNumber,
-					assetTotal: 0
-				}
-			});
-		}
+			return {
+				id: customerId,
+				managerId: managerId,
+				name: customer.name,
+				identificationCode: customer.desensitizedIDCardNumber,
+				assetTotal: 0
+			};
+		}), {
+			ignoreDuplicates: true
+		});
 
-		let now = Date.now();
+		const now = Date.now();
 
-		for(const accountData of dataList) {
+		const accountDataList = [];
+		const accountProductDataList = [];
+
+		dataList.forEach((accountData, index) => {
 			const { accountId, data: productDataMap } = accountData;
-			const id = Utils.encodeSHA256(`${planId}${accountId}${now++}`);
+			const dataId = Utils.encodeSHA256(`${planId}${accountId}${now + index}`);
 
-			await AccountData.create({
-				id: id,
+			accountDataList.push({
+				id: dataId,
 				planId: planId,
 				accountId: accountId
 			});
 
-			for(const productCode in productDataMap) {
+			Object.keys(productDataMap).forEach(productCode => {
 				const productData = productDataMap[productCode];
+				const { averageDeposit, balance } = productData;
 
-				await AccountProductData.create({
-					dataId: id,
+				if (averageDeposit === 0 && balance === 0) {
+					return;
+				}
+
+				accountProductDataList.push({
+					dataId: dataId,
 					productCode: productCode,
-					averageDeposit: productData.averageDeposit,
-					balance: productData.balance
+					averageDeposit: averageDeposit,
+					balance: balance
 				});
-			}
-		}
+			});
+		});
+
+		await AccountData.bulkCreate(accountDataList, { ignoreDuplicates: true });
+		await AccountProductData.bulkCreate(accountProductDataList, { ignoreDuplicates: true });
 
 		console.log('写完了');
 	}
@@ -150,7 +159,7 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 
 		const resolver = AccountDataResolver(setting);
 
-		saveData(resolver(xlsFile), managerId);
+		saveData(resolver(xlsFile), managerId, planId);
 		file.Manager = manager;
 		file.AccountDataPlan = plan;
 		ctx.body = Resource.AccountDataFile(file);

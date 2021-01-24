@@ -80,6 +80,9 @@ module.exports = Duck({
 		async install(options) {
 			await Workspace.buildAll();
 			await sequelize.sync({ force: true });
+		},
+		get sequelize() {
+			return sequelize;
 		}
 	};
 });
