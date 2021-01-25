@@ -1,5 +1,6 @@
 import axios from 'axios';
 import dateformat from 'dateformat';
+import bytes from 'bytes';
 
 export function localDatetime(value) {
 	return dateformat(value, 'yyyy-mm-dd HH:MM:ss');
@@ -13,6 +14,9 @@ export function localTime(value) {
 	return dateformat(value, 'HH:MM:ss');
 }
 
+function toBytes(size) {
+	return bytes(size);
+}
 
 function pickData(res) {
 	return res.data;
@@ -23,6 +27,7 @@ export default {
 		Vue.filter('localDatetime', localDatetime);
 		Vue.filter('localDate', localDate);
 		Vue.filter('localTime', localTime);
+		Vue.filter('toBytes', toBytes);
 
 		const agent = axios.create({ baseURL: '/api' });
 
@@ -102,6 +107,13 @@ export default {
 					formdata.append('raw', raw);
 
 					return agent.post('/account/data/file', formdata).then(pickData);
+				},
+				query(options) {
+					const { planId, managerId } = options;
+
+					return agent.get('/account/data/file', {
+						params: { planId, managerId }
+					}).then(pickData);
 				}
 			}),
 			AccountDataPlan: Object.assign(function IAccountDataPlan(planId) {

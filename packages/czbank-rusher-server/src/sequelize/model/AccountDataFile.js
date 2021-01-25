@@ -11,6 +11,9 @@ module.exports = function AccountDataFile(sequelize, namespace) {
 		},
 		planId: DataTypes.CHAR(64),
 		managerId: DataTypes.CHAR(64),
+		size: DataTypes.INTEGER,
+		customerNumber: DataTypes.INTEGER,
+		accountNumber: DataTypes.INTEGER,
 		description: DataTypes.STRING,
 		createdAt: DataTypes.DATE
 	}, {

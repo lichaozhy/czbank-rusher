@@ -17,7 +17,7 @@ function getDataSheet(workbook) {
 function getDate(sheet) {
 	const raw = String(sheet.B2.v);
 
-	return new Date(`${raw.substr(0, 4)}-${raw.substr(4, 2)}-${raw.substr(6, 2)}`);
+	return `${raw.substr(0, 4)}-${raw.substr(4, 2)}-${raw.substr(6, 2)}`;
 }
 
 function encodeSHA256(raw) {

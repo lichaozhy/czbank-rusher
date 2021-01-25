@@ -15,7 +15,7 @@
 
 		<b-button
 			variant="primary"
-			class="mr-1"
+			class="mr-auto"
 			:disabled="selectedPlanId === null"
 			@click="requestUpdatingPlan"
 		>修改计划</b-button>
@@ -64,8 +64,10 @@
 			>{{ row.detailsShowing ? '收缩' : '展开'}}</b-button>
 		</template>
 
-		<template #row-details="">
-			已上传文件列表
+		<template #row-details="row">
+			<FileListPanel
+				:plan-id="row.item.id"
+			/>
 		</template>
 	</b-table>
 
@@ -117,6 +119,7 @@
 import PlanCreating from './Creating';
 import PlanUpdating from './Updating';
 import FileUploader from './Uploader';
+import FileListPanel from './FileTable';
 
 export default {
 	data() {
@@ -180,7 +183,8 @@ export default {
 	components: {
 		PlanCreating,
 		PlanUpdating,
-		FileUploader
+		FileUploader,
+		FileListPanel
 	},
 	computed: {
 		selectedPlan() {

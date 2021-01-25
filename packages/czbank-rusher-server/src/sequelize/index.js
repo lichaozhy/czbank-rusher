@@ -72,5 +72,17 @@ module.exports = function CZBankRusherSequelize(options) {
 
 	ProductAccountDataSetting.belongsTo(Product, ASSOCIATION_BASIC_OPTIONS);
 
+	const AccountDataFile = sequelize.model('AccountDataFile');
+	const AccountDataPlan = sequelize.model('AccountDataPlan');
+	const Manager = sequelize.model('Manager');
+
+	AccountDataFile.belongsTo(AccountDataPlan, Object.assign({
+		foreignKey: 'planId'
+	}, ASSOCIATION_BASIC_OPTIONS));
+
+	AccountDataFile.belongsTo(Manager, Object.assign({
+		foreignKey: 'managerId'
+	}, ASSOCIATION_BASIC_OPTIONS));
+
 	return sequelize;
 };

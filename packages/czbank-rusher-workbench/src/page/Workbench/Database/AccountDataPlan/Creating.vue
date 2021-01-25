@@ -21,6 +21,8 @@
 			v-model="form.dateAs"
 			name="plan-dateas"
 			:date-disabled-fn="disabledDate"
+			button-variant="primary"
+			nav-button-variant="primary"
 		/>
 	</b-form-group>
 

@@ -18,6 +18,11 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 
 			return {
 				id: data.id,
+				createdAt: data.createdAt,
+				description: data.description,
+				size: data.size,
+				customerNumber: data.customerNumber,
+				accountNumber: data.accountNumber,
 				plan: {
 					id: AccountDataPlan.id,
 					name: AccountDataPlan.name
@@ -31,7 +36,7 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 	};
 
 	async function saveData(resolved, managerId, planId) {
-		const { date, result } = resolved;
+		const { result } = resolved;
 		const { accountMap, customerMap, dataList } = result;
 
 		await Account.bulkCreate(Object.keys(accountMap).map(accountId => {
@@ -101,7 +106,7 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 
 	router.get('/', async function getFileList(ctx) {
 		const { planId, managerId } = ctx.query;
-		const options = { where: {} };
+		const options = { where: {}, include: [Manager, AccountDataPlan] };
 
 		if (planId) {
 			options.where.planId = planId;
@@ -130,9 +135,9 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 			return ctx.throw(400, `The plan id:${planId} is NOT found.`);
 		}
 
-		const existed = await AccountDataFile.findOne({ where: { managerId, planId } });
+		const existedFile = await AccountDataFile.findOne({ where: { managerId, planId } });
 
-		if (existed) {
+		if (existedFile) {
 			await fs.remove(raw.path);
 
 			return ctx.throw(400, 'The manager has uploaded file to the plan.');
@@ -140,13 +145,15 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 
 		const xlsFile = await fs.readFile(raw.path);
 		const id = Utils.encodeSHA256(xlsFile);
+		const xlsPath = Workspace.resolve('file', `${id}.xls`);
 
-		await fs.move(raw.path, Workspace.resolve('file', `${id}.xls`));
+		try {
+			await fs.move(raw.path, xlsPath);
+		} catch (err) {
+			fs.remove(raw.path);
 
-		const file = await AccountDataFile.create({
-			id, planId, managerId, description,
-			createdAt: new Date()
-		});
+			return ctx.throw(400, 'The file is existed.');
+		}
 
 		const setting = JSON.parse(plan.setting).map(item => {
 			return {
@@ -157,9 +164,35 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 			};
 		});
 
-		const resolver = AccountDataResolver(setting);
+		let resolvedData = null;
 
-		saveData(resolver(xlsFile), managerId, planId);
+		try {
+			const resolver = AccountDataResolver(setting);
+
+			resolvedData = resolver(xlsFile);
+
+			if (resolvedData.date !== plan.dateAs) {
+				fs.remove(xlsPath);
+
+				return ctx.throw(400, 'The date of file is NOT matched to the plan.');
+			}
+
+			saveData(resolvedData, managerId, planId);
+		} catch (err) {
+			console.log(err);
+			fs.remove(xlsPath);
+
+			return ctx.throw(400, 'Bad xls file.');
+		}
+
+		const file = await AccountDataFile.create({
+			id, planId, managerId, description,
+			size: xlsFile.length,
+			customerNumber: Object.keys(resolvedData.result.customerMap).length,
+			accountNumber: Object.keys(resolvedData.result.accountMap).length,
+			createdAt: new Date()
+		});
+
 		file.Manager = manager;
 		file.AccountDataPlan = plan;
 		ctx.body = Resource.AccountDataFile(file);

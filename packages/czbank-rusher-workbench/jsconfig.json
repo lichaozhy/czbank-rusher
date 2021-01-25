@@ -1,2 +1,6 @@
 {
+	"include": [
+		"src/**/*.vue",
+		"src/**/*.js"
+	]
 }
