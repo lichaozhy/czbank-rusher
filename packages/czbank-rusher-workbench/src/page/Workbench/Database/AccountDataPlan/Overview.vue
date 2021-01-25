@@ -44,6 +44,7 @@
 	<b-table
 		id="plan-list"
 		class="mt-3"
+		ref="plan-table"
 		:items="planItemList"
 		:fields="planFieldList"
 		small
@@ -66,6 +67,7 @@
 
 		<template #row-details="row">
 			<FileListPanel
+				@request-upload="requestUploadByFilePanel(row.item.id)"
 				:plan-id="row.item.id"
 			/>
 		</template>
@@ -175,6 +177,13 @@ export default {
 				console.log(err);
 				event.preventDefault();
 			}
+		},
+		requestUploadByFilePanel(planId) {
+			const rowIndex = this.$refs['plan-table'].sortedItems
+				.findIndex(plan => plan.id === planId);
+
+			this.$refs['plan-table'].selectRow(rowIndex);
+			this.requestUploadingFile();
 		}
 	},
 	mounted() {

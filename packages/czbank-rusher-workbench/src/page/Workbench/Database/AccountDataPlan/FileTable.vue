@@ -20,6 +20,7 @@
 		<b-button
 			variant="primary"
 			class="mr-auto"
+			@click="emitUpoalding"
 		>上传到本计划</b-button>
 
 		<b-button
@@ -48,7 +49,10 @@
 		</template>
 
 		<template #empty>
-			<em>该计划不包含任何报表，您可以</em><b-link class="ml-3" >上传报表</b-link>
+			<em>该计划不包含任何报表，您可以</em><b-link
+				class="ml-3"
+				@click="emitUpoalding"
+			>上传报表</b-link>
 		</template>
 	</b-table>
 </b-card>
@@ -71,6 +75,9 @@ export default {
 			this.fileList = await this.$rusher.backend.File.query({
 				planId: this.planId
 			});
+		},
+		emitUpoalding() {
+			this.$emit('request-upload', { planId: this.planId });
 		}
 	},
 	mounted() {

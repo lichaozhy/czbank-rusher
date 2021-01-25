@@ -80,6 +80,10 @@ module.exports = function CZBankRusherSequelize(options) {
 		foreignKey: 'planId'
 	}, ASSOCIATION_BASIC_OPTIONS));
 
+	AccountDataPlan.hasMany(AccountDataFile, Object.assign({
+		foreignKey: 'planId'
+	}, ASSOCIATION_BASIC_OPTIONS));
+
 	AccountDataFile.belongsTo(Manager, Object.assign({
 		foreignKey: 'managerId'
 	}, ASSOCIATION_BASIC_OPTIONS));

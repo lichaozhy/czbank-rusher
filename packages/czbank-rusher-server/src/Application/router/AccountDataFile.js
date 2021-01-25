@@ -35,7 +35,7 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 		}
 	};
 
-	async function saveData(resolved, managerId, planId) {
+	async function saveData(resolved, managerId, planId, fileId) {
 		const { result } = resolved;
 		const { accountMap, customerMap, dataList } = result;
 
@@ -78,7 +78,8 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 			accountDataList.push({
 				id: dataId,
 				planId: planId,
-				accountId: accountId
+				accountId: accountId,
+				fileId: fileId
 			});
 
 			Object.keys(productDataMap).forEach(productCode => {
@@ -150,9 +151,7 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 		try {
 			await fs.move(raw.path, xlsPath);
 		} catch (err) {
-			fs.remove(raw.path);
-
-			return ctx.throw(400, 'The file is existed.');
+			console.log('Moving xls fail because a same file has been already existed.');
 		}
 
 		const setting = JSON.parse(plan.setting).map(item => {
@@ -177,7 +176,7 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 				return ctx.throw(400, 'The date of file is NOT matched to the plan.');
 			}
 
-			saveData(resolvedData, managerId, planId);
+			saveData(resolvedData, managerId, planId, id);
 		} catch (err) {
 			console.log(err);
 			fs.remove(xlsPath);

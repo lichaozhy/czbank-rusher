@@ -17,3 +17,6 @@ plan:
   name: 计划名称，用于总览时索引
   dateAs: 规定作为客户账户数据统计日的时刻
   description: 如果有其他情况可以在此编辑，长度不超过255个字
+
+file:
+  description: 补充该文件的其他情况

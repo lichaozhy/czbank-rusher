@@ -37,6 +37,20 @@
 			required
 		/>
 	</b-form-group>
+
+	<b-form-group
+		:label="$t('c.base.description')"
+		:description="$t('d.file.description')"
+		valid-feedback=""
+	>
+		<b-form-textarea
+			v-model="form.description"
+			trim
+			name="product-description"
+			autocomplete="off"
+			style="height: 8em"
+		/>
+	</b-form-group>
 </b-form>
 
 </template>
@@ -49,7 +63,8 @@ export default {
 			plan: {},
 			form: {
 				managerId: null,
-				file: null
+				file: null,
+				description: ''
 			}
 		};
 	},
