@@ -52,6 +52,7 @@
 		select-mode="single"
 		@row-selected="selectPlan"
 		:filter="keyword"
+		@sort-changed="collapseAll"
 	>
 		<template #cell(createdAt)="row">
 			{{ row.item.createdAt | localDatetime }}
@@ -132,6 +133,9 @@ export default {
 		};
 	},
 	methods: {
+		collapseAll() {
+			this.planList = this.planList.slice(0);
+		},
 		selectPlan(rows) {
 			this.selectedPlanId = rows.length > 0 ? rows[0].id : null;
 		},

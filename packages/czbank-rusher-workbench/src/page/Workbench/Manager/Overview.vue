@@ -93,6 +93,12 @@ export default {
 					sortable: true
 				},
 				{
+					key: 'lastUploadedDateAs',
+					label: '最近时点数据在',
+					class: 'col-last-upload',
+					sortable: true
+				},
+				{
 					key: 'blank',
 					label: '',
 					class: 'col-blank',
@@ -105,7 +111,8 @@ export default {
 					id: manager.id,
 					name: manager.name,
 					code: manager.code,
-					customerNumber: manager.customerNumber
+					customerNumber: manager.customerNumber,
+					lastUploadedDateAs: manager.lastUploadedDateAs
 				};
 			});
 		}

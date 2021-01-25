@@ -14,13 +14,13 @@
   },
   "main": "index.js",
   "dependencies": {
-    "core-js": "^3.8.2",
+    "core-js": "^3.8.3",
     "vue": "^2.6.12"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.10",
-    "@vue/cli-plugin-eslint": "~4.5.10",
-    "@vue/cli-service": "~4.5.10",
+    "@vue/cli-plugin-babel": "~4.5.11",
+    "@vue/cli-plugin-eslint": "~4.5.11",
+    "@vue/cli-service": "~4.5.11",
     "axios": "^0.21.1",
     "babel-eslint": "^10.1.0",
     "bootstrap-vue": "^2.21.2",
@@ -30,11 +30,13 @@
     "eslint": "^7.18.0",
     "eslint-plugin-vue": "^7.5.0",
     "node-sass": "^5.0.0",
+    "numeral": "^2.0.6",
     "sass-loader": "^10.1.1",
     "vue-i18n": "^8.22.4",
     "vue-router": "^3.4.9",
     "vue-template-compiler": "^2.6.12",
     "vuelidate": "^0.7.6",
+    "vuex": "^3.6.0",
     "yaml-loader": "^0.6.0"
   },
   "eslintConfig": {

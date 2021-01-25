@@ -10,6 +10,7 @@ import bvOptions from './bvOptions.json';
 
 import router from './router';
 import i18n from './i18n';
+import store from './store';
 
 Vue.config.productionTip = false;
 
@@ -21,5 +22,6 @@ Vue.use(Vuelidate);
 new Vue({
 	router,
 	i18n,
+	store,
 	render: h => h(Application),
 }).$mount('#app');

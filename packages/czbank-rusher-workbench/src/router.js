@@ -160,7 +160,14 @@ export default new VueRouter({
 				{
 					name: 'workbench.manager.detail',
 					path: 'manager/detail/:managerId',
-					component: Page.Workbench.Manager.Detail
+					component: Page.Workbench.Manager.Detail.Framework,
+					children: [
+						{
+							name: 'workbench.manager.detail.customer',
+							path: 'customer',
+							component: Page.Workbench.Manager.Detail.Customer
+						}
+					]
 				},
 				{
 					name: 'workbench.point',

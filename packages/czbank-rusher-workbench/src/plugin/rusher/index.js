@@ -1,6 +1,7 @@
 import axios from 'axios';
 import dateformat from 'dateformat';
 import bytes from 'bytes';
+import numeral from 'numeral';
 
 export function localDatetime(value) {
 	return dateformat(value, 'yyyy-mm-dd HH:MM:ss');
@@ -28,6 +29,7 @@ export default {
 		Vue.filter('localDate', localDate);
 		Vue.filter('localTime', localTime);
 		Vue.filter('toBytes', toBytes);
+		Vue.filter('numeral', value => numeral(value).format('0,0'));
 
 		const agent = axios.create({ baseURL: '/api' });
 

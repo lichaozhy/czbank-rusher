@@ -40,7 +40,7 @@ function normalize(_options) {
 	return options;
 }
 
-const ASSOCIATION_BASIC_OPTIONS = {
+const BASIC_OPTIONS = {
 	foreignKeyConstraint: false,
 	constraints: false
 };
@@ -68,9 +68,9 @@ module.exports = function CZBankRusherSequelize(options) {
 
 	Product.hasOne(ProductAccountDataSetting, Object.assign({
 		foreignKey: 'productId'
-	}, ASSOCIATION_BASIC_OPTIONS));
+	}, BASIC_OPTIONS));
 
-	ProductAccountDataSetting.belongsTo(Product, ASSOCIATION_BASIC_OPTIONS);
+	ProductAccountDataSetting.belongsTo(Product, BASIC_OPTIONS);
 
 	const AccountDataFile = sequelize.model('AccountDataFile');
 	const AccountDataPlan = sequelize.model('AccountDataPlan');
@@ -78,15 +78,25 @@ module.exports = function CZBankRusherSequelize(options) {
 
 	AccountDataFile.belongsTo(AccountDataPlan, Object.assign({
 		foreignKey: 'planId'
-	}, ASSOCIATION_BASIC_OPTIONS));
+	}, BASIC_OPTIONS));
 
 	AccountDataPlan.hasMany(AccountDataFile, Object.assign({
 		foreignKey: 'planId'
-	}, ASSOCIATION_BASIC_OPTIONS));
+	}, BASIC_OPTIONS));
 
 	AccountDataFile.belongsTo(Manager, Object.assign({
 		foreignKey: 'managerId'
-	}, ASSOCIATION_BASIC_OPTIONS));
+	}, BASIC_OPTIONS));
+
+	const Customer = sequelize.model('Customer');
+
+	Manager.hasMany(Customer, Object.assign({
+		foreignKey: 'managerId'
+	}, BASIC_OPTIONS));
+
+	Manager.hasMany(AccountDataFile, Object.assign({
+		foreignKey: 'managerId'
+	}, BASIC_OPTIONS));
 
 	return sequelize;
 };
