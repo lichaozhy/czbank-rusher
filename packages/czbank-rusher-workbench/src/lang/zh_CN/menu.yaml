@@ -35,6 +35,8 @@ database:
 
 manager:
   label: 客户经理
+  contribution:
+    label: 客户贡献度分布
   overview:
     label: 客户经理总览
   register:

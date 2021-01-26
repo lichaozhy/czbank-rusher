@@ -154,6 +154,11 @@ export default new VueRouter({
 							name: 'workbench.manager.register',
 							path: 'register',
 							component: Page.Workbench.Manager.Register
+						},
+						{
+							name: 'workbench.manager.contribution',
+							path: 'contribution',
+							component: Page.Workbench.Manager.Contribution
 						}
 					]
 				},

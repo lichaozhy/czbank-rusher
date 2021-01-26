@@ -16,14 +16,31 @@
 			xxl="2"
 			xl="3"
 		>
-			<b-list-group>
-				<b-list-group-item
-					:to="{ name: 'workbench.manager.overview' }"
-				>{{ $t('m.manager.overview.label') }}</b-list-group-item>
-				<b-list-group-item
-					:to="{ name: 'workbench.manager.register' }"
-				>{{ $t('m.manager.register.label') }}</b-list-group-item>
-			</b-list-group>
+			<b-card
+				no-body
+				header="分析&amp;统计"
+				class="mb-3"
+			>
+				<b-list-group flush>
+					<b-list-group-item
+						:to="{ name: 'workbench.manager.overview' }"
+					>{{ $t('m.manager.overview.label') }}</b-list-group-item>
+					<b-list-group-item
+						:to="{ name: 'workbench.manager.contribution' }"
+					>{{ $t('m.manager.contribution.label') }}</b-list-group-item>
+				</b-list-group>
+			</b-card>
+
+			<b-card
+				no-body
+				header="维护"
+			>
+				<b-list-group flush>
+					<b-list-group-item
+						:to="{ name: 'workbench.manager.register' }"
+					>{{ $t('m.manager.register.label') }}</b-list-group-item>
+				</b-list-group>
+			</b-card>
 		</b-col>
 		<b-col
 			xxl="10"
