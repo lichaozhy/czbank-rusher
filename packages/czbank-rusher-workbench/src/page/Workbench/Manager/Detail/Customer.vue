@@ -7,11 +7,59 @@
 		<b-input-group
 			prepend="过滤"
 			class="mr-auto"
+			size="sm"
 		>
 			<b-form-input
 				v-model="keyword"
 				placeholder="搜索客户"
 				lazy
+				name="manager-customer-search"
+				style="width: 8em"
+			/>
+		</b-input-group>
+
+		<b-input-group
+			prepend="选择时点"
+			class="mr-auto"
+		>
+			<b-form-select
+				name="manager-name"
+				:options="dateAsOptionList"
+				v-model="dateAs"
+				:disabled="dateAs === null"
+				style="width:10em"
+			/>
+		</b-input-group>
+
+		<b-input-group
+			prepend="每页"
+			append="条"
+			class="mr-1"
+			size="sm"
+		>
+			<b-form-input
+				style="width: 5em"
+				max="30"
+				min="10"
+				v-model="perPage"
+				type="number"
+				autocomplete="off"
+				class="text-center"
+			/>
+		</b-input-group>
+
+		<b-input-group
+			prepend="第"
+			append="页"
+			class="mr-auto"
+			size="sm"
+		>
+			<b-form-input
+				style="width: 5em"
+				v-model="currentPage"
+				type="number"
+				autocomplete="off"
+				class="text-center"
 			/>
 		</b-input-group>
 
@@ -21,7 +69,7 @@
       :total-rows="filteredLength"
       :per-page="perPage"
       aria-controls="my-table"
-			limit="9"
+			size="sm"
     ></b-pagination>
 	</b-button-toolbar>
 
@@ -38,6 +86,8 @@
 		hover
 		ref="customerTable"
 		@filtered="updateLength"
+		select-mode="single"
+		selectable
 	>
 		<template #cell(contribution)="row">
 			{{ row.item.contribution.toFixed(0) }}
@@ -83,11 +133,13 @@ export default {
 		return {
 			keyword: '',
 			currentPage: 1,
-			perPage: 25,
+			perPage: 20,
 			customerList: [],
 			productList: [],
 			selectedProductCodeMap: {},
-			filteredLength: 0
+			filteredLength: 0,
+			fileList: [],
+			dateAs: null
 		};
 	},
 	computed: {
@@ -96,6 +148,17 @@ export default {
 		},
 		Manager() {
 			return this.$rusher.backend.Manager(this.managerId);
+		},
+		dateAsOptionList() {
+			if (this.fileList.length === 0) {
+				return [{ value: null, text: '无可用的时点数据' }];
+			} else {
+				return this.fileList.slice(0).sort((fileA, fileB) => {
+					return fileA.plan.dateAs - fileB.plan.dateAs;
+				}).map(file => {
+					return { value: file.plan.dateAs, text: file.plan.dateAs };
+				});
+			}
 		},
 		customerItem() {
 			return this.customerList.map(customer => {
@@ -211,21 +274,39 @@ export default {
 			];
 		}
 	},
+	watch: {
+		dateAs() {
+			this.getCustomerList();
+		}
+	},
 	methods: {
 		updateLength() {
 			this.filteredLength = this.$refs.customerTable.filteredItems.length;
 		},
 		async getCustomerList() {
-			this.customerList = await this.Manager.Customer.query();
+			this.customerList = await this.Manager.Customer.query({ dateAs: this.dateAs });
+			this.$nextTick(() => this.updateLength());
 		},
 		async getProductList() {
 			this.productList = await this.$rusher.backend.Product.query();
-			this.updateLength();
+		},
+		async getManagerFile() {
+			this.fileList = await this.Manager.File.query();
+
+			if (this.fileList.length > 0) {
+				this.dateAs = this.fileList.slice(0).sort((fileA, fileB) => {
+					return fileA.plan.dateAs - fileB.plan.dateAs;
+				})[0].plan.dateAs;
+			}
 		}
 	},
-	mounted() {
-		this.getCustomerList();
-		this.getProductList();
+	async mounted() {
+		await this.getManagerFile();
+		await this.getProductList();
+
+		if (this.dateAs !== null) {
+			await this.getCustomerList();
+		}
 	}
 };
 </script>

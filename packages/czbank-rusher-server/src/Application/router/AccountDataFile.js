@@ -168,12 +168,17 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 			size: xlsFile.length,
 			customerNumber: Object.keys(resolvedData.result.customerMap).length,
 			accountNumber: Object.keys(resolvedData.result.accountMap).length,
+			abstract: JSON.stringify(resolvedData.abstract),
 			createdAt: new Date()
 		});
 
 		file.Manager = manager;
 		file.AccountDataPlan = plan;
 		ctx.body = Resource.AccountDataFile(file, manager, plan);
+	}).param('fileId', async (id, ctx, next) => {
+		const file = await AccountDataFile.findOne();
+
+		return next();
 	}).get('/:fileId', async function getFile() {
 
 	}).get('/:filedId.xls', async function downloadXLS() {

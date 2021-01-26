@@ -68,10 +68,32 @@ function normalize(_options = []) {
 	return options;
 }
 
+
+
 module.exports = function CZBankAccountDataFileReader(options = []) {
 	const Product = normalize(options);
 
+	function Abstract() {
+		const abstract = {};
+
+		Product.forEach(product => {
+			abstract[product.code] = { average: 0, balance: 0 };
+		});
+
+		return abstract;
+	}
+
+	function trimAbstract(abstract) {
+		Product.forEach(product => {
+			const { average, balance } = abstract[product.code];
+
+			abstract[product.code].average = Number(average.toFixed(2));
+			abstract[product.code].balance = Number(balance.toFixed(2));
+		});
+	}
+
 	return function read(buffer) {
+		const abstract = Abstract();
 		const workbook = XLSX.read(buffer);
 		const sheet = getDataSheet(workbook);
 		const date = getDate(sheet);
@@ -173,9 +195,23 @@ module.exports = function CZBankAccountDataFileReader(options = []) {
 			});
 		});
 
+		Result.dataList.forEach(accountData => {
+			const { data } = accountData;
+
+			for(const productCode in data) {
+				const { balance, averageDeposit } = data[productCode];
+
+				abstract[productCode].balance += balance;
+				abstract[productCode].average += averageDeposit;
+			}
+		});
+
+		trimAbstract(abstract);
+
 		return {
 			date,
-			result: Result
+			result: Result,
+			abstract: abstract
 		};
 	};
 };

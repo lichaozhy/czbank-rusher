@@ -8,9 +8,11 @@
 		"xxl"
 	],
   "formControls": {
+		"size": "sm"
   },
   "BButton": {
-    "variant": "secondary"
+		"variant": "secondary",
+		"size": "sm"
   },
   "BToast": {
     "toaster": "b-toaster-bottom-center",
@@ -23,5 +25,11 @@
 	"BModal": {
     "cancelVariant": "secondary",
     "okVariant": "primary"
+	},
+	"BFormGroup": {
+		"size": "sm"
+	},
+	"BInputGroup": {
+		"size": "sm"
 	}
 }

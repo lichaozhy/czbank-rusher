@@ -6,6 +6,7 @@ module.exports = function AccountDataFile(file, manager, plan) {
 		size: file.size,
 		customerNumber: file.customerNumber,
 		accountNumber: file.accountNumber,
+		abstract: JSON.parse(file.abstract),
 		plan: {
 			id: plan.id,
 			name: plan.name,

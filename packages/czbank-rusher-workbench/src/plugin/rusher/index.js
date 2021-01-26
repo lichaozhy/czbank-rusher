@@ -66,8 +66,10 @@ export default {
 					Customer: Object.assign(function IManagerCustomer() {
 
 					}, {
-						query() {
-							return agent.get(`/manager/${managerId}/customer`).then(pickData);
+						query({ dateAs }) {
+							return agent.get(`/manager/${managerId}/customer`, {
+								params: { dateAs }
+							}).then(pickData);
 						}
 					})
 				};

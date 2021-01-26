@@ -277,7 +277,7 @@ export default {
 	}
 
 	.col-createdat {
-		width: 10em;
+		width: 12em;
 	}
 
 	.col-detail {

@@ -40,7 +40,7 @@
 				</b-list-group>
 			</b-card>
 
-			<b-form-group
+			<!-- <b-form-group
 				label="选择时点"
 			>
 				<b-form-select
@@ -49,33 +49,63 @@
 					v-model="dateAs"
 					:disabled="dateAs === null"
 				/>
-			</b-form-group>
+			</b-form-group> -->
 
 			<b-card
 				no-body
 				class="mt-3"
 			>
 				<template #header>
-					<div><b class="mr-1">{{ manager.name }}'s</b>业绩总览</div>
+					<b-input-group
+						prepend="选择时点"
+					>
+						<b-form-select
+							name="manager-name"
+							:options="dateAsOptionList"
+							v-model="dateAs"
+							:disabled="dateAs === null"
+						/>
+					</b-input-group>
 				</template>
 
 				<b-card-body>
 					<p class="text-center">共计客户</p>
-					<h1 class="m-0 text-center">{{ manager.customerNumber | numeral }}</h1>
+					<h1
+						class="m-0 text-center"
+					>{{ currentFile ? currentFile.customerNumber : 0 | numeral }}</h1>
 				</b-card-body>
 
-				<b-list-group flush>
-					<b-list-group-item>存款余额：</b-list-group-item>
-					<b-list-group-item>存款日均：</b-list-group-item>
-					<b-list-group-item>非存款余额：</b-list-group-item>
-					<b-list-group-item>非存款日均：</b-list-group-item>
+				<b-list-group flush class="mt-1">
+					<b-list-group-item
+						class="d-flex justify-content-between align-items-center"
+					><b>金融资产余额：</b><span>{{ matrix.balance | numeral }}</span></b-list-group-item>
+					<b-list-group-item
+						class="d-flex justify-content-between align-items-center"
+					><b>金融资产日均：</b><span>{{ matrix.average | numeral }}</span></b-list-group-item>
 				</b-list-group>
 
 				<b-list-group flush class="mt-1">
-					<b-list-group-item><b>金融资产余额：</b></b-list-group-item>
-					<b-list-group-item><b>金融资产日均：</b></b-list-group-item>
-					<b-list-group-item><b>存款占比：</b></b-list-group-item>
-					<b-list-group-item><b>贡献度：</b></b-list-group-item>
+					<b-list-group-item
+						class="d-flex justify-content-between align-items-center"
+					><b>存款余额：</b><span>{{ matrix.deposit.balance | numeral }}</span></b-list-group-item>
+					<b-list-group-item
+						class="d-flex justify-content-between align-items-center"
+					><b>存款日均：</b><span>{{ matrix.deposit.average | numeral }}</span></b-list-group-item>
+					<b-list-group-item
+						class="d-flex justify-content-between align-items-center"
+					><b>非存款余额：</b><span>{{ matrix.nonDeposit.balance | numeral }}</span></b-list-group-item>
+					<b-list-group-item
+						class="d-flex justify-content-between align-items-center"
+					><b>非存款日均：</b><span>{{ matrix.nonDeposit.average | numeral }}</span></b-list-group-item>
+				</b-list-group>
+
+				<b-list-group flush class="mt-1">
+					<b-list-group-item
+						class="d-flex justify-content-between align-items-center"
+					><b>存款占比：</b><span>{{ (matrix.depositRate * 100).toFixed(2) + '%' }}</span></b-list-group-item>
+					<b-list-group-item
+						class="d-flex justify-content-between align-items-center"
+					><b>贡献度：</b><span>{{ matrix.contribution | numeral }}</span></b-list-group-item>
 				</b-list-group>
 			</b-card>
 		</b-col>
@@ -91,6 +121,8 @@
 </template>
 
 <script>
+const DEPOSIT_PRODUCT_CODE = 'DEPOSIT';
+
 export default {
 	data() {
 		return {
@@ -121,6 +153,41 @@ export default {
 					return { value: file.plan.dateAs, text: file.plan.dateAs };
 				});
 			}
+		},
+		currentFile() {
+			return this.fileList.find(file => file.plan.dateAs === this.dateAs);
+		},
+		matrix() {
+			const matrix = {
+				deposit: { average: null, balance: null },
+				nonDeposit: { average: null, balance: null },
+				average: null,
+				balance: null,
+				depositRate: null,
+				contribution: null
+			};
+
+			if (this.currentFile) {
+				const { abstract } = this.currentFile;
+
+				matrix.deposit.balance = abstract[DEPOSIT_PRODUCT_CODE].balance;
+				matrix.deposit.average = abstract[DEPOSIT_PRODUCT_CODE].average;
+
+				matrix.balance = 0;
+				matrix.average = 0;
+
+				for(const productCode in abstract) {
+					matrix.balance += abstract[productCode].balance;
+					matrix.average += abstract[productCode].average;
+				}
+
+				matrix.nonDeposit.balance = matrix.balance - matrix.deposit.balance;
+				matrix.nonDeposit.average = matrix.average - matrix.deposit.average;
+				matrix.depositRate = matrix.deposit.average / matrix.average;
+				matrix.contribution = (matrix.deposit.average * 2 + matrix.nonDeposit.average) / 10000;
+			}
+
+			return matrix;
 		}
 	},
 	methods: {

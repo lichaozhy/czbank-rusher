@@ -2,14 +2,15 @@
 
 <b-card>
 	<b-button-toolbar>
-
 		<b-button
+			size="sm"
 			class="mr-1"
 			variant="primary"
 			@click="getFileListByPlanId"
 		>刷新</b-button>
 
 		<b-form-input
+			size="sm"
 			v-model="keyword"
 			placeholder="输入姓名过滤"
 			class="mr-auto"
@@ -18,12 +19,14 @@
 		/>
 
 		<b-button
+			size="sm"
 			variant="primary"
 			class="mr-auto"
 			@click="emitUpoalding"
 		>上传到本计划</b-button>
 
 		<b-button
+			size="sm"
 			variant="danger"
 			class="mr-0"
 		>删除</b-button>

@@ -15,6 +15,7 @@ module.exports = function AccountDataFile(sequelize, namespace) {
 		customerNumber: DataTypes.INTEGER,
 		accountNumber: DataTypes.INTEGER,
 		description: DataTypes.STRING,
+		abstract: DataTypes.TEXT,
 		createdAt: DataTypes.DATE
 	}, {
 		tableName: `${namespace}account_data_file`

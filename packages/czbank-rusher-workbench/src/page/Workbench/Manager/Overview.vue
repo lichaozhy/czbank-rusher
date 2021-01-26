@@ -7,6 +7,7 @@
 		<b-input-group
 			prepend="过滤"
 			class="mr-auto"
+			size="sm"
 		>
 			<b-form-input
 				v-model="keyword"
@@ -46,6 +47,7 @@
 		selectable
 		select-mode="single"
 		@row-selected="selectManager($event)"
+		@row-dblclicked="gotoManager($event.id)"
 	></b-table>
 </div>
 
@@ -128,6 +130,12 @@ export default {
 			this.selectedManagerId = null;
 			await this.$rusher.backend.Manager(managerId).delete();
 			await this.getManagerList();
+		},
+		async gotoManager(managerId) {
+			await this.$router.push({
+				name: 'workbench.manager.detail',
+				params: { managerId }
+			});
 		}
 	},
 	mounted() {
