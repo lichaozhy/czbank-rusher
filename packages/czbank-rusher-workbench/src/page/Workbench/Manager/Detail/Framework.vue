@@ -20,21 +20,9 @@
 			xxl="2"
 			xl="3"
 		>
-
-			<b-form-group
-				label="选择时点"
-			>
-				<b-form-select
-					name="manager-name"
-					:options="dateAsOptionList"
-					v-model="dateAs"
-					:disabled="dateAs === null"
-				/>
-			</b-form-group>
-
 			<b-card
+				class="mb-3"
 				no-body
-				class="mt-3"
 			>
 				<template #header>
 					<div><b class="mr-1">{{ manager.name }}'s</b>统计</div>
@@ -51,6 +39,17 @@
 					>客户指标变动</b-list-group-item>
 				</b-list-group>
 			</b-card>
+
+			<b-form-group
+				label="选择时点"
+			>
+				<b-form-select
+					name="manager-name"
+					:options="dateAsOptionList"
+					v-model="dateAs"
+					:disabled="dateAs === null"
+				/>
+			</b-form-group>
 
 			<b-card
 				no-body

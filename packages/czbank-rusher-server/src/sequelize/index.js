@@ -98,5 +98,27 @@ module.exports = function CZBankRusherSequelize(options) {
 		foreignKey: 'managerId'
 	}, BASIC_OPTIONS));
 
+	const Account = sequelize.model('Account');
+
+	Customer.hasMany(Account, Object.assign({
+		foreignKey: 'customerId'
+	}, BASIC_OPTIONS));
+
+	const AccountData = sequelize.model('AccountData');
+
+	Account.hasMany(AccountData, Object.assign({
+		foreignKey: 'accountId'
+	}, BASIC_OPTIONS));
+
+	AccountData.belongsTo(AccountDataPlan, Object.assign({
+		foreignKey: 'planId'
+	}, BASIC_OPTIONS));
+
+	const AccountProductData = sequelize.model('AccountProductData');
+
+	AccountData.hasMany(AccountProductData, Object.assign({
+		foreignKey: 'dataId'
+	}, BASIC_OPTIONS));
+
 	return sequelize;
 };

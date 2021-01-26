@@ -2,7 +2,7 @@ const { Router } = require('@produck/duck-web-koa-router');
 const fs = require('fs-extra');
 
 module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
-	Sequelize, Utils, Workspace, AccountDataResolver
+	Sequelize, Utils, Workspace, AccountDataResolver, Resource
 }) {
 	const Customer = Sequelize.model('Customer');
 	const Account = Sequelize.model('Account');
@@ -11,29 +11,6 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 	const AccountDataFile = Sequelize.model('AccountDataFile');
 	const Manager = Sequelize.model('Manager');
 	const AccountDataPlan = Sequelize.model('AccountDataPlan');
-
-	const Resource = {
-		AccountDataFile(data) {
-			const { Manager, AccountDataPlan } = data;
-
-			return {
-				id: data.id,
-				createdAt: data.createdAt,
-				description: data.description,
-				size: data.size,
-				customerNumber: data.customerNumber,
-				accountNumber: data.accountNumber,
-				plan: {
-					id: AccountDataPlan.id,
-					name: AccountDataPlan.name
-				},
-				manager: {
-					id: Manager.id,
-					name: Manager.name
-				}
-			};
-		}
-	};
 
 	async function saveData(resolved, managerId, planId, fileId) {
 		const { result } = resolved;
@@ -119,7 +96,9 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 
 		const list = await AccountDataFile.findAll(options);
 
-		ctx.body = list.map(fileData => Resource.AccountDataFile(fileData));
+		ctx.body = list.map(file => {
+			return Resource.AccountDataFile(file, file.Manager, file.AccountDataPlan);
+		});
 	}).post('/', async function importFile(ctx) {
 		const { managerId, planId, description } = ctx.request.body;
 		const { raw } = ctx.request.files;
@@ -194,7 +173,7 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 
 		file.Manager = manager;
 		file.AccountDataPlan = plan;
-		ctx.body = Resource.AccountDataFile(file);
+		ctx.body = Resource.AccountDataFile(file, manager, plan);
 	}).get('/:fileId', async function getFile() {
 
 	}).get('/:filedId.xls', async function downloadXLS() {

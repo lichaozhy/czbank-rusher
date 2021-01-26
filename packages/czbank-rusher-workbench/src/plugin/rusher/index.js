@@ -30,6 +30,7 @@ export default {
 		Vue.filter('localTime', localTime);
 		Vue.filter('toBytes', toBytes);
 		Vue.filter('numeral', value => numeral(value).format('0,0'));
+		Vue.filter('numeralFloat', value => numeral(value).format('0,0.00'));
 
 		const agent = axios.create({ baseURL: '/api' });
 
@@ -60,6 +61,13 @@ export default {
 					}, {
 						query() {
 							return agent.get(`/manager/${managerId}/file`).then(pickData);
+						}
+					}),
+					Customer: Object.assign(function IManagerCustomer() {
+
+					}, {
+						query() {
+							return agent.get(`/manager/${managerId}/customer`).then(pickData);
 						}
 					})
 				};

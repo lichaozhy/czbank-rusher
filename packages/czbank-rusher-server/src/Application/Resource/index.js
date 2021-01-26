@@ -1,3 +1,6 @@
 module.exports = {
-	AccountDataFile: require('./AccountDataFile')
+	AccountDataFile: require('./AccountDataFile'),
+	Manager: require('./Manager'),
+	Product: require('./Product'),
+	Customer: require('./Customer')
 };

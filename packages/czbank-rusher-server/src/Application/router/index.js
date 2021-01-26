@@ -6,5 +6,6 @@ module.exports = {
 	AccountDataPlanRouter: require('./AccountDataPlan'),
 	ManagerRouter: require('./Manager'),
 	ManagerFileRouter: require('./ManagerFile'),
+	ManagerCustomerRouter: require('./ManagerCustomer'),
 	ProductRouter: require('./Product'),
 };
