@@ -12,7 +12,6 @@ module.exports = Router(function CZBankRusherManagerFileRouter(router, {
 	router.get('/', async function hello(ctx) {
 		const { manager } = ctx.state;
 		const { dateAs } = ctx.query;
-		const planOptions = { model: AccountDataPlan };
 
 		const customerList = await Customer.findAll({
 			where: { managerId: manager.id },
@@ -20,16 +19,19 @@ module.exports = Router(function CZBankRusherManagerFileRouter(router, {
 				model: Account,
 				include: [{
 					model: AccountData,
-					include: [planOptions, AccountProductData]
-				}]
+					include: [
+						{
+							model: AccountDataPlan,
+							where: { dateAs }
+						},
+						{
+							model: AccountProductData,
+						}
+					],
+					required: false
+				}],
 			}]
 		});
-
-		if (dateAs) {
-			planOptions.through = { where: { dateAs } };
-		} else {
-			planOptions.sort = [['dateAs', 'DESC']];
-		}
 
 		ctx.body = customerList.map(customer => {
 			const { Accounts: accountList } = customer;
@@ -47,7 +49,7 @@ module.exports = Router(function CZBankRusherManagerFileRouter(router, {
 
 			accountList.forEach(account => {
 				const { AccountData: dataList } = account;
-				const data = dataList.find(data => data.AccountDataPlan.dateAs === dateAs);
+				const data = dataList[0];
 
 				if (data) {
 					const productDataList = data.AccountProductData;

@@ -38,6 +38,7 @@
 	</b-button-toolbar>
 
 	<b-table
+		id="manager-overview-table"
 		class="mt-3"
 		:fields="managerTableField"
 		:items="managerItemList"
@@ -48,12 +49,47 @@
 		select-mode="single"
 		@row-selected="selectManager($event)"
 		@row-dblclicked="gotoManager($event.id)"
-	></b-table>
+	>
+		<template #cell(average)="row">
+			{{ row.item.average | numeralFloat }}
+		</template>
+
+		<template #cell(balance)="row">
+			{{ row.item.balance | numeralFloat }}
+		</template>
+
+		<template #cell(contribution)="row">
+			{{ row.item.contribution.toFixed(0) }}
+		</template>
+
+		<template #cell(depositRate)="row">
+			{{ (row.item.depositRate * 100).toFixed(2) + '%' }}
+		</template>
+
+		<template #cell(depositAverage)="row">
+			{{ row.item.depositAverage | numeralFloat }}
+		</template>
+
+		<template #cell(depositBalance)="row">
+			{{ row.item.depositBalance | numeralFloat }}
+		</template>
+
+		<template #cell(nonDepositAverage)="row">
+			{{ row.item.nonDepositAverage | numeralFloat }}
+		</template>
+
+		<template #cell(nonDepositBalance)="row">
+			{{ row.item.nonDepositBalance | numeralFloat }}
+		</template>
+
+	</b-table>
 </div>
 
 </template>
 
 <script>
+import Matrix from './Detail/matrix';
+
 export default {
 	data() {
 		return {
@@ -91,12 +127,60 @@ export default {
 				{
 					key: 'customerNumber',
 					label: this.$t('c.manager.customerNumber'),
-					class: 'col-manager-customerNumber',
-					sortable: true
+					class: 'col-matrix',
+					sortable: true,
+				},
+				{
+					key: 'average',
+					label: '金融资产日均',
+					sortable: true,
+					class: 'col-matrix'
+				},
+				{
+					key: 'balance',
+					label: '金融资产余额',
+					sortable: true,
+					class: 'col-matrix'
+				},
+				{
+					key: 'contribution',
+					label: '贡献度',
+					sortable: true,
+					class: 'col-matrix'
+				},
+				{
+					key: 'depositRate',
+					label: '存款占比',
+					sortable: true,
+					class: 'col-matrix'
+				},
+				{
+					key: 'depositAverage',
+					label: '存款日均',
+					sortable: true,
+					class: 'col-matrix'
+				},
+				{
+					key: 'depositBalance',
+					label: '存款余额',
+					sortable: true,
+					class: 'col-matrix'
+				},
+				{
+					key: 'nonDepositAverage',
+					label: '非存款日均',
+					sortable: true,
+					class: 'col-matrix'
+				},
+				{
+					key: 'nonDepositBalance',
+					label: '非存款余额',
+					sortable: true,
+					class: 'col-matrix'
 				},
 				{
 					key: 'lastUploadedDateAs',
-					label: '最近时点数据在',
+					label: '最新时点',
 					class: 'col-last-upload',
 					sortable: true
 				},
@@ -109,11 +193,21 @@ export default {
 		},
 		managerItemList() {
 			return this.managerList.map(manager => {
+				const matrix = Matrix(manager.abstract);
+
 				return {
 					id: manager.id,
 					name: manager.name,
 					code: manager.code,
 					customerNumber: manager.customerNumber,
+					average: matrix.average,
+					balance: matrix.balance,
+					contribution: matrix.contribution,
+					depositRate: matrix.depositRate,
+					depositAverage: matrix.deposit.average,
+					depositBalance: matrix.deposit.balance,
+					nonDepositAverage: matrix.nonDeposit.average,
+					nonDepositBalance: matrix.nonDeposit.balance,
 					lastUploadedDateAs: manager.lastUploadedDateAs
 				};
 			});
@@ -144,6 +238,15 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+#manager-overview-table {
+	.col-last-upload {
+		width: 8em;
+	}
 
+	.col-matrix {
+		width: 8em;
+		text-align: right;
+	}
+}
 </style>

@@ -21,12 +21,34 @@ module.exports = Router(function CZBankRusherManagerRouter(router, {
 	}
 
 	router.get('/', async function getManagerList(ctx) {
-		const list = await Manager.findAll(BaseOptions());
+		const list = await Manager.findAll({
+			include: [
+				{
+					model: AccountDataFile,
+					include: [{
+						model: AccountDataPlan,
+					}],
+					// limit: 1,
+					separate: true,
+					required: false,
+					order: [
+						[AccountDataPlan, 'dateAs', 'DESC']
+					]
+				},
+			],
+		});
 
 		ctx.body = list.map(manager => {
-			const { Customers, AccountDataFiles } = manager;
+			const file = manager.AccountDataFiles[0];
 
-			return Resource.Manager(manager, Customers, AccountDataFiles);
+			return {
+				id: manager.id,
+				name: manager.name,
+				code: manager.code,
+				customerNumber: file ? file.customerNumber : 0,
+				abstract: file ? JSON.parse(file.abstract) : {},
+				lastUploadedDateAs: file ? file.AccountDataPlan.dateAs : null
+			};
 		});
 	}).post('/', async function createManager(ctx) {
 		const { name, code } = ctx.request.body;
