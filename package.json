@@ -9,7 +9,7 @@
     "dev:db": "node ./script/db.js",
     "deps:install": "npm install && lerna bootstrap",
     "deps:clean": "lerna clean -y",
-    "build:workbench": "lerna run --scope=@plumber-hub/workbench build",
+    "build:workbench": "lerna run --scope=@czbank/czbank-rusher-workbench build",
     "build:pkg": "node ./script/build.js",
     "build": "npm run deps:install && npm run build:workbench && npm run build:pkg"
   },
@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/lichaozhy/czbank-rusher#readme",
   "devDependencies": {
+    "fs-extra": "^9.1.0",
     "lerna": "^3.22.1",
     "pkg": "^4.4.9"
   }

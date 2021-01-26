@@ -2,6 +2,8 @@ const DuckWebKoa = require('@produck/duck-web-koa');
 const DuckWebKoaRouter = require('@produck/duck-web-koa-router');
 const koaBody = require('koa-body');
 const ResourcePlugin = require('./ResourcePlugin');
+const serve = require('koa-static');
+const path = require('path');
 
 const Router = require('./router');
 
@@ -16,6 +18,7 @@ module.exports = DuckWebKoa(function CZBankRusherApplication(app, {
 	});
 
 	app
+		.use(serve(path.resolve('www')))
 		.use(bodyparser)
 		.use(AppRouter().routes());
 }, {

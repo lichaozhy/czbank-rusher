@@ -11,6 +11,8 @@ const RusherSequelize = require('./src/sequelize');
 const utils = require('./src/utils');
 const AccountDataResolver = require('./src/AccountDataResolver');
 
+require('sqlite3');
+
 module.exports = Duck({
 	id: 'com.czbank.tianjin.rusher',
 	name: meta.name,
