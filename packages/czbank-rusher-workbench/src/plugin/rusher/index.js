@@ -54,7 +54,14 @@ export default {
 							name,
 							code
 						}).then(pickData);
-					}
+					},
+					File: Object.assign(function IManagerFile() {
+
+					}, {
+						query() {
+							return agent.get(`/manager/${managerId}/file`).then(pickData);
+						}
+					})
 				};
 			}, {
 				query() {

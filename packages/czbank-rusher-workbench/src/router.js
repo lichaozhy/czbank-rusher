@@ -161,12 +161,20 @@ export default new VueRouter({
 					name: 'workbench.manager.detail',
 					path: 'manager/detail/:managerId',
 					component: Page.Workbench.Manager.Detail.Framework,
+					redirect: {
+						name: 'workbench.manager.detail.customer'
+					},
 					children: [
 						{
 							name: 'workbench.manager.detail.customer',
 							path: 'customer',
 							component: Page.Workbench.Manager.Detail.Customer
-						}
+						},
+						{
+							name: 'workbench.manager.detail.customer-change',
+							path: 'customer-change',
+							component: Page.Workbench.Manager.Detail.CustomerChange
+						},
 					]
 				},
 				{

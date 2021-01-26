@@ -2,17 +2,19 @@ const { Router } = require('@produck/duck-web-koa-router');
 
 const Resource = {
 	Manager(data) {
-		data.AccountDataFiles.sort((fileA, fileB) => {
-			return fileA.AccountDataPlan.dateAs - fileB.AccountDataPlan.dateAs;
-		});
+		if (data.AccountDataFiles) {
+			data.AccountDataFiles.sort((fileA, fileB) => {
+				return fileA.AccountDataPlan.dateAs - fileB.AccountDataPlan.dateAs;
+			});
+		}
 
-		const file = data.AccountDataFiles[0]
+		const file = data.AccountDataFiles && data.AccountDataFiles[0];
 
 		return {
 			id: data.id,
 			name: data.name,
 			code: data.code,
-			customerNumber: data.Customers.length,
+			customerNumber: data.Customers ? data.Customers.length : 0,
 			lastUploadedDateAs: file ? file.AccountDataPlan.dateAs : null
 		};
 	}

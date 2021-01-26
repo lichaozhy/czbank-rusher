@@ -47,7 +47,7 @@
 			class="mr-1"
 		/>{{ $t('menu.database.label') }}</b-nav-item>
 	</b-navbar-nav>
-
+<!--
 	<b-navbar-nav class="ml-auto">
 		<b-nav-form>
 			<b-form-select
@@ -60,7 +60,7 @@
 				@change="setGlobalPlanDateAs($event)"
 			/>
 		</b-nav-form>
-	</b-navbar-nav>
+	</b-navbar-nav> -->
 
 </b-navbar>
 

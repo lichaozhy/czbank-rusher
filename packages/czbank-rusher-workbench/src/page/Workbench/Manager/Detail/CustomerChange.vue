@@ -1,8 +1,6 @@
 <template>
 
-<div>
-	客户经理客户总览
-</div>
+<div>客户指标变动</div>
 
 </template>
 
