@@ -65,7 +65,7 @@ export default {
 				average.nonDeposit += clone[productCode].averageDeposit;
 			}
 
-			return Math.ceil((average.deposit * 2 + average.nonDeposit) / 10000);
+			return Math.round((average.deposit * 2 + average.nonDeposit) / 10000);
 		},
 		computeItemList() {
 			const contributionOfManagerCustomerListMap = {};

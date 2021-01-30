@@ -1,7 +1,7 @@
 const Duck = require('@produck/duck');
 const DuckWeb = require('@produck/duck-web');
 const DuckLog = require('@produck/duck-log');
-const DuckWorkspace = require('./lib/workspace');
+const DuckWorkspace = require('@produck/duck-workspace');
 const http = require('http');
 const https = require('https');
 
