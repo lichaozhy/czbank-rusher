@@ -40,17 +40,6 @@
 				</b-list-group>
 			</b-card>
 
-			<!-- <b-form-group
-				label="选择时点"
-			>
-				<b-form-select
-					name="manager-name"
-					:options="dateAsOptionList"
-					v-model="dateAs"
-					:disabled="dateAs === null"
-				/>
-			</b-form-group> -->
-
 			<b-card
 				no-body
 				class="mt-3"

@@ -1,10 +1,32 @@
 <template>
 
 <div>
-	<h1>最新客户贡献度分布</h1><hr>
+	<h1>客户贡献度分布</h1><hr>
+
+	<b-button-toolbar>
+		<b-input-group
+			prepend="选择时点"
+			class="mr-1"
+		>
+			<b-form-select
+				name="manager-name"
+				:options="dateAsOptionList"
+				v-model="dateAs"
+				:disabled="dateAs === null"
+				style="width:12em"
+			/>
+		</b-input-group>
+
+		<b-button
+			@click="getAllCustomerList"
+			variant="success"
+			:disabled="fetching"
+		>开始计算</b-button>
+	</b-button-toolbar>
 
 	<b-table
 		id="manager-contribution"
+		class="mt-3"
 		:fields="fieldList"
 		:items="itemList"
 		small
@@ -17,7 +39,7 @@
 		>
 			<div
 				:key="manager.id"
-			>{{ manager.name }}<div>{{ manager.lastUploadedDateAs }}</div></div>
+			>{{ manager.name }}</div>
 		</template>
 	</b-table>
 </div>
@@ -35,7 +57,9 @@ export default {
 				list: [],
 				customerListMap: {}
 			},
-			itemList: []
+			itemList: [],
+			planList: [],
+			fetching: false
 		};
 	},
 	methods: {
@@ -43,13 +67,21 @@ export default {
 			this.Manager.list = await this.$rusher.backend.Manager.query();
 		},
 		async getAllCustomerList() {
+			this.fetching = true;
+
 			for(const manager of this.Manager.list) {
 				this.Manager.customerListMap[manager.id] =
 					await this.$rusher.backend.Manager(manager.id)
-						.Customer.query({ dateAs: manager.lastUploadedDateAs });
+						.Customer.query({ dateAs: this.dateAs });
+
+				this.computeItemList();
 			}
 
-			this.computeItemList();
+			this.fetching = false;
+		},
+		async getPlanList() {
+			this.planList = await this.$rusher.backend.AccountDataPlan.query();
+			this.dateAs = this.planList[0].dateAs;
 		},
 		getContributeFromData(data) {
 			const clone = Object.assign({}, data);
@@ -100,6 +132,17 @@ export default {
 		}
 	},
 	computed: {
+		dateAsOptionList() {
+			if (this.planList.length === 0) {
+				return [{ value: null, text: '无可用的时点数据' }];
+			} else {
+				return this.planList.slice(0).sort((planA, planB) => {
+					return planA.dateAs - planB.dateAs;
+				}).map(plan => {
+					return { value: plan.dateAs, text: plan.dateAs };
+				});
+			}
+		},
 		fieldList() {
 			const managerField = this.Manager.list.map(manager => {
 				return {
@@ -137,7 +180,8 @@ export default {
 	},
 	async mounted() {
 		await this.getManagerList();
-		await this.getAllCustomerList();
+		await this.getPlanList();
+		this.computeItemList();
 	}
 };
 </script>
