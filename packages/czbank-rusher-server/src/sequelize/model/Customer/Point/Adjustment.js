@@ -3,8 +3,8 @@ const { DataTypes } = require('sequelize');
 /**
  * @param {import('sequelize').Sequelize} sequelize
  */
-module.exports = function PointAdjustment(sequelize, namespace) {
-	sequelize.define('PointAdjustment', {
+module.exports = function CustomerPointAdjustment(sequelize, namespace) {
+	sequelize.define('CustomerPointAdjustment', {
 		id: {
 			type: DataTypes.CHAR(64),
 			primaryKey: true

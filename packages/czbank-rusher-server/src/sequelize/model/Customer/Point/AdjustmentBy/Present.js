@@ -3,8 +3,8 @@ const { DataTypes } = require('sequelize');
 /**
  * @param {import('sequelize').Sequelize} sequelize
  */
-module.exports = function AdjustmentReasonPresent(sequelize, namespace) {
-	sequelize.define('AdjustmentReasonPresent', {
+module.exports = function CustomerPointAdjustmentByPresent(sequelize, namespace) {
+	sequelize.define('CustomerPointAdjustmentByPresent', {
 		adjustmentId: {
 			type: DataTypes.CHAR(64),
 			primaryKey: true
@@ -13,6 +13,6 @@ module.exports = function AdjustmentReasonPresent(sequelize, namespace) {
 		amount: DataTypes.INTEGER,
 		description: DataTypes.STRING
 	}, {
-		tableName: `${namespace}adjustment_reason_present`
+		tableName: `${namespace}customer_point_adjustment_by_present`
 	});
 };

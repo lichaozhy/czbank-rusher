@@ -9,7 +9,7 @@ module.exports = function CustomerPoint(sequelize, namespace) {
 			type: DataTypes.CHAR(64),
 			primaryKey: true
 		},
-		pointTotal: DataTypes.INTEGER
+		value: DataTypes.INTEGER
 	}, {
 		tableName: `${namespace}customer_point`
 	});

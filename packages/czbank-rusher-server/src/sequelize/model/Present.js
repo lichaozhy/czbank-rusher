@@ -10,8 +10,8 @@ module.exports = function Present(sequelize, namespace) {
 			primaryKey: true
 		},
 		name: DataTypes.CHAR(64),
-		RMBPrice: DataTypes.FLOAT,
-		pointPrice: DataTypes.FLOAT,
+		price: DataTypes.FLOAT,
+		point: DataTypes.INTEGER,
 		description: DataTypes.STRING,
 	}, {
 		tableName: `${namespace}present`

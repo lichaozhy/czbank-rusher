@@ -1,49 +1,32 @@
 const { Sequelize } = require('sequelize');
-const path = require('path');
+const { FK } = require('./utils');
+const normalize = require('./normalize');
 
-const Model = {
+const ModelFactory = {
+	AccountData: require('./model/Account/Data'),
+	AccountProductData: require('./model/Account/ProductData'),
+	CustomerPointAdjustmentByActivity: require('./model/Customer/Point/AdjustmentBy/Activity'),
+	CustomerPointAdjustmentByManual: require('./model/Customer/Point/AdjustmentBy/Manual'),
+	CustomerPointAdjustmentByPlan: require('./model/Customer/Point/AdjustmentBy/Plan'),
+	CustomerPointAdjustmentByPresent: require('./model/Customer/Point/AdjustmentBy/Present'),
+	CustomerPointAdjustment: require('./model/Customer/Point/Adjustment'),
+	CustomerContribution: require('./model/Customer/Contribution'),
+	CustomerData: require('./model/Customer/Data'),
+	CustomerPoint: require('./model/Customer/Point'),
+	CustomerProductData: require('./model/Customer/ProductData'),
+	CustomerRelation: require('./model/Customer/Relation'),
+	ManagerContribution: require('./model/Manager/Contribution'),
+	ManagerData: require('./model/Manager/Data'),
+	ManagerProductData: require('./model/Manager/ProductData'),
+	ProductDataSetting: require('./model/Product/DataSetting'),
 	Account: require('./model/Account'),
-	AccountData: require('./model/AccountData'),
-	AccountDataFile: require('./model/Data/File'),
-	AccountDataPlan: require('./model/Data/Plan'),
-	AccountProductData: require('./model/AccountProductData'),
+	Activity: require('./model/Activity'),
 	Customer: require('./model/Customer'),
-	CustomerPoint: require('./model/CustomerPoint'),
-	CustomerPointAdjustment: require('./model/Point/Adjustment'),
-	CustomerRelation: require('./model/CustomerRelation'),
+	File: require('./model/File'),
 	Manager: require('./model/Manager'),
+	Plan: require('./model/Plan'),
 	Present: require('./model/Present'),
 	Product: require('./model/Product'),
-	ProductAccountDataSetting: require('./model/Product/DataSetting'),
-	AdjustmentReasonActivity: require('./model/Point/AdjustmentReason/Activity'),
-	AdjustmentReasonCustomer: require('./model/Point/AdjustmentReason/Data'),
-	AdjustmentReasonManual: require('./model/Point/AdjustmentReason/Manual'),
-	AdjustmentReasonPresent: require('./model/Point/AdjustmentReason/Present')
-};
-
-function normalize(_options) {
-	const options = {
-		storage: path.resolve('output/czbrusher.sqlite'),
-		namespace: '',
-		onLog: sql => console.log(sql)
-	};
-
-	const {
-		storage: _storage = options.storage,
-		namespace: _namespace = options.namespace,
-		onLog: _onLog = options.onLog
-	} = _options;
-
-	options.storage = _storage;
-	options.namespace = _namespace;
-	options.onLog = _onLog;
-
-	return options;
-}
-
-const BASIC_OPTIONS = {
-	foreignKeyConstraint: false,
-	constraints: false
 };
 
 module.exports = function CZBankRusherSequelize(options) {
@@ -60,66 +43,72 @@ module.exports = function CZBankRusherSequelize(options) {
 		logging: finalOptions.onLog
 	});
 
-	Object.keys(Model).forEach(modelName => {
-		Model[modelName](sequelize, finalOptions.namespace);
-	});
+	for(const name in ModelFactory) {
+		ModelFactory[name](sequelize, finalOptions.namespace);
+	}
 
-	const Product = sequelize.model('Product');
-	const ProductAccountDataSetting = sequelize.model('ProductAccountDataSetting');
+	/**
+	 * Associations
+	 */
+	const Model = {
+		AccountData: sequelize.model('AccountData'),
+		AccountProductData: sequelize.model('AccountProductData'),
+		CustomerPointAdjustmentByActivity: sequelize.model('CustomerPointAdjustmentByActivity'),
+		CustomerPointAdjustmentByManual: sequelize.model('CustomerPointAdjustmentByManual'),
+		CustomerPointAdjustmentByPlan: sequelize.model('CustomerPointAdjustmentByPlan'),
+		CustomerPointAdjustmentByPresent: sequelize.model('CustomerPointAdjustmentByPresent'),
+		CustomerPointAdjustment: sequelize.model('CustomerPointAdjustment'),
+		CustomerContribution: sequelize.model('CustomerContribution'),
+		CustomerData: sequelize.model('CustomerData'),
+		CustomerPoint: sequelize.model('CustomerPoint'),
+		CustomerProductData: sequelize.model('CustomerProductData'),
+		CustomerRelation: sequelize.model('CustomerRelation'),
+		ManagerContribution: sequelize.model('ManagerContribution'),
+		ManagerData: sequelize.model('ManagerData'),
+		ManagerProductData: sequelize.model('ManagerProductData'),
+		ProductDataSetting: sequelize.model('ProductDataSetting'),
+		Account: sequelize.model('Account'),
+		Activity: sequelize.model('Activity'),
+		Customer: sequelize.model('Customer'),
+		File: sequelize.model('File'),
+		Manager: sequelize.model('Manager'),
+		Plan: sequelize.model('Plan'),
+		Present: sequelize.model('Present'),
+		Product: sequelize.model('Product')
+	};
 
-	Product.hasOne(ProductAccountDataSetting, Object.assign({
-		foreignKey: 'productId'
-	}, BASIC_OPTIONS));
-
-	ProductAccountDataSetting.belongsTo(Product, BASIC_OPTIONS);
-
-	const AccountDataFile = sequelize.model('AccountDataFile');
-	const AccountDataPlan = sequelize.model('AccountDataPlan');
-	const Manager = sequelize.model('Manager');
-
-	AccountDataFile.belongsTo(AccountDataPlan, Object.assign({
-		foreignKey: 'planId'
-	}, BASIC_OPTIONS));
-
-	AccountDataPlan.hasMany(AccountDataFile, Object.assign({
-		foreignKey: 'planId'
-	}, BASIC_OPTIONS));
-
-	AccountDataFile.belongsTo(Manager, Object.assign({
-		foreignKey: 'managerId'
-	}, BASIC_OPTIONS));
-
-	const Customer = sequelize.model('Customer');
-
-	Manager.hasMany(Customer, Object.assign({
-		foreignKey: 'managerId'
-	}, BASIC_OPTIONS));
-
-	Manager.hasMany(AccountDataFile, Object.assign({
-		foreignKey: 'managerId'
-	}, BASIC_OPTIONS));
-
-	const Account = sequelize.model('Account');
-
-	Customer.hasMany(Account, Object.assign({
-		foreignKey: 'customerId'
-	}, BASIC_OPTIONS));
-
-	const AccountData = sequelize.model('AccountData');
-
-	Account.hasMany(AccountData, Object.assign({
-		foreignKey: 'accountId'
-	}, BASIC_OPTIONS));
-
-	AccountData.belongsTo(AccountDataPlan, Object.assign({
-		foreignKey: 'planId'
-	}, BASIC_OPTIONS));
-
-	const AccountProductData = sequelize.model('AccountProductData');
-
-	AccountData.hasMany(AccountProductData, Object.assign({
-		foreignKey: 'dataId'
-	}, BASIC_OPTIONS));
+	Model.File.belongsTo(Model.Plan, FK('planId'));
+	Model.Plan.hasMany(Model.File, FK('planId'));
+	Model.File.hasMany(Model.AccountData, FK('fileId'));
+	Model.AccountData.belongsTo(Model.File, FK('fileId'));
+	Model.AccountData.hasMany(Model.AccountProductData, FK('accountDataId'));
+	Model.AccountProductData.belongsTo(Model.AccountData, FK('accountDataId'));
+	Model.AccountData.belongsTo(Model.Account, FK('accountId'));
+	Model.Account.hasMany(Model.AccountData, FK('accountId'));
+	Model.Account.belongsTo(Model.Customer, FK('customerId'));
+	Model.Customer.hasMany(Model.Account, FK('customerId'));
+	Model.CustomerData.belongsTo(Model.Customer, FK('customerId'));
+	Model.Customer.hasMany(Model.CustomerData, FK('customerId'));
+	Model.CustomerData.belongsTo(Model.File, FK('fileId'));
+	Model.File.hasMany(Model.CustomerData, FK('fileId'));
+	Model.CustomerData.hasMany(Model.CustomerProductData, FK('customerDataId'));
+	Model.CustomerProductData.belongsTo(Model.CustomerData, FK('customerDataId'));
+	Model.Customer.hasOne(Model.CustomerPoint, FK('customerId'));
+	Model.CustomerPoint.belongsTo(Model.Customer, FK('customerId'));
+	Model.Customer.hasMany(Model.CustomerPointAdjustment, FK('customerId'));
+	Model.CustomerPointAdjustment.belongsTo(Model.Customer, FK('customerId'));
+	Model.CustomerData.belongsTo(Model.Manager, FK('managerId'));
+	Model.Manager.hasMany(Model.CustomerData, FK('managerId'));
+	Model.CustomerData.hasOne(Model.CustomerContribution, FK('customerDataId'));
+	Model.CustomerContribution.belongsTo(Model.CustomerData, FK('customerDataId'));
+	Model.Manager.hasMany(Model.ManagerData, FK('managerId'));
+	Model.ManagerData.belongsTo(Model.Manager, FK('managerId'));
+	Model.ManagerData.hasMany(Model.ManagerProductData, FK('managerDataId'));
+	Model.ManagerProductData.belongsTo(Model.ManagerData, FK('managerDataId'));
+	Model.ManagerData.belongsTo(Model.File, FK('fileId'));
+	Model.File.hasMany(Model.ManagerData, FK('fileId'));
+	Model.Product.hasOne(Model.ProductDataSetting, FK('productId'));
+	Model.ProductDataSetting.belongsTo(Model.Product, FK('productId'));
 
 	return sequelize;
 };

@@ -9,8 +9,8 @@ module.exports = function CustomerData(sequelize, namespace) {
 			type: DataTypes.CHAR(64),
 			primaryKey: true
 		},
-		planId: DataTypes.CHAR(64),
 		customerId: DataTypes.CHAR(64),
+		managerId: DataTypes.CHAR(64),
 		fileId: DataTypes.CHAR(64)
 	}, {
 		tableName: `${namespace}customer_data`

@@ -9,7 +9,6 @@ module.exports = function Customer(sequelize, namespace) {
 			type: DataTypes.CHAR(64),
 			primaryKey: true
 		},
-		managerId: DataTypes.CHAR(64),
 		name: DataTypes.STRING,
 		gender: DataTypes.TINYINT,
 		mobilePhone: DataTypes.CHAR(16),

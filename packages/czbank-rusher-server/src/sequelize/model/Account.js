@@ -10,7 +10,8 @@ module.exports = function Account(sequelize, namespace) {
 			primaryKey: true
 		},
 		customerId: DataTypes.CHAR(64),
-		internalCode: DataTypes.CHAR(22)
+		internalCode: DataTypes.CHAR(22),
+		code: DataTypes.STRING
 	}, {
 		tableName: `${namespace}account`
 	});

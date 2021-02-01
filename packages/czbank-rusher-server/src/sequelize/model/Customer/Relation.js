@@ -9,9 +9,9 @@ module.exports = function CustomerRelation(sequelize, namespace) {
 			type: DataTypes.CHAR(64),
 			primaryKey: true
 		},
-		fromCustomerId: DataTypes.CHAR(64),
-		toCustomerId: DataTypes.CHAR(64),
-		name: DataTypes.CHAR(),
+		fromId: DataTypes.CHAR(64),
+		toId: DataTypes.CHAR(64),
+		name: DataTypes.CHAR(16),
 		description: DataTypes.STRING
 	}, {
 		tableName: `${namespace}customer_relation`
