@@ -9,10 +9,9 @@ module.exports = function AccountData(sequelize, namespace) {
 			type: DataTypes.CHAR(64),
 			primaryKey: true
 		},
-		planId: DataTypes.CHAR(64),
 		accountId: DataTypes.CHAR(64),
 		fileId: DataTypes.CHAR(64)
 	}, {
 		tableName: `${namespace}account_data`
 	});
-}
+};

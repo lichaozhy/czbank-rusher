@@ -1,11 +1,12 @@
 module.exports = {
-	ApiRouter: require('./Api'),
-	AccountRouter: require('./Account'),
-	AccountDataRouter: require('./AccountData'),
-	AccountDataFileRouter: require('./AccountDataFile'),
-	AccountDataPlanRouter: require('./AccountDataPlan'),
-	ManagerRouter: require('./Manager'),
-	ManagerFileRouter: require('./ManagerFile'),
-	ManagerCustomerRouter: require('./ManagerCustomer'),
-	ProductRouter: require('./Product'),
+	Api: require('./Api'),
+	Account: require('./Account'),
+	AccountData: require('./AccountData'),
+	AccountDataFile: require('./AccountDataFile'),
+	AccountDataPlan: require('./AccountDataPlan'),
+	Manager: require('./Manager'),
+	ManagerFile: require('./ManagerFile'),
+	ManagerCustomer: require('./ManagerCustomer'),
+	Product: require('./Product'),
+	Customer: require('./Customer')
 };

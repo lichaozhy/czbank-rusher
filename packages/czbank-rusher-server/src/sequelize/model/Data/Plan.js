@@ -3,8 +3,8 @@ const { DataTypes } = require('sequelize');
 /**
  * @param {import('sequelize').Sequelize} sequelize
  */
-module.exports = function AccountDataPlan(sequelize, namespace) {
-	sequelize.define('AccountDataPlan', {
+module.exports = function Plan(sequelize, namespace) {
+	sequelize.define('Plan', {
 		id: {
 			type: DataTypes.CHAR(64),
 			primaryKey: true
@@ -13,9 +13,8 @@ module.exports = function AccountDataPlan(sequelize, namespace) {
 		description: DataTypes.STRING,
 		dateAs: DataTypes.DATEONLY,
 		setting: DataTypes.TEXT,
-		// resolved: DataTypes.BOOLEAN,
 		createdAt: DataTypes.DATE
 	}, {
-		tableName: `${namespace}account_data_plan`
+		tableName: `${namespace}plan`
 	});
 }

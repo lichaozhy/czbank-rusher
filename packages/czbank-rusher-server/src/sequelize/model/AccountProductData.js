@@ -12,7 +12,7 @@ module.exports = function AccountProductData(sequelize, namespace) {
 		},
 		dataId: DataTypes.CHAR(64),
 		productCode: DataTypes.CHAR(64),
-		averageDeposit: DataTypes.DOUBLE,
+		average: DataTypes.DOUBLE,
 		balance: DataTypes.DOUBLE
 	}, {
 		tableName: `${namespace}account_product_data`

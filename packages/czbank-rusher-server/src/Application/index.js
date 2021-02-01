@@ -8,7 +8,7 @@ const path = require('path');
 const Router = require('./router');
 
 module.exports = DuckWebKoa(function CZBankRusherApplication(app, {
-	AppRouter, Workspace, injection
+	AppRouter, Workspace
 }) {
 	const bodyparser = koaBody({
 		multipart: true,
@@ -26,41 +26,45 @@ module.exports = DuckWebKoa(function CZBankRusherApplication(app, {
 		ResourcePlugin(),
 		DuckWebKoaRouter({
 			prefix: '/api',
-			Router: Router.ApiRouter,
+			Router: Router.Api,
 			use: [
 				{
 					prefix: '/account',
-					Router: Router.AccountRouter
+					Router: Router.Account
 				},
 				{
 					prefix: '/account/data',
-					Router: Router.AccountDataRouter
+					Router: Router.AccountData
 				},
 				{
 					prefix: '/account/data/plan',
-					Router: Router.AccountDataPlanRouter
+					Router: Router.AccountDataPlan
 				},
 				{
 					prefix: '/account/data/file',
-					Router: Router.AccountDataFileRouter
+					Router: Router.AccountDataFile
 				},
 				{
 					prefix: '/manager',
-					Router: Router.ManagerRouter,
+					Router: Router.Manager,
 					use: [
 						{
 							prefix: '/:managerId/file',
-							Router: Router.ManagerFileRouter
+							Router: Router.ManagerFile
 						},
 						{
 							prefix: '/:managerId/customer',
-							Router: Router.ManagerCustomerRouter
+							Router: Router.ManagerCustomer
 						}
 					]
 				},
 				{
 					prefix: '/product',
-					Router: Router.ProductRouter
+					Router: Router.Product
+				},
+				{
+					prefix: '/customer',
+					Router: Router.Customer
 				}
 			]
 		})

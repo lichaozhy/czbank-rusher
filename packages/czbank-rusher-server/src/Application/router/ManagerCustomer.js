@@ -55,10 +55,17 @@ module.exports = Router(function CZBankRusherManagerFileRouter(router, {
 					const productDataList = data.AccountProductData;
 
 					productDataList.forEach(productData => {
-						resource.data[productData.productCode] = {
-							averageDeposit: productData.averageDeposit,
-							balance: productData.balance
-						};
+						if (!resource.data[productData.productCode]) {
+							resource.data[productData.productCode] = {
+								averageDeposit: 0,
+								balance: 0
+							};
+						}
+
+						const { averageDeposit, balance } = productData;
+
+						resource.data[productData.productCode].averageDeposit += averageDeposit;
+						resource.data[productData.productCode].balance += balance;
 					});
 
 					resource.dateAs = data.AccountDataPlan.dateAs;

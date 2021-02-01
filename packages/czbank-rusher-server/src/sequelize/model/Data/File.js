@@ -3,8 +3,8 @@ const { DataTypes } = require('sequelize');
 /**
  * @param {import('sequelize').Sequelize} sequelize
  */
-module.exports = function AccountDataFile(sequelize, namespace) {
-	sequelize.define('AccountDataFile', {
+module.exports = function File(sequelize, namespace) {
+	sequelize.define('File', {
 		id: {
 			type: DataTypes.CHAR(64),
 			primaryKey: true
@@ -18,6 +18,6 @@ module.exports = function AccountDataFile(sequelize, namespace) {
 		abstract: DataTypes.TEXT,
 		createdAt: DataTypes.DATE
 	}, {
-		tableName: `${namespace}account_data_file`
+		tableName: `${namespace}file`
 	});
 };

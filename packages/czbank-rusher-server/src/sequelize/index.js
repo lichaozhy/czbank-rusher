@@ -4,20 +4,21 @@ const path = require('path');
 const Model = {
 	Account: require('./model/Account'),
 	AccountData: require('./model/AccountData'),
-	AccountDataFile: require('./model/AccountDataFile'),
-	AccountDataPlan: require('./model/AccountDataPlan'),
+	AccountDataFile: require('./model/Data/File'),
+	AccountDataPlan: require('./model/Data/Plan'),
 	AccountProductData: require('./model/AccountProductData'),
 	Customer: require('./model/Customer'),
 	CustomerPoint: require('./model/CustomerPoint'),
-	CustomerPointAdjustment: require('./model/CustomerPointAdjustment'),
+	CustomerPointAdjustment: require('./model/Point/Adjustment'),
 	CustomerRelation: require('./model/CustomerRelation'),
 	Manager: require('./model/Manager'),
 	Present: require('./model/Present'),
 	Product: require('./model/Product'),
-	ProductAccountDataSetting: require('./model/ProductAccountDataSetting'),
-	AdjustmentReasonCustomer: require('./model/AdjustmentReason/Customer'),
-	AdjustmentReasonManual: require('./model/AdjustmentReason/Manual'),
-	AdjustmentReasonPresent: require('./model/AdjustmentReason/Present')
+	ProductAccountDataSetting: require('./model/Product/DataSetting'),
+	AdjustmentReasonActivity: require('./model/Point/AdjustmentReason/Activity'),
+	AdjustmentReasonCustomer: require('./model/Point/AdjustmentReason/Data'),
+	AdjustmentReasonManual: require('./model/Point/AdjustmentReason/Manual'),
+	AdjustmentReasonPresent: require('./model/Point/AdjustmentReason/Present')
 };
 
 function normalize(_options) {
