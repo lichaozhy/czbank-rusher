@@ -5,11 +5,18 @@ const { DataTypes } = require('sequelize');
  */
 module.exports = function ManagerContribution(sequelize, namespace) {
 	sequelize.define('ManagerContribution', {
-		ManagerDataId: {
+		managerDataId: {
 			type: DataTypes.CHAR(64),
 			primaryKey: true
 		},
-		value: DataTypes.INTEGER
+		depositBalance: DataTypes.DOUBLE,
+		depositAverage: DataTypes.DOUBLE,
+		otherBalance: DataTypes.DOUBLE,
+		otherAverage: DataTypes.DOUBLE,
+		rate: DataTypes.DOUBLE,
+		balance: DataTypes.DOUBLE,
+		average: DataTypes.DOUBLE,
+		contribution: DataTypes.INTEGER
 	}, {
 		tableName: `${namespace}manager_contribution`
 	});

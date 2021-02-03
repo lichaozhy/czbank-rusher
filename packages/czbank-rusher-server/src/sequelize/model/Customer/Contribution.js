@@ -9,7 +9,14 @@ module.exports = function CustomerContribution(sequelize, namespace) {
 			type: DataTypes.CHAR(64),
 			primaryKey: true
 		},
-		value: DataTypes.INTEGER
+		depositBalance: DataTypes.DOUBLE,
+		depositAverage: DataTypes.DOUBLE,
+		otherBalance: DataTypes.DOUBLE,
+		otherAverage: DataTypes.DOUBLE,
+		rate: DataTypes.DOUBLE,
+		balance: DataTypes.DOUBLE,
+		average: DataTypes.DOUBLE,
+		contribution: DataTypes.INTEGER
 	}, {
 		tableName: `${namespace}customer_contribution`
 	});

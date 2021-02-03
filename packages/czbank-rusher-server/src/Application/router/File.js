@@ -55,7 +55,7 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 
 		const customerDataList = [];
 		const customerProductDataList = [];
-		const customerContribution = [];
+		const customerContributionList = [];
 
 		Customer.dataList.forEach((customerData, index) => {
 			const { customerId, data: productDataMap } = customerData;
@@ -73,10 +73,16 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 
 				customerProductDataList.push({ customerDataId: id, productCode, average, balance });
 			});
+
+			const contribution = Utils.Contribution(productDataMap);
+
+			contribution.customerDataId = id;
+			customerContributionList.push(contribution);
 		});
 
 		await Model.CustomerData.bulkCreate(customerDataList, BULK_CREATING_OPTIONS);
 		await Model.CustomerProductData.bulkCreate(customerProductDataList, BULK_CREATING_OPTIONS);
+		await Model.CustomerContribution.bulkCreate(customerContributionList, BULK_CREATING_OPTIONS);
 
 		const managerProductDataList = [];
 
@@ -94,7 +100,11 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 				managerProductDataList.push({ managerDataId: id, productCode, average, balance });
 			});
 
+			const contribution = Utils.Contribution(Abstract);
+
 			await Model.ManagerData.create({ id, fileId, managerId });
+			contribution.managerDataId = id;
+			await Model.ManagerContribution.create(contribution);
 		}
 
 		await Model.ManagerProductData.bulkCreate(managerProductDataList);
