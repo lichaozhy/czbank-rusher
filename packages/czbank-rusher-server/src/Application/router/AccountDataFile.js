@@ -8,9 +8,9 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 	const Account = Sequelize.model('Account');
 	const AccountData = Sequelize.model('AccountData');
 	const AccountProductData = Sequelize.model('AccountProductData');
-	const AccountDataFile = Sequelize.model('AccountDataFile');
+	const File = Sequelize.model('File');
 	const Manager = Sequelize.model('Manager');
-	const AccountDataPlan = Sequelize.model('AccountDataPlan');
+	const Plan = Sequelize.model('Plan');
 
 	async function saveData(resolved, managerId, planId, fileId) {
 		const { result } = resolved;
@@ -84,7 +84,7 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 
 	router.get('/', async function getFileList(ctx) {
 		const { planId, managerId } = ctx.query;
-		const options = { where: {}, include: [Manager, AccountDataPlan] };
+		const options = { where: {}, include: [Manager, Plan] };
 
 		if (planId) {
 			options.where.planId = planId;
@@ -94,7 +94,7 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 			options.where.managerId = managerId;
 		}
 
-		const list = await AccountDataFile.findAll(options);
+		const list = await File.findAll(options);
 
 		ctx.body = list.map(file => {
 			return Resource.AccountDataFile(file, file.Manager, file.AccountDataPlan);
@@ -109,13 +109,13 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 			return ctx.throw(400, `The manager id:${managerId} is NOT found.`);
 		}
 
-		const plan = await AccountDataPlan.findOne({ where: { id: planId } });
+		const plan = await Plan.findOne({ where: { id: planId } });
 
 		if (!plan) {
 			return ctx.throw(400, `The plan id:${planId} is NOT found.`);
 		}
 
-		const existedFile = await AccountDataFile.findOne({ where: { managerId, planId } });
+		const existedFile = await File.findOne({ where: { managerId, planId } });
 
 		if (existedFile) {
 			await fs.remove(raw.path);
@@ -163,7 +163,7 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 			return ctx.throw(400, 'Bad xls file.');
 		}
 
-		const file = await AccountDataFile.create({
+		const file = await File.create({
 			id, planId, managerId, description,
 			size: xlsFile.length,
 			customerNumber: Object.keys(resolvedData.result.customerMap).length,
@@ -176,7 +176,7 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 		file.AccountDataPlan = plan;
 		ctx.body = Resource.AccountDataFile(file, manager, plan);
 	}).param('fileId', async (id, ctx, next) => {
-		const file = await AccountDataFile.findOne();
+		const file = await File.findOne();
 
 		return next();
 	}).get('/:fileId', async function getFile() {

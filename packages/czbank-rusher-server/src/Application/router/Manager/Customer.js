@@ -6,7 +6,7 @@ module.exports = Router(function CZBankRusherManagerFileRouter(router, {
 	const Customer = Sequelize.model('Customer');
 	const Account = Sequelize.model('Account');
 	const AccountData = Sequelize.model('AccountData');
-	const AccountDataPlan = Sequelize.model('AccountDataPlan');
+	const Plan = Sequelize.model('Plan');
 	const AccountProductData = Sequelize.model('AccountProductData');
 
 	router.get('/', async function hello(ctx) {
@@ -21,7 +21,7 @@ module.exports = Router(function CZBankRusherManagerFileRouter(router, {
 					model: AccountData,
 					include: [
 						{
-							model: AccountDataPlan,
+							model: Plan,
 							where: { dateAs }
 						},
 						{

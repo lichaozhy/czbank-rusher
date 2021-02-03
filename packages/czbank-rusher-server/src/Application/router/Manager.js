@@ -3,82 +3,38 @@ const { Router } = require('@produck/duck-web-koa-router');
 module.exports = Router(function CZBankRusherManagerRouter(router, {
 	Sequelize, Utils, Resource
 }) {
-	const Manager = Sequelize.model('Manager');
-	const Customer = Sequelize.model('Customer');
-	const AccountDataFile = Sequelize.model('AccountDataFile');
-	const AccountDataPlan = Sequelize.model('AccountDataPlan');
-
-	function BaseOptions() {
-		return {
-			include: [
-				{ model: Customer },
-				{
-					model: AccountDataFile,
-					include: [AccountDataPlan]
-				}
-			]
-		};
-	}
+	const Model = {
+		Manager: Sequelize.model('Manager'),
+	};
 
 	router.get('/', async function getManagerList(ctx) {
-		const list = await Manager.findAll({
-			include: [
-				{
-					model: AccountDataFile,
-					include: [{
-						model: AccountDataPlan,
-					}],
-					// limit: 1,
-					separate: true,
-					required: false,
-					order: [
-						[AccountDataPlan, 'dateAs', 'DESC']
-					]
-				},
-			],
-		});
 
-		ctx.body = list.map(manager => {
-			const file = manager.AccountDataFiles[0];
-
-			return {
-				id: manager.id,
-				name: manager.name,
-				code: manager.code,
-				customerNumber: file ? file.customerNumber : 0,
-				abstract: file ? JSON.parse(file.abstract) : {},
-				lastUploadedDateAs: file ? file.AccountDataPlan.dateAs : null
-			};
-		});
 	}).post('/', async function createManager(ctx) {
 		const { name, code } = ctx.request.body;
-		const id = Utils.encodeSHA256(`${name}-${code}`);
-		const manager = await Manager.create({ id, name, code });
 
-		ctx.body = Resource.Manager(manager, [], []);
-	}).param('managerId', async function getManager(id, ctx, next) {
-		const options = BaseOptions();
+		const existed = await Model.Manager.findOne({ where: { code } });
 
-		options.where = { id };
+		if (existed) {
+			return ctx.throw(400, `A manager code=${code} has been existed.`);
+		}
 
-		const manager = await Manager.findOne(options);
+		const id = Utils.encodeSHA256(`${name}-${Date.now()}`);
+		const manager = await Model.Manager.create({ id, name, code });
+
+		ctx.body = Resource.Manager(manager);
+	}).param('managerId', async function fetchManager(id, ctx, next) {
+		const manager = await Model.Manager.findOne({ where: { id } });
 
 		if (!manager) {
 			return ctx.throw(404, 'The manager is NOT existed.');
 		}
 
 		ctx.state.manager = manager;
-		ctx.state.customerList = manager.Customers;
-		ctx.state.fileList = manager.AccountDataFiles;
 
 		return next();
-	}).get('/:managerId', async function getManager(ctx) {
-		const { manager, customerList, fileList } = ctx.state;
-
-		ctx.body = Resource.Manager(manager, customerList, fileList);
 	}).put('/:managerId', async function updateManager(ctx) {
 		const { name, code } = ctx.request.body;
-		const { manager, customerList, fileList } = ctx.state;
+		const { manager } = ctx.state;
 
 		if (name) {
 			manager.name = name;
@@ -89,13 +45,11 @@ module.exports = Router(function CZBankRusherManagerRouter(router, {
 		}
 
 		manager.save();
-
-		ctx.body = Resource.Manager(manager, customerList, fileList);
+		ctx.body = Resource.Manager(manager);
 	}).delete('/:managerId', async function deleteManager(ctx) {
-		const { manager, customerList, fileList } = ctx.state;
+		const { manager } = ctx.state;
 
 		manager.destroy();
-
-		ctx.body = Resource.Manager(manager, customerList, fileList);
+		ctx.body = Resource.Manager(manager);
 	});
 });

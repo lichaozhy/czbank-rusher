@@ -107,8 +107,27 @@ module.exports = function CZBankRusherSequelize(options) {
 	Model.ManagerProductData.belongsTo(Model.ManagerData, FK('managerDataId'));
 	Model.ManagerData.belongsTo(Model.File, FK('fileId'));
 	Model.File.hasMany(Model.ManagerData, FK('fileId'));
+
 	Model.Product.hasOne(Model.ProductDataSetting, FK('productId'));
 	Model.ProductDataSetting.belongsTo(Model.Product, FK('productId'));
+
+	const adjustmentFK = FK('adjustmentId');
+
+	Model.CustomerPointAdjustment.hasMany(Model.CustomerPointAdjustmentByActivity, adjustmentFK);
+	Model.CustomerPointAdjustment.hasMany(Model.CustomerPointAdjustmentByManual, adjustmentFK);
+	Model.CustomerPointAdjustment.hasMany(Model.CustomerPointAdjustmentByPlan, adjustmentFK);
+	Model.CustomerPointAdjustment.hasMany(Model.CustomerPointAdjustmentByPresent, adjustmentFK);
+	Model.CustomerPointAdjustmentByActivity.belongsTo(Model.CustomerPointAdjustment, adjustmentFK);
+	Model.CustomerPointAdjustmentByManual.belongsTo(Model.CustomerPointAdjustment, adjustmentFK);
+	Model.CustomerPointAdjustmentByPlan.belongsTo(Model.CustomerPointAdjustment, adjustmentFK);
+	Model.CustomerPointAdjustmentByPresent.belongsTo(Model.CustomerPointAdjustment, adjustmentFK);
+
+	Model.CustomerPointAdjustmentByPlan.belongsTo(Model.Plan, FK('planId'));
+	Model.CustomerPointAdjustmentByPresent.belongsTo(Model.Present, FK('presentId'));
+	Model.CustomerPointAdjustmentByActivity.belongsTo(Model.Activity, FK('activityId'));
+	Model.Plan.hasOne(Model.CustomerPointAdjustmentByPlan, FK('planId'));
+	Model.Present.hasMany(Model.CustomerPointAdjustmentByPresent, FK('presentId'));
+	Model.Activity.hasMany(Model.CustomerPointAdjustmentByActivity, FK('activityId'));
 
 	return sequelize;
 };

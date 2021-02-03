@@ -4,11 +4,11 @@ module.exports = Router(function CZBankRusherAPIRouter(router, {
 	Sequelize, Utils, Resource
 }) {
 	const Product = Sequelize.model('Product');
-	const ProductAccountDataSetting = Sequelize.model('ProductAccountDataSetting');
+	const ProductDataSetting = Sequelize.model('ProductDataSetting');
 
 	router.get('/', async function getProductList(ctx) {
 		const list = await Product.findAll({
-			include: [ProductAccountDataSetting]
+			include: [ProductDataSetting]
 		});
 
 		ctx.body = list.map(product => {
@@ -18,13 +18,13 @@ module.exports = Router(function CZBankRusherAPIRouter(router, {
 		const { name, code, description } = ctx.request.body;
 		const id = Utils.encodeSHA256(`${name}${code}${Date.now()}`);
 		const product = await Product.create({ id, name, code, description });
-		const setting = await ProductAccountDataSetting.create({ productId: id });
+		const setting = await ProductDataSetting.create({ productId: id });
 
 		ctx.body = Resource.Product(product, setting);
 	}).param('productId', async function queryProduct(id, ctx, next) {
 		const product = await Product.findOne({
 			where: { id },
-			include: [ProductAccountDataSetting]
+			include: [ProductDataSetting]
 		});
 
 		if (!product) {

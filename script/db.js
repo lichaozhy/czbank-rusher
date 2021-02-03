@@ -4,7 +4,7 @@ const productList = require('./product');
 const utils = require('../packages/czbank-rusher-server/src/utils');
 
 const Product = rusher.sequelize.model('Product');
-const ProductAccountDataSetting = rusher.sequelize.model('ProductAccountDataSetting');
+const ProductDataSetting = rusher.sequelize.model('ProductDataSetting');
 
 (async function install() {
 	await rusher.install();
@@ -17,7 +17,7 @@ const ProductAccountDataSetting = rusher.sequelize.model('ProductAccountDataSett
 			id, name, code, description: name
 		});
 
-		ProductAccountDataSetting.create({
+		ProductDataSetting.create({
 			productId: id,
 			fieldIndexOfAverageDeposit: averageDepositIndex,
 			fieldIndexOfBalance: balanceIndex

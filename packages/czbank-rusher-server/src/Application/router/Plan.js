@@ -1,34 +1,16 @@
 const { Router } = require('@produck/duck-web-koa-router');
 
 module.exports = Router(function CZBankRusherAccountDataPlanRouter(router, {
-	Sequelize, Utils
+	Sequelize, Utils, Resource
 }) {
-	const AccountDataFile = Sequelize.model('AccountDataFile');
-	const AccountDataPlan = Sequelize.model('AccountDataPlan');
+	const File = Sequelize.model('File');
+	const Plan = Sequelize.model('Plan');
 	const Product = Sequelize.model('Product');
-	const ProductAccountDataSetting = Sequelize.model('ProductAccountDataSetting');
-
-	const Resource = {
-		async AccountDataPlan(planData) {
-			return {
-				id: planData.id,
-				name: planData.name,
-				description: planData.description,
-				dateAs: planData.dateAs,
-				fileNumber: await planData.countAccountDataFiles(),
-				createdAt: planData.createdAt
-			};
-		},
-		AccountDataPlanResult() {
-			return {
-
-			};
-		}
-	};
+	const ProductDataSetting = Sequelize.model('ProductDataSetting');
 
 	async function PlanSetting() {
 		const list = await Product.findAll({
-			include: [ProductAccountDataSetting]
+			include: [ProductDataSetting]
 		});
 
 		const setting = list.map(product => {
@@ -46,20 +28,20 @@ module.exports = Router(function CZBankRusherAccountDataPlanRouter(router, {
 	function BaseQueryOptions() {
 		return {
 			include: [{
-				model: AccountDataFile,
+				model: File,
 				attributes: []
 			}]
 		};
 	}
 
 	router.get('/', async function getPlanList(ctx) {
-		const list = await AccountDataPlan.findAll(BaseQueryOptions());
+		const list = await Plan.findAll(BaseQueryOptions());
 
 		ctx.body = await Promise.all(list.map(plan => Resource.AccountDataPlan(plan)));
 	}).post('/', async function createPlan(ctx) {
 		const { name, description, dateAs } = ctx.request.body;
 
-		const data = await AccountDataPlan.create({
+		const data = await Plan.create({
 			id: Utils.encodeSHA256(`${name}${dateAs}${Date.now()}`),
 			name, description,
 			dateAs: new Date(dateAs),
@@ -73,7 +55,7 @@ module.exports = Router(function CZBankRusherAccountDataPlanRouter(router, {
 
 		options.where = { id };
 
-		const plan = await AccountDataPlan.findOne(options);
+		const plan = await Plan.findOne(options);
 
 		if (!plan) {
 			return ctx.throw(404, 'The plan is NOT existed.');

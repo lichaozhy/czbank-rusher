@@ -3,10 +3,12 @@ module.exports = {
 	Account: require('./Account'),
 	AccountData: require('./AccountData'),
 	AccountDataFile: require('./AccountDataFile'),
-	AccountDataPlan: require('./AccountDataPlan'),
-	Manager: require('./Manager'),
+	AccountDataPlan: require('./Plan'),
 	ManagerFile: require('./ManagerFile'),
-	ManagerCustomer: require('./ManagerCustomer'),
+	ManagerCustomer: require('./Manager/Customer'),
 	Product: require('./Product'),
-	Customer: require('./Customer')
+	Customer: require('./Customer'),
+
+	Manager: require('./Manager'),
+	ManagerPerformance: require('./Manager/Performance')
 };

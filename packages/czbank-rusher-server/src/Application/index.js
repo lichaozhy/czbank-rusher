@@ -49,6 +49,10 @@ module.exports = DuckWebKoa(function CZBankRusherApplication(app, {
 					Router: Router.Manager,
 					use: [
 						{
+							prefix: '/performance',
+							Router: Router.ManagerPerformance
+						},
+						{
 							prefix: '/:managerId/file',
 							Router: Router.ManagerFile
 						},
