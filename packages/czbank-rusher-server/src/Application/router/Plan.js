@@ -5,57 +5,32 @@ module.exports = Router(function CZBankRusherAccountDataPlanRouter(router, {
 }) {
 	const File = Sequelize.model('File');
 	const Plan = Sequelize.model('Plan');
-	const Product = Sequelize.model('Product');
-	const ProductDataSetting = Sequelize.model('ProductDataSetting');
 
-	async function PlanSetting() {
-		const list = await Product.findAll({
-			include: [ProductDataSetting]
-		});
-
-		const setting = list.map(product => {
-			return {
-				name: product.name,
-				code: product.code,
-				balance: product.ProductAccountDataSetting.fieldIndexOfBalance,
-				averageDeposit: product.ProductAccountDataSetting.fieldIndexOfAverageDeposit
-			};
-		});
-
-		return JSON.stringify(setting);
-	}
-
-	function BaseQueryOptions() {
-		return {
-			include: [{
-				model: File,
-				attributes: []
-			}]
-		};
+	function BaseQueryOptions(options = {}) {
+		return Object.assign(options, { include: [{ model: File }] });
 	}
 
 	router.get('/', async function getPlanList(ctx) {
 		const list = await Plan.findAll(BaseQueryOptions());
 
-		ctx.body = await Promise.all(list.map(plan => Resource.AccountDataPlan(plan)));
+		ctx.body = list.map(plan => Resource.Plan(plan));
 	}).post('/', async function createPlan(ctx) {
-		const { name, description, dateAs } = ctx.request.body;
+		const { name, description, dateAs, setting } = ctx.request.body;
+		const id = Utils.encodeSHA256(`${dateAs}${Date.now()}`);
 
-		const data = await Plan.create({
-			id: Utils.encodeSHA256(`${name}${dateAs}${Date.now()}`),
+		await Plan.create({
+			id,
 			name, description,
 			dateAs: new Date(dateAs),
-			setting: await PlanSetting(),
+			setting: JSON.stringify(setting),
 			createdAt: new Date()
-		}, BaseQueryOptions());
+		});
 
-		ctx.body = await Resource.AccountDataPlan(data);
+		const planData = await Plan.findOne(BaseQueryOptions({ where: { id } }));
+
+		ctx.body = Resource.Plan(planData);
 	}).param('planId', async function getPlan(id, ctx, next) {
-		const options = BaseQueryOptions();
-
-		options.where = { id };
-
-		const plan = await Plan.findOne(options);
+		const plan = await Plan.findOne(BaseQueryOptions({ where: { id } }));
 
 		if (!plan) {
 			return ctx.throw(404, 'The plan is NOT existed.');
@@ -67,7 +42,7 @@ module.exports = Router(function CZBankRusherAccountDataPlanRouter(router, {
 	}).get('/:planId', async function getPlan(ctx) {
 		const { plan } = ctx.state;
 
-		ctx.body = await Resource.AccountDataPlan(plan);
+		ctx.body = await Resource.Plan(plan);
 	}).put('/:planId', async function updatePlan(ctx) {
 		const { name, description, dateAs } = ctx.request.body;
 		const { plan } = ctx.state;
@@ -85,13 +60,15 @@ module.exports = Router(function CZBankRusherAccountDataPlanRouter(router, {
 		}
 
 		await plan.save();
-
-		ctx.body = await Resource.AccountDataPlan(plan);
+		ctx.body = await Resource.Plan(plan);
 	}).delete('/:planId', async function deletePlan(ctx) {
 		const { plan } = ctx.state;
 
-		await plan.destroy();
+		if (plan.Files.length > 0) {
+			return ctx.throw(423, 'The plan is in use.');
+		}
 
-		ctx.body = await Resource.AccountDataPlan(plan);
+		await plan.destroy();
+		ctx.body = await Resource.Plan(plan);
 	});
 });

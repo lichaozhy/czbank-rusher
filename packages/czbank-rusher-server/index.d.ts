@@ -6,7 +6,9 @@ import https from 'https';
 declare module '@produck/duck' {
 	interface InstalledInjection {
 		Sequelize: Sequelize.Sequelize
-		Utils: CZBankRusher.Utils
+		Utils: CZBankRusher.Utils,
+		Model: CZBankRusher.Model,
+		Resource: CZBankRusher.Resource
 	}
 }
 
@@ -21,6 +23,45 @@ declare namespace CZBankRusher {
 	interface Utils {
 		encodeSHA256(raw: Buffer | string): string
 		randomInt(from: number, to: number): number
+	}
+
+	interface Model {
+		AccountData: typeof Sequelize.Model
+		AccountProductData: typeof Sequelize.Model
+		CustomerPointAdjustmentByActivity: typeof Sequelize.Model
+		CustomerPointAdjustmentByManual: typeof Sequelize.Model
+		CustomerPointAdjustmentByPlan: typeof Sequelize.Model
+		CustomerPointAdjustmentByPresent: typeof Sequelize.Model
+		CustomerPointAdjustment: typeof Sequelize.Model
+		CustomerContribution: typeof Sequelize.Model
+		CustomerData: typeof Sequelize.Model
+		CustomerPoint: typeof Sequelize.Model
+		CustomerProductData: typeof Sequelize.Model
+		CustomerRelation: typeof Sequelize.Model
+		ManagerContribution: typeof Sequelize.Model
+		ManagerData: typeof Sequelize.Model
+		ManagerProductData: typeof Sequelize.Model
+		ProductDataSetting: typeof Sequelize.Model
+		Account: typeof Sequelize.Model
+		Activity: typeof Sequelize.Model
+		Customer: typeof Sequelize.Model
+		File: typeof Sequelize.Model
+		Manager: typeof Sequelize.Model
+		Plan: typeof Sequelize.Model
+		Present: typeof Sequelize.Model
+		Product: typeof Sequelize.Model
+	}
+
+	interface Resource {
+		Customer: (data: Sequelize.Model) => Object
+		CustomerPerformance: (data: Sequelize.Model) => Object
+		Manager: (data: Sequelize.Model) => Object
+		ManagerPerformance: (data: Sequelize.Model) => Object
+		File: (data: Sequelize.Model) => Object
+		Plan: (data: Sequelize.Model) => Object
+		Activity: (data: Sequelize.Model) => Object
+		Present: (data: Sequelize.Model) => Object
+		Product: (data: Sequelize.Model) => Object
 	}
 }
 

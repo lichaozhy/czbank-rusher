@@ -9,7 +9,7 @@ const meta = require('./package.json');
 const normlize = require('./src/normalize');
 const RusherSequelize = require('./src/sequelize');
 const utils = require('./src/utils');
-const AccountDataResolver = require('./src/AccountDataResolver');
+const ReportResolver = require('./src/ReportResolver');
 
 require('sqlite3');
 
@@ -48,7 +48,7 @@ module.exports = Duck({
 	injection, Log, Web, Workspace, product
 }, options) {
 	injection.Utils = utils;
-	injection.AccountDataResolver = AccountDataResolver;
+	injection.ReportResolver = ReportResolver;
 
 	const finalOptions = normlize(options);
 
@@ -58,13 +58,14 @@ module.exports = Duck({
 	Workspace.setPath('file', finalOptions.workspace.file);
 	Workspace.setPath('temp', finalOptions.workspace.temp);
 
-	const sequelize = RusherSequelize({
+	const { sequelize, Model } = RusherSequelize({
 		namespace: `${product.meta.namespace}_`,
 		storage: Workspace.resolve('database', finalOptions.database.rusher),
 		onLog: () => {}
 	});
 
 	injection.Sequelize = sequelize;
+	injection.Model = Model;
 	injection.options = finalOptions;
 
 	Log();

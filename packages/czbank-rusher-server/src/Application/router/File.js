@@ -2,21 +2,13 @@ const { Router } = require('@produck/duck-web-koa-router');
 const fs = require('fs-extra');
 
 module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
-	Sequelize, Utils, Workspace, AccountDataResolver, Resource
+	Model, Utils, Workspace, AccountDataResolver, Resource
 }) {
-	const Customer = Sequelize.model('Customer');
-	const Account = Sequelize.model('Account');
-	const AccountData = Sequelize.model('AccountData');
-	const AccountProductData = Sequelize.model('AccountProductData');
-	const File = Sequelize.model('File');
-	const Manager = Sequelize.model('Manager');
-	const Plan = Sequelize.model('Plan');
-
 	async function saveData(resolved, managerId, planId, fileId) {
 		const { result } = resolved;
 		const { accountMap, customerMap, dataList } = result;
 
-		await Account.bulkCreate(Object.keys(accountMap).map(accountId => {
+		await Model.Account.bulkCreate(Object.keys(accountMap).map(accountId => {
 			const account = accountMap[accountId];
 
 			return {
@@ -94,10 +86,10 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 			options.where.managerId = managerId;
 		}
 
-		const list = await File.findAll(options);
+		const list = await Model.File.findAll(options);
 
 		ctx.body = list.map(file => {
-			return Resource.AccountDataFile(file, file.Manager, file.AccountDataPlan);
+			return Resource.File(file, file.Manager, file.AccountDataPlan);
 		});
 	}).post('/', async function importFile(ctx) {
 		const { managerId, planId, description } = ctx.request.body;
@@ -142,11 +134,10 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 			};
 		});
 
+		const resolver = AccountDataResolver(setting);
 		let resolvedData = null;
 
 		try {
-			const resolver = AccountDataResolver(setting);
-
 			resolvedData = resolver(xlsFile);
 
 			if (resolvedData.date !== plan.dateAs) {

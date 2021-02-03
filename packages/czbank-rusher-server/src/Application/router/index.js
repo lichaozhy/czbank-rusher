@@ -2,7 +2,7 @@ module.exports = {
 	Api: require('./Api'),
 	Account: require('./Account'),
 	AccountData: require('./AccountData'),
-	AccountDataFile: require('./AccountDataFile'),
+	File: require('./File'),
 	AccountDataPlan: require('./Plan'),
 	ManagerFile: require('./ManagerFile'),
 	ManagerCustomer: require('./Manager/Customer'),

@@ -1,12 +1,17 @@
-module.exports = function Product(product, setting) {
+module.exports = function Product(productData) {
+	const {
+		fieldIndexOfBalance,
+		fieldIndexOfAverage
+	} = productData.ProductAccountDataSetting;
+
 	return {
-		id: product.id,
-		name: product.name,
-		code: product.code,
-		description: product.description,
+		id: productData.id,
+		name: productData.name,
+		code: productData.code,
+		description: productData.description,
 		fieldIndex: {
-			averageDeposit: setting.fieldIndexOfAverageDeposit,
-			balance: setting.fieldIndexOfBalance
+			average: fieldIndexOfAverage,
+			balance: fieldIndexOfBalance
 		}
 	};
 };

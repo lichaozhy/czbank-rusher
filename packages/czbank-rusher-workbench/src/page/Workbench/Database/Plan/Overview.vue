@@ -140,7 +140,7 @@ export default {
 			this.selectedPlanId = rows.length > 0 ? rows[0].id : null;
 		},
 		async getPlanList() {
-			this.planList = await this.$rusher.backend.AccountDataPlan.query();
+			this.planList = await this.$rusher.backend.Plan.query();
 		},
 		requestCreatingPlan() {
 			this.$refs.creating.show();
@@ -167,7 +167,7 @@ export default {
 			}
 		},
 		async deletePlan() {
-			await this.$rusher.backend.AccountDataPlan(this.selectedPlanId).delete();
+			await this.$rusher.backend.Plan(this.selectedPlanId).delete();
 			this.getPlanList();
 		},
 		requestUploadingFile() {

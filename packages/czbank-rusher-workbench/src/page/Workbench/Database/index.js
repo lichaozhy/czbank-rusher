@@ -1,5 +1,5 @@
 import Framework from './Framework';
-import AccountDataPlan from './AccountDataPlan';
+import AccountDataPlan from './Plan';
 import Product from './Product';
 
 export default {

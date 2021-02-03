@@ -18,11 +18,9 @@
 		:description="$t('d.plan.dateAs')"
 	>
 		<b-form-datepicker
-			v-model="form.dateAs"
+			:value="dateAs"
+			readonly
 			name="plan-dateas"
-			:date-disabled-fn="disabledDate"
-			button-variant="primary"
-			nav-button-variant="primary"
 		/>
 	</b-form-group>
 
@@ -46,31 +44,38 @@
 export default {
 	data() {
 		return {
-			planList: [],
+			dateAs: '',
 			form: {
 				name: '',
-				dateAs: '',
 				description: ''
 			}
 		};
 	},
-	methods: {
-		async getPlanList() {
-			this.planList = await this.$rusher.backend.AccountDataPlan.query();
-		},
-		async create() {
-			return this.$rusher.backend.AccountDataPlan.create({
-				name: this.form.name,
-				dateAs: new Date(this.form.dateAs),
-				description: this.form.description
-			});
-		},
-		disabledDate(ymd) {
-			return this.planList.some(plan => plan.dateAs === ymd);
+	props: {
+		planId: {
+			type: String,
+			required: true
 		}
 	},
-	mounted() {
-		this.getPlanList();
+	computed: {
+		IPlan() {
+			return this.$rusher.backend.Plan(this.planId);
+		}
+	},
+	methods: {
+		async update() {
+			return this.IPlan.update({
+				name: this.form.name,
+				description: this.form.description
+			});
+		}
+	},
+	async mounted() {
+		const plan = await this.IPlan.get();
+
+		this.dateAs = plan.dateAs;
+		this.form.name = plan.name;
+		this.form.description = plan.description;
 	}
 };
 </script>

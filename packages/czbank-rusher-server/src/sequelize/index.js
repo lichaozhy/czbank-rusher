@@ -77,6 +77,8 @@ module.exports = function CZBankRusherSequelize(options) {
 		Product: sequelize.model('Product')
 	};
 
+	Model.File.belongsTo(Model.Manager, FK('managerId'));
+	Model.Manager.hasMany(Model.File, FK('managerId'));
 	Model.File.belongsTo(Model.Plan, FK('planId'));
 	Model.Plan.hasMany(Model.File, FK('planId'));
 	Model.File.hasMany(Model.AccountData, FK('fileId'));
@@ -129,5 +131,5 @@ module.exports = function CZBankRusherSequelize(options) {
 	Model.Present.hasMany(Model.CustomerPointAdjustmentByPresent, FK('presentId'));
 	Model.Activity.hasMany(Model.CustomerPointAdjustmentByActivity, FK('activityId'));
 
-	return sequelize;
+	return { sequelize, Model };
 };

@@ -125,45 +125,43 @@ export default {
 					formdata.append('managerId', managerId);
 					formdata.append('raw', raw);
 
-					return agent.post('/account/data/file', formdata).then(pickData);
+					return agent.post('/file', formdata).then(pickData);
 				},
 				query(options) {
 					const { planId, managerId } = options;
 
-					return agent.get('/account/data/file', {
+					return agent.get('/file', {
 						params: { planId, managerId }
 					}).then(pickData);
 				}
 			}),
-			AccountDataPlan: Object.assign(function IAccountDataPlan(planId) {
+			Plan: Object.assign(function IAccountDataPlan(planId) {
 				return {
 					get() {
-						return agent.get(`/account/data/plan/${planId}`).then(pickData);
+						return agent.get(`/plan/${planId}`).then(pickData);
 					},
 					update(options) {
 						const { name, description } = options;
 
-						return agent.put(`/account/data/plan/${planId}`, {
+						return agent.put(`/plan/${planId}`, {
 							name, description
 						}).then(pickData);
 					},
 					delete() {
-						return agent.delete(`/account/data/plan/${planId}`).then(pickData);
+						return agent.delete(`/plan/${planId}`).then(pickData);
 					},
 					resolve() {
-						return agent.post(`/account/data/plan/${planId}/result`, {}).then(pickData);
+						return agent.post(`/plan/${planId}/result`, {}).then(pickData);
 					}
 				};
 			}, {
 				query() {
-					return agent.get('/account/data/plan').then(pickData);
+					return agent.get('/plan').then(pickData);
 				},
 				create(options) {
 					const { name, description, dateAs } = options;
 
-					return agent.post('/account/data/plan', {
-						name, dateAs, description
-					}).then(pickData);
+					return agent.post('/plan', { name, dateAs, description }).then(pickData);
 				}
 			})
 		});

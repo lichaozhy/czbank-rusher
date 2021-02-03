@@ -19,6 +19,7 @@ module.exports = {
 	randomInt(from, to) {
 		return Math.round(Math.random() * (to - from) + from);
 	},
+
 	// LocalDateString(date) {
 	// 	return dateformat(date, 'yyyy-mm-dd HH:MM:ss');
 	// }
