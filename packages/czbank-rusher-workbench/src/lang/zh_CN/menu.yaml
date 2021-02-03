@@ -41,6 +41,13 @@ manager:
     label: 客户经理总览
   register:
     label: 登记新客户经理
+
+activity:
+  label: 活动
+  overview: 
+    label: 活动总览
+  register:
+    label: 登记新活动
   
 point:
   label: 积分

@@ -1,22 +1,3 @@
-manager:
-  className: 客户经理
-  name: 姓名
-  code: 工号
-  customerNumber: 客户数
-
-product:
-  className: 产品
-  name: 产品名
-  code: 代码
-  description: 描述
-  fieldIndex:
-    label: 字段索引
-    averageDeposit: 日均存款列号
-    balance: 余额列号
-
-database:
-  className: 数据维护
-
 base:
   id: ID
   create: 创建
@@ -36,3 +17,25 @@ account:
       dateAs: 时点
       description: 描述
       fileNumber: 文件数
+
+manager:
+  className: 客户经理
+  name: 姓名
+  code: 工号
+  customerNumber: 客户数
+
+product:
+  className: 产品
+  name: 产品名
+  code: 代码
+  description: 描述
+  fieldIndex:
+    label: 字段索引
+    averageDeposit: 日均存款列号
+    balance: 余额列号
+
+activity:
+  className: 活动
+
+database:
+  className: 数据维护

@@ -6,6 +6,7 @@ import Point from './Point';
 import Framework from './Framework';
 import Database from './Database';
 import Manager from './Manager';
+import Activity from './Activity';
 
 export default {
 	Account,
@@ -15,5 +16,6 @@ export default {
 	Point,
 	Framework,
 	Database,
-	Manager
+	Manager,
+	Activity
 };

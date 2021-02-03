@@ -206,6 +206,26 @@ export default new VueRouter({
 							component: Page.Workbench.Point.Adjustment
 						}
 					]
+				},
+				{
+					name: 'workbench.activity',
+					path: 'activity',
+					component: Page.Workbench.Activity.Framework,
+					redirect: {
+						name: 'workbench.activity.overview'
+					},
+					children: [
+						{
+							name: 'workbench.activity.overview',
+							path: 'overview',
+							component: Page.Workbench.Activity.Overview
+						},
+						{
+							name: 'workbench.activity.register',
+							path: 'register',
+							component: Page.Workbench.Activity.Register
+						}
+					]
 				}
 			]
 		}
