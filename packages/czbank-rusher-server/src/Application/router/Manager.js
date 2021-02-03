@@ -1,14 +1,12 @@
 const { Router } = require('@produck/duck-web-koa-router');
 
 module.exports = Router(function CZBankRusherManagerRouter(router, {
-	Sequelize, Utils, Resource
+	Model, Utils, Resource
 }) {
-	const Model = {
-		Manager: Sequelize.model('Manager'),
-	};
-
 	router.get('/', async function getManagerList(ctx) {
+		const list = await Model.Manager.findAll();
 
+		ctx.body = list.map(manager => Resource.Manager(manager));
 	}).post('/', async function createManager(ctx) {
 		const { name, code } = ctx.request.body;
 

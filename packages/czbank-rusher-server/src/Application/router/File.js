@@ -1,82 +1,110 @@
 const { Router } = require('@produck/duck-web-koa-router');
 const fs = require('fs-extra');
 
+const DEFAULT_SETTING = require('../../../../../script/product');
+const BULK_CREATING_OPTIONS = { ignoreDuplicates: true };
+
 module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
-	Model, Utils, Workspace, AccountDataResolver, Resource
+	Model, Utils, Workspace, ReportResolver, Resource
 }) {
-	async function saveData(resolved, managerId, planId, fileId) {
-		const { result } = resolved;
-		const { accountMap, customerMap, dataList } = result;
+	async function saveData(report, { managerId, planId, fileId }) {
+		const { Result } = report;
+		const { Account, Customer, Abstract } = Result;
+		const now = Date.now();
 
-		await Model.Account.bulkCreate(Object.keys(accountMap).map(accountId => {
-			const account = accountMap[accountId];
-
+		await Model.Account.bulkCreate(Account.list.map(account => {
 			return {
-				id: accountId,
+				id: account.accountId,
 				customerId: account.customerId,
-				internalCode: account.internalCode,
-				assetTotal: 0
+				internalCode: account.internalCode
 			};
-		}), {
-			ignoreDuplicates: true
-		});
+		}), BULK_CREATING_OPTIONS);
 
-		await Customer.bulkCreate(Object.keys(customerMap).map(customerId => {
-			const customer = customerMap[customerId];
-
+		await Model.Customer.bulkCreate(Customer.list.map(customer => {
 			return {
-				id: customerId,
+				id: customer.customerId,
 				managerId: managerId,
 				name: customer.name,
 				identificationCode: customer.desensitizedIDCardNumber,
-				assetTotal: 0
 			};
-		}), {
-			ignoreDuplicates: true
-		});
-
-		const now = Date.now();
+		}), BULK_CREATING_OPTIONS);
 
 		const accountDataList = [];
 		const accountProductDataList = [];
 
-		dataList.forEach((accountData, index) => {
+		Account.dataList.forEach((accountData, index) => {
 			const { accountId, data: productDataMap } = accountData;
-			const dataId = Utils.encodeSHA256(`${planId}${accountId}${now + index}`);
+			const id = Utils.encodeSHA256(`${planId}${accountId}${now}-${index}`);
 
-			accountDataList.push({
-				id: dataId,
-				planId: planId,
-				accountId: accountId,
-				fileId: fileId
-			});
+			accountDataList.push({ id, planId, accountId, fileId });
 
 			Object.keys(productDataMap).forEach(productCode => {
 				const productData = productDataMap[productCode];
-				const { averageDeposit, balance } = productData;
+				const { average, balance } = productData;
 
-				if (averageDeposit === 0 && balance === 0) {
+				if (average === 0 && balance === 0) {
 					return;
 				}
 
-				accountProductDataList.push({
-					dataId: dataId,
-					productCode: productCode,
-					averageDeposit: averageDeposit,
-					balance: balance
-				});
+				accountProductDataList.push({ accountDataId: id, productCode, average, balance });
 			});
 		});
 
-		await AccountData.bulkCreate(accountDataList, { ignoreDuplicates: true });
-		await AccountProductData.bulkCreate(accountProductDataList, { ignoreDuplicates: true });
+		await Model.AccountData.bulkCreate(accountDataList, BULK_CREATING_OPTIONS);
+		await Model.AccountProductData.bulkCreate(accountProductDataList, BULK_CREATING_OPTIONS);
+
+		const customerDataList = [];
+		const customerProductDataList = [];
+		const customerContribution = [];
+
+		Customer.dataList.forEach((customerData, index) => {
+			const { customerId, data: productDataMap } = customerData;
+			const id = Utils.encodeSHA256(`${planId}${customerId}${now}-${index}`);
+
+			customerDataList.push({ id, planId, managerId, customerId, fileId });
+
+			Object.keys(productDataMap).forEach(productCode => {
+				const productData = productDataMap[productCode];
+				const { average, balance } = productData;
+
+				if (average === 0 && balance === 0) {
+					return;
+				}
+
+				customerProductDataList.push({ customerDataId: id, productCode, average, balance });
+			});
+		});
+
+		await Model.CustomerData.bulkCreate(customerDataList, BULK_CREATING_OPTIONS);
+		await Model.CustomerProductData.bulkCreate(customerProductDataList, BULK_CREATING_OPTIONS);
+
+		const managerProductDataList = [];
+
+		{
+			const id = Utils.encodeSHA256(`${planId}${managerId}${now}`);
+
+			Object.keys(Abstract).forEach(productCode => {
+				const productData = Abstract[productCode];
+				const { average, balance } = productData;
+
+				if (average === 0 && balance === 0) {
+					return;
+				}
+
+				managerProductDataList.push({ managerDataId: id, productCode, average, balance });
+			});
+
+			await Model.ManagerData.create({ id, fileId, managerId });
+		}
+
+		await Model.ManagerProductData.bulkCreate(managerProductDataList);
 
 		console.log('写完了');
 	}
 
 	router.get('/', async function getFileList(ctx) {
 		const { planId, managerId } = ctx.query;
-		const options = { where: {}, include: [Manager, Plan] };
+		const options = { where: {}, include: [Model.Manager, Model.Plan] };
 
 		if (planId) {
 			options.where.planId = planId;
@@ -88,26 +116,24 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 
 		const list = await Model.File.findAll(options);
 
-		ctx.body = list.map(file => {
-			return Resource.File(file, file.Manager, file.AccountDataPlan);
-		});
+		ctx.body = list.map(file => Resource.File(file));
 	}).post('/', async function importFile(ctx) {
 		const { managerId, planId, description } = ctx.request.body;
 		const { raw } = ctx.request.files;
 
-		const manager = await Manager.findOne({ where: { id: managerId } });
+		const manager = await Model.Manager.findOne({ where: { id: managerId } });
 
 		if (!manager) {
 			return ctx.throw(400, `The manager id:${managerId} is NOT found.`);
 		}
 
-		const plan = await Plan.findOne({ where: { id: planId } });
+		const plan = await Model.Plan.findOne({ where: { id: planId } });
 
 		if (!plan) {
 			return ctx.throw(400, `The plan id:${planId} is NOT found.`);
 		}
 
-		const existedFile = await File.findOne({ where: { managerId, planId } });
+		const existedFile = await Model.File.findOne({ where: { managerId, planId } });
 
 		if (existedFile) {
 			await fs.remove(raw.path);
@@ -125,28 +151,36 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 			console.log('Moving xls fail because a same file has been already existed.');
 		}
 
-		const setting = JSON.parse(plan.setting).map(item => {
-			return {
-				name: item.name,
-				code: item.code,
-				balanceIndex: item.balance,
-				averageDepositIndex: item.averageDeposit
-			};
-		});
+		// const setting = JSON.parse(plan.setting).map(item => {
+		// 	return {
+		// 		name: item.name,
+		// 		code: item.code,
+		// 		balanceIndex: item.balance,
+		// 		averageIndex: item.average
+		// 	};
+		// });
 
-		const resolver = AccountDataResolver(setting);
-		let resolvedData = null;
+		const fileOptions = {
+			id, planId, managerId, description,
+			size: 0,
+			customerNumber: 0,
+			accountNumber: 0,
+			createdAt: new Date()
+		};
 
 		try {
-			resolvedData = resolver(xlsFile);
+			const report = ReportResolver(DEFAULT_SETTING)(xlsFile);
 
-			if (resolvedData.date !== plan.dateAs) {
+			if (report.date !== plan.dateAs) {
 				fs.remove(xlsPath);
 
 				return ctx.throw(400, 'The date of file is NOT matched to the plan.');
 			}
 
-			saveData(resolvedData, managerId, planId, id);
+			saveData(report, { managerId, planId, fileId: id });
+			fileOptions.customerNumber = report.Result.Customer.list.length;
+			fileOptions.accountNumber = report.Result.Account.list.length;
+			fileOptions.size = xlsFile.length;
 		} catch (err) {
 			console.log(err);
 			fs.remove(xlsPath);
@@ -154,20 +188,15 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 			return ctx.throw(400, 'Bad xls file.');
 		}
 
-		const file = await File.create({
-			id, planId, managerId, description,
-			size: xlsFile.length,
-			customerNumber: Object.keys(resolvedData.result.customerMap).length,
-			accountNumber: Object.keys(resolvedData.result.accountMap).length,
-			abstract: JSON.stringify(resolvedData.abstract),
-			createdAt: new Date()
+		await Model.File.create(fileOptions);
+
+		const file = await Model.File.findOne({
+			where: { id }, include: [Model.Manager, Model.Plan]
 		});
 
-		file.Manager = manager;
-		file.AccountDataPlan = plan;
-		ctx.body = Resource.AccountDataFile(file, manager, plan);
+		ctx.body = Resource.File(file);
 	}).param('fileId', async (id, ctx, next) => {
-		const file = await File.findOne();
+		const file = await Model.File.findOne();
 
 		return next();
 	}).get('/:fileId', async function getFile() {

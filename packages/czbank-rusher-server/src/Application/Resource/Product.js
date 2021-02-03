@@ -2,7 +2,7 @@ module.exports = function Product(productData) {
 	const {
 		fieldIndexOfBalance,
 		fieldIndexOfAverage
-	} = productData.ProductAccountDataSetting;
+	} = productData.ProductDataSetting;
 
 	return {
 		id: productData.id,

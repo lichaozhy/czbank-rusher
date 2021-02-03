@@ -80,9 +80,6 @@ export default {
 		};
 	},
 	methods: {
-		// async getPlanList() {
-		// 	this.planList = await this.$rusher.backend.AccountDataPlan.query();
-		// },
 		setGlobalPlanDateAs(dateAs) {
 			this.$store.commit('setCurrentDateAs', dateAs);
 		}

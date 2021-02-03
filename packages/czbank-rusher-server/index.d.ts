@@ -1,18 +1,67 @@
 import '@produck/duck'
 import Sequelize from 'sequelize'
-import http from 'http';
-import https from 'https';
+import http from 'http'
+import https from 'https'
 
 declare module '@produck/duck' {
 	interface InstalledInjection {
 		Sequelize: Sequelize.Sequelize
-		Utils: CZBankRusher.Utils,
-		Model: CZBankRusher.Model,
+		Utils: CZBankRusher.Utils
+		Model: CZBankRusher.Model
 		Resource: CZBankRusher.Resource
-	}
+		ReportResolver: CZBankRusher.Report.FileReader
+	};
 }
 
 declare namespace CZBankRusher {
+	namespace Report {
+		type FileReader = (options) => read
+		type read = (buffer: Buffer) => Report
+		
+		interface Abstract {
+			[key: string]: AbstractData
+		}
+
+		interface AbstractData {
+			balance: number
+			average: number
+		}
+
+		namespace Namespace {
+			interface AccountData {
+				accountId: string
+				data: Abstract
+			}
+
+			interface CustomerData {
+				accountId: string
+				customerId: string
+				data: Abstract
+			}
+
+			interface Account {
+				list: [],
+				dataList: AccountData[]
+			}
+
+			interface Customer {
+				list: [],
+				dataList: CustomerData[]
+			}
+		}
+		
+		interface Report {
+			date: string,
+			Result: ReportResult
+		}
+
+		interface ReportResult {
+			Account: Namespace.Account,
+			Customer: Namespace.Customer,
+			Abstract: Abstract
+		}
+	}
+
 	interface CZBankRusher {
 		HttpServer(): http.Server
 		HttpsServer(): https.Server

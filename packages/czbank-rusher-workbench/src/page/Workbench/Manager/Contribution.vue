@@ -80,7 +80,7 @@ export default {
 			this.fetching = false;
 		},
 		async getPlanList() {
-			this.planList = await this.$rusher.backend.AccountDataPlan.query();
+			this.planList = await this.$rusher.backend.Plan.query();
 			this.dateAs = this.planList[0].dateAs;
 		},
 		getContributeFromData(data) {

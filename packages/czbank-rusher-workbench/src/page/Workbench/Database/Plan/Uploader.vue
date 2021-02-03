@@ -76,7 +76,7 @@ export default {
 			this.managerList = await this.$rusher.backend.Manager.query();
 		},
 		async getPlan() {
-			this.plan = await this.$rusher.backend.AccountDataPlan(this.planId).get();
+			this.plan = await this.$rusher.backend.Plan(this.planId).get();
 		},
 		async upload() {
 			await this.$rusher.backend.File.create({

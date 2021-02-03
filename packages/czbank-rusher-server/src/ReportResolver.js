@@ -68,7 +68,7 @@ function normalize(_options = []) {
 	return options;
 }
 
-module.exports = function CZBankAccountDataFileReader(options = []) {
+module.exports = function CZBankReportFileReader(options = []) {
 	const Product = normalize(options);
 
 	function Abstract() {
@@ -216,17 +216,13 @@ module.exports = function CZBankAccountDataFileReader(options = []) {
 				const customerDataMap = {};
 
 				for(const accountId in Result.accountMap) {
-					const account = Object.assign({
-						id: accountId
-					}, Result.accountMap[accountId]);
+					const account = Object.assign({}, Result.accountMap[accountId]);
 
 					namespace.Account.list.push(account);
 				}
 
 				for(const customerId in Result.customerMap) {
-					const customer = Object.assign({
-						id: customerId
-					}, Result.customerMap[customerId]);
+					const customer = Object.assign({}, Result.customerMap[customerId]);
 
 					namespace.Customer.list.push(customer);
 					customerDataMap[customerId] = Abstract();
