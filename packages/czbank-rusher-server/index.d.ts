@@ -112,6 +112,7 @@ declare namespace CZBankRusher {
 		Activity: (data: Sequelize.Model) => Object
 		Present: (data: Sequelize.Model) => Object
 		Product: (data: Sequelize.Model) => Object
+		CustomerPerformance: (data: Sequelize.Model) => Object
 	}
 }
 

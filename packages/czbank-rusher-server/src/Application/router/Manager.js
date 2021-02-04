@@ -51,7 +51,7 @@ module.exports = Router(function CZBankRusherManagerRouter(router, {
 
 		manager.destroy();
 		ctx.body = Resource.Manager(manager);
-	}).get('/:managerId/performance', async function getManagerPerformanceByManager(ctx) {
+	}).get('/:managerId/performance', async function getManagerPerformanceList(ctx) {
 		const { manager } = ctx.state;
 
 		const list = await Model.ManagerData.findAll({
@@ -64,5 +64,14 @@ module.exports = Router(function CZBankRusherManagerRouter(router, {
 		});
 
 		ctx.body = list.map(manager => Resource.ManagerPerformance(manager));
+	}).get('/:managerId/file', async function getManagerFileList(ctx) {
+		const { manager } = ctx.state;
+
+		const list = await Model.File.findAll({
+			where: { managerId: manager.id },
+			include: [Model.Manager, Model.Plan]
+		});
+
+		ctx.body = list.map(file => Resource.File(file));
 	});
 });

@@ -12,8 +12,7 @@ module.exports = function Customer(sequelize, namespace) {
 		name: DataTypes.STRING,
 		gender: DataTypes.TINYINT,
 		mobilePhone: DataTypes.CHAR(16),
-		identificationCode: DataTypes.CHAR(18),
-		assetTotal: DataTypes.DOUBLE
+		identificationCode: DataTypes.CHAR(18)
 	}, {
 		tableName: `${namespace}customer`
 	});
