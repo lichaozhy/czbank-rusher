@@ -64,6 +64,15 @@ export default {
 								params: { dateAs }
 							}).then(pickData);
 						}
+					}),
+					Performance: Object.assign(function IManagerPerformance() {
+
+					}, {
+						query() {
+							return agent.get(`/manager/${managerId}/performance`, {
+
+							}).then(pickData);
+						}
 					})
 				};
 			}, {

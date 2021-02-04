@@ -116,7 +116,7 @@
 		<template #cell(lastDateAs)="{ item }">
 			<span
 				v-if="item.lastDateAs !== null"
-			>{{ item.lastDateAs | numeral }}</span>
+			>{{ item.lastDateAs }}</span>
 			<b-link
 				:to="{ name: 'workbench.database.account-data-plan' }"
 			><em v-if="item.lastDateAs === null">上传报表</em></b-link>

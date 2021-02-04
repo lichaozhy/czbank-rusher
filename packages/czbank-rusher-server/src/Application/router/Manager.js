@@ -7,19 +7,6 @@ module.exports = Router(function CZBankRusherManagerRouter(router, {
 		const list = await Model.Manager.findAll();
 
 		ctx.body = list.map(manager => Resource.Manager(manager));
-	}).get('/preview', async function getManagerPerformance(ctx) {
-		const list = await Model.Manager.findAll({
-			include: [{
-				model: Model.ManagerData,
-				require: false,
-				include: [
-					{ model: Model.ManagerContribution },
-					{ model: Model.File, include: [{ model: Model.Plan }, Model.CustomerData] }
-				]
-			}]
-		});
-
-		ctx.body = list.map(manager => Resource.ManagerPreview(manager));
 	}).post('/', async function createManager(ctx) {
 		const { name, code } = ctx.request.body;
 
@@ -43,6 +30,8 @@ module.exports = Router(function CZBankRusherManagerRouter(router, {
 		ctx.state.manager = manager;
 
 		return next();
+	}).get('/:managerId', async function getManager(ctx) {
+		ctx.body = Resource.Manager(ctx.state.manager);
 	}).put('/:managerId', async function updateManager(ctx) {
 		const { name, code } = ctx.request.body;
 		const { manager } = ctx.state;
@@ -62,5 +51,18 @@ module.exports = Router(function CZBankRusherManagerRouter(router, {
 
 		manager.destroy();
 		ctx.body = Resource.Manager(manager);
+	}).get('/:managerId/performance', async function getManagerPerformanceByManager(ctx) {
+		const { manager } = ctx.state;
+
+		const list = await Model.ManagerData.findAll({
+			where: { managerId: manager.id },
+			include: [
+				{ model: Model.Manager },
+				{ model: Model.ManagerContribution },
+				{ model: Model.File, include: [{ model: Model.Plan }, Model.CustomerData] }
+			]
+		});
+
+		ctx.body = list.map(manager => Resource.ManagerPerformance(manager));
 	});
 });

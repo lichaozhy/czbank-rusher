@@ -52,7 +52,7 @@
 							name="manager-name"
 							:options="dateAsOptionList"
 							v-model="dateAs"
-							:disabled="dateAs === null"
+							:disabled="performanceListSortedByDateAs.length === 0"
 						/>
 					</b-input-group>
 				</template>
@@ -61,40 +61,40 @@
 					<p class="text-center">共计客户</p>
 					<h1
 						class="m-0 text-center"
-					>{{ currentFile ? currentFile.customerNumber : 0 | numeral }}</h1>
+					>{{ contribution ? contribution.customerNumber : 0 | numeral }}</h1>
 				</b-card-body>
 
 				<b-list-group flush class="mt-1">
 					<b-list-group-item
 						class="d-flex justify-content-between align-items-center"
-					><b>金融资产余额：</b><span>{{ matrix.balance | numeral }}</span></b-list-group-item>
+					><b>金融资产余额：</b><span>{{ contribution.balance | numeral }}</span></b-list-group-item>
 					<b-list-group-item
 						class="d-flex justify-content-between align-items-center"
-					><b>金融资产日均：</b><span>{{ matrix.average | numeral }}</span></b-list-group-item>
+					><b>金融资产日均：</b><span>{{ contribution.average | numeral }}</span></b-list-group-item>
 				</b-list-group>
 
 				<b-list-group flush class="mt-1">
 					<b-list-group-item
 						class="d-flex justify-content-between align-items-center"
-					><b>存款余额：</b><span>{{ matrix.deposit.balance | numeral }}</span></b-list-group-item>
+					><b>存款余额：</b><span>{{ contribution.deposit.balance | numeral }}</span></b-list-group-item>
 					<b-list-group-item
 						class="d-flex justify-content-between align-items-center"
-					><b>存款日均：</b><span>{{ matrix.deposit.average | numeral }}</span></b-list-group-item>
+					><b>存款日均：</b><span>{{ contribution.deposit.average | numeral }}</span></b-list-group-item>
 					<b-list-group-item
 						class="d-flex justify-content-between align-items-center"
-					><b>非存款余额：</b><span>{{ matrix.nonDeposit.balance | numeral }}</span></b-list-group-item>
+					><b>非存款余额：</b><span>{{ contribution.other.balance | numeral }}</span></b-list-group-item>
 					<b-list-group-item
 						class="d-flex justify-content-between align-items-center"
-					><b>非存款日均：</b><span>{{ matrix.nonDeposit.average | numeral }}</span></b-list-group-item>
+					><b>非存款日均：</b><span>{{ contribution.other.average | numeral }}</span></b-list-group-item>
 				</b-list-group>
 
 				<b-list-group flush class="mt-1">
 					<b-list-group-item
 						class="d-flex justify-content-between align-items-center"
-					><b>存款占比：</b><span>{{ (matrix.depositRate * 100).toFixed(2) + '%' }}</span></b-list-group-item>
+					><b>存款占比：</b><span>{{ (contribution.rate * 100).toFixed(2) + '%' }}</span></b-list-group-item>
 					<b-list-group-item
 						class="d-flex justify-content-between align-items-center"
-					><b>贡献度：</b><span>{{ matrix.contribution | numeral }}</span></b-list-group-item>
+					><b>贡献度：</b><span>{{ contribution.value | numeral }}</span></b-list-group-item>
 				</b-list-group>
 			</b-card>
 		</b-col>
@@ -110,17 +110,11 @@
 </template>
 
 <script>
-import Matrix from './matrix';
-
 export default {
 	data() {
 		return {
-			manager: {
-				name: '',
-				code: '',
-				id: '',
-				customerNumber: 0
-			},
+			manager: { name: '', code: '', id: '' },
+			performanceList: [],
 			fileList: [],
 			dateAs: null
 		};
@@ -129,44 +123,72 @@ export default {
 		managerId() {
 			return this.$route.params.managerId;
 		},
-		Manager() {
+		IManager() {
 			return this.$rusher.backend.Manager(this.managerId);
 		},
+		performanceListSortedByDateAs() {
+			return this.performanceList.slice(0).sort((a, b) => a.dateAs - b.dateAs);
+		},
+		performanceMap() {
+			const map = {};
+
+			this.performanceList.forEach(performance => map[performance.dateAs] = performance);
+
+			return map;
+		},
 		dateAsOptionList() {
-			if (this.fileList.length === 0) {
+			if (this.performanceListSortedByDateAs.length === 0) {
 				return [{ value: null, text: '无可用的时点数据' }];
 			} else {
-				return this.fileList.slice(0).sort((fileA, fileB) => {
-					return fileA.plan.dateAs - fileB.plan.dateAs;
-				}).map(file => {
-					return { value: file.plan.dateAs, text: file.plan.dateAs };
+				return this.performanceListSortedByDateAs.map(performance => {
+					return { value: performance.dateAs, text: performance.dateAs };
 				});
 			}
 		},
-		currentFile() {
-			return this.fileList.find(file => file.plan.dateAs === this.dateAs);
-		},
-		matrix() {
-			return Matrix(this.currentFile ? this.currentFile.abstract : null);
+		contribution() {
+			const contribution = {
+				deposit: { balance: null, average: null },
+				other: { balance: null, average: null },
+				balance: null,
+				average: null,
+				customerNumber: null,
+				rate: null,
+				value: null
+			};
+
+			if (this.dateAs !== null) {
+				const current = this.performanceMap[this.dateAs];
+				const { contribution: c } = current;
+
+				contribution.deposit.balance = c.deposit.balance;
+				contribution.deposit.average = c.deposit.average;
+				contribution.other.balance = c.other.balance;
+				contribution.other.average = c.other.average;
+				contribution.balance = c.balance;
+				contribution.average = c.average;
+				contribution.rate = c.rate;
+				contribution.value = c.value;
+				contribution.customerNumber = current.customerNumber;
+			}
+
+			return contribution;
 		}
 	},
 	methods: {
 		async getManager() {
-			this.manager = await this.Manager.get();
+			this.manager = await this.IManager.get();
 		},
-		async getManagerFile() {
-			this.fileList = await this.Manager.File.query();
-
-			if (this.fileList.length > 0) {
-				this.dateAs = this.fileList.slice(0).sort((fileA, fileB) => {
-					return fileA.plan.dateAs - fileB.plan.dateAs;
-				})[0].plan.dateAs;
-			}
+		async getManagerPerformanceList() {
+			this.performanceList = await this.IManager.Performance.query();
 		}
 	},
-	mounted() {
-		this.getManager();
-		this.getManagerFile();
+	async mounted() {
+		await this.getManager();
+		await this.getManagerPerformanceList();
+
+		if (this.dateAsOptionList.length > 0) {
+			this.dateAs = this.dateAsOptionList[0].value;
+		}
 	}
 };
 </script>
