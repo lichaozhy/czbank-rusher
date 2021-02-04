@@ -7,7 +7,7 @@ product:
   name: 表示行内业务的概念名称。例如：活期存款
   code: 作为信息系统对产品数据分别分类的依据
   description: 产品的介绍，少于255字
-  averageDepositFieldIndex: 该产品的日均存款值在XLS报表中的列坐标
+  averageFieldIndex: 该产品的日均值在XLS报表中的列坐标
   balanceFieldIndex: 该产品余额值在XLS报表中的列坐标
 
 database:

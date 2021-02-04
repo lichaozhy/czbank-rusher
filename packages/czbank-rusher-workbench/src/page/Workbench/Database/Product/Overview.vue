@@ -62,8 +62,8 @@
 		@row-selected="selectProduct"
 		:filter="keyword"
 	>
-		<template #cell(averageDepositFieldIndex)="row">
-			{{ row.item.averageDepositFieldIndex === null ? '&lt;!未设定>' : row.item.averageDepositFieldIndex }}
+		<template #cell(averageFieldIndex)="row">
+			{{ row.item.averageFieldIndex === null ? '&lt;!未设定>' : row.item.averageFieldIndex }}
 		</template>
 
 		<template #cell(balanceFieldIndex)="row">
@@ -197,9 +197,9 @@ export default {
 					sortable: true
 				},
 				{
-					key: 'averageDepositFieldIndex',
+					key: 'averageFieldIndex',
 					label: '日均存款列号',
-					class: 'col-average-deposit',
+					class: 'col-average',
 					sortable: true
 				},
 				{
@@ -229,7 +229,7 @@ export default {
 					name: product.name,
 					code: product.code,
 					description: product.description,
-					averageDepositFieldIndex: fieldIndex.averageDeposit,
+					averageFieldIndex: fieldIndex.average,
 					balanceFieldIndex: fieldIndex.balance
 				};
 			});
@@ -256,7 +256,7 @@ export default {
 		width: 20em;
 	}
 
-	.col-average-deposit {
+	.col-average {
 		width: 8em;
 		text-align: center;
 	}

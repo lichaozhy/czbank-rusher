@@ -4,13 +4,13 @@
 	<b-form-row>
 		<b-col cols="6">
 			<b-form-group
-				:label="$t('c.product.fieldIndex.averageDeposit')"
-				:description="$t('d.product.averageDepositFieldIndex')"
+				:label="$t('c.product.fieldIndex.average')"
+				:description="$t('d.product.averageFieldIndex')"
 			>
 				<b-form-input
-					v-model="form.fieldIndex.averageDeposit"
+					v-model="form.fieldIndex.average"
 					trim
-					name="product-field-average-deposit"
+					name="product-field-average"
 					autocomplete="off"
 				/>
 			</b-form-group>
@@ -42,7 +42,7 @@ export default {
 		return {
 			form: {
 				fieldIndex: {
-					averageDeposit: '',
+					average: '',
 					balance: ''
 				}
 			}
@@ -57,7 +57,7 @@ export default {
 	async mounted() {
 		const product = await this.$rusher.backend.Product(this.productId).get();
 
-		this.form.fieldIndex.averageDeposit = product.fieldIndex.averageDeposit;
+		this.form.fieldIndex.average = product.fieldIndex.average;
 		this.form.fieldIndex.balance = product.fieldIndex.balance;
 	},
 	methods: {

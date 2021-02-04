@@ -10,16 +10,14 @@ const ProductDataSetting = rusher.sequelize.model('ProductDataSetting');
 	await rusher.install();
 
 	productList.forEach(options => {
-		const { name, code, balanceIndex, averageDepositIndex } = options;
+		const { name, code, balanceIndex, averageIndex } = options;
 		const id = utils.encodeSHA256(`${name}${code}${Date.now()}`);
 
-		Product.create({
-			id, name, code, description: name
-		});
+		Product.create({ id, name, code, description: name });
 
 		ProductDataSetting.create({
 			productId: id,
-			fieldIndexOfAverageDeposit: averageDepositIndex,
+			fieldIndexOfAverage: averageIndex,
 			fieldIndexOfBalance: balanceIndex
 		});
 	});
