@@ -93,32 +93,32 @@
 			{{ row.item.contribution.toFixed(0) }}
 		</template>
 
-		<template #cell(averageDeposit)="row">
-			{{ row.item.averageDeposit | numeralFloat }}
+		<template #cell(rate)="row">
+			{{ (row.item.rate * 100).toFixed(2) + '%' }}
 		</template>
 
-		<template #cell(depositRate)="row">
-			{{ (row.item.depositRate * 100).toFixed(2) + '%' }}
+		<template #cell(average)="row">
+			{{ row.item.average | numeralFloat }}
 		</template>
 
 		<template #cell(balance)="row">
 			{{ row.item.balance | numeralFloat }}
 		</template>
 
-		<template #cell(depositAD)="row">
-			{{ row.item.depositAD | numeralFloat }}
+		<template #cell(depositAverage)="row">
+			{{ row.item.depositAverage | numeralFloat }}
 		</template>
 
-		<template #cell(depositB)="row">
-			{{ row.item.depositB | numeralFloat }}
+		<template #cell(depositBalance)="row">
+			{{ row.item.depositBalance | numeralFloat }}
 		</template>
 
-		<template #cell(nonDepositAD)="row">
-			{{ row.item.nonDepositAD | numeralFloat }}
+		<template #cell(otherAverage)="row">
+			{{ row.item.otherAverage | numeralFloat }}
 		</template>
 
-		<template #cell(nonDepositB)="row">
-			{{ row.item.nonDepositB | numeralFloat }}
+		<template #cell(otherBalance)="row">
+			{{ row.item.otherBalance | numeralFloat }}
 		</template>
 	</b-table>
 </div>
@@ -126,16 +126,13 @@
 </template>
 
 <script>
-const DEPOSIT_PRODUCT_CODE = 'DEPOSIT';
-
 export default {
 	data() {
 		return {
 			keyword: '',
 			currentPage: 1,
 			perPage: 20,
-			customerList: [],
-			productList: [],
+			customerPerformanceList: [],
 			selectedProductCodeMap: {},
 			filteredLength: 0,
 			fileList: [],
@@ -150,145 +147,64 @@ export default {
 			return this.$rusher.backend.Manager(this.managerId);
 		},
 		dateAsOptionList() {
-			if (this.fileList.length === 0) {
+			if (this.fileListSortedByDateAs.length === 0) {
 				return [{ value: null, text: '无可用的时点数据' }];
 			} else {
-				return this.fileList.slice(0).sort((fileA, fileB) => {
-					return fileA.plan.dateAs - fileB.plan.dateAs;
-				}).map(file => {
+				return this.fileListSortedByDateAs.map(file => {
 					return { value: file.plan.dateAs, text: file.plan.dateAs };
 				});
 			}
 		},
+		fileListSortedByDateAs() {
+			return this.fileList.slice(0).sort((a, b) => a.plan.dateAs - b.plan.dateAs);
+		},
 		customerItem() {
-			return this.customerList.map(customer => {
-				const { data } = customer;
+			return this.customerPerformanceList.map(performance => {
+				const { customer, contribution } = performance;
 
-				const item = {
-					id: customer.id,
+				return {
 					name: customer.name,
-					contribution: 0,
-					averageDeposit: 0,
-					balance: 0,
-					depositRate: 0,
-					depositAD: 0,
-					depositB: 0,
-					nonDepositAD: 0,
-					nonDepositB: 0,
-					dateAs: customer.dateAs
+					contribution: contribution.value,
+					rate: contribution.rate,
+					average: contribution.average,
+					balance: contribution.balance,
+					depositAverage: contribution.deposit.average,
+					depositBalance: contribution.deposit.balance,
+					otherAverage: contribution.other.average,
+					otherBalance: contribution.other.balance,
 				};
-
-				if (data[DEPOSIT_PRODUCT_CODE]) {
-					const { averageDeposit, balance } = data[DEPOSIT_PRODUCT_CODE];
-
-					item.depositAD = averageDeposit;
-					item.depositB = balance;
-				}
-
-				Object.keys(data).forEach(productCode => {
-					const { averageDeposit, balance } = data[productCode];
-
-					item.averageDeposit += averageDeposit;
-					item.balance += balance;
-				});
-
-				item.depositAD = Number(item.depositAD.toFixed(2));
-				item.depositB = Number(item.depositB.toFixed(2));
-				item.averageDeposit = Number(item.averageDeposit.toFixed(2));
-				item.balance = Number(item.balance.toFixed(2));
-
-				item.nonDepositAD = Number((item.averageDeposit - item.depositAD).toFixed(2));
-				item.nonDepositB = Number((item.balance - item.depositB).toFixed(2));
-				item.depositRate = Number((item.depositAD / item.averageDeposit).toFixed(2));
-
-				item.contribution = Number(((item.depositAD * 2 + item.nonDepositAD) / 10000).toFixed(2));
-
-				return item;
 			});
 		},
 		customerFieldList() {
 			return [
-				{
-					key: 'name',
-					label: '姓名',
-				},
-				{
-					key: 'contribution',
-					label: '贡献度',
-					sortable: true,
-					class: 'text-right'
-				},
-				{
-					key: 'depositRate',
-					label: '存款占比',
-					sortable: true,
-					class: 'col-rate text-right'
-				},
-				{
-					key: 'averageDeposit',
-					label: '金融资产日均',
-					sortable: true,
-					class: 'col-total'
-				},
-				{
-					key: 'balance',
-					label: '金融资产余额',
-					sortable: true,
-					class: 'col-total'
-				},
-				{
-					key: 'depositAD',
-					label: '存款日均',
-					sortable: true,
-					class: 'col-item'
-				},
-				{
-					key: 'depositB',
-					label: '存款余额',
-					sortable: true,
-					class: 'col-item'
-				},
-				{
-					key: 'nonDepositAD',
-					label: '非存款日均',
-					sortable: true,
-					class: 'col-item'
-				},
-				{
-					key: 'nonDepositB',
-					label: '非存款余额',
-					sortable: true,
-					class: 'col-item'
-				},
-				{
-					key: 'blank',
-					label: '',
-					class: 'col-blank',
-				}
-				// {
-				// 	key: 'dateAs',
-				// 	label: '时点',
-				// 	sortable: true,
-				// 	class: 'col-dateas'
-				// },
+				{ key: 'name', label: '姓名', },
+				{ key: 'contribution', label: '贡献度', sortable: true, class: 'text-right' },
+				{ key: 'rate', label: '存款占比', sortable: true, class: 'col-rate text-right' },
+				{ key: 'average', label: '金融资产日均', sortable: true, class: 'col-total' },
+				{ key: 'balance', label: '金融资产余额', sortable: true, class: 'col-total' },
+				{ key: 'depositAverage', label: '存款日均', sortable: true, class: 'col-item' },
+				{ key: 'depositBalance', label: '存款余额', sortable: true, class: 'col-item' },
+				{ key: 'otherAverage', label: '非存款日均', sortable: true, class: 'col-item' },
+				{ key: 'otherBalance', label: '非存款余额', sortable: true, class: 'col-item' },
+				{ key: 'blank', label: '', class: 'col-blank' }
 			];
 		}
 	},
 	watch: {
 		dateAs() {
-			this.getCustomerList();
+			this.getCustomerPerformanceList();
 		}
 	},
 	methods: {
 		updateLength() {
 			this.filteredLength = this.$refs.customerTable.filteredItems.length;
 		},
-		async getCustomerList() {
-			this.customerList = await this.Manager.Customer.query({ dateAs: this.dateAs });
+		async getCustomerPerformanceList() {
+			this.customerPerformanceList = await this.Manager.Customer.Performance.query({
+				dateAs: this.dateAs
+			});
+
 			this.$nextTick(() => this.updateLength());
-		},
-		async getProductList() {
-			this.productList = await this.$rusher.backend.Product.query();
 		},
 		async getManagerFile() {
 			this.fileList = await this.Manager.File.query();
@@ -302,11 +218,6 @@ export default {
 	},
 	async mounted() {
 		await this.getManagerFile();
-		await this.getProductList();
-
-		if (this.dateAs !== null) {
-			await this.getCustomerList();
-		}
 	}
 };
 </script>
@@ -314,12 +225,12 @@ export default {
 <style lang="scss">
 #manager-customer-table {
 	.col-total {
-		width: 12em;
+		width: 10em;
 		text-align: right;
 	}
 
 	.col-item {
-		width: 10em;
+		width: 8em;
 		text-align: right;
 	}
 

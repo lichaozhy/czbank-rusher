@@ -59,10 +59,12 @@ export default {
 					Customer: Object.assign(function IManagerCustomer() {
 
 					}, {
-						query({ dateAs }) {
-							return agent.get(`/manager/${managerId}/customer`, {
-								params: { dateAs }
-							}).then(pickData);
+						Performance: {
+							query({ dateAs }) {
+								return agent.get(`/manager/${managerId}/customer/performance`, {
+									params: { dateAs }
+								}).then(pickData);
+							}
 						}
 					}),
 					Performance: Object.assign(function IManagerPerformance() {

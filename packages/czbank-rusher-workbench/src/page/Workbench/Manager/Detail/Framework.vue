@@ -115,7 +115,6 @@ export default {
 		return {
 			manager: { name: '', code: '', id: '' },
 			performanceList: [],
-			fileList: [],
 			dateAs: null
 		};
 	},
@@ -192,7 +191,3 @@ export default {
 	}
 };
 </script>
-
-<style>
-
-</style>

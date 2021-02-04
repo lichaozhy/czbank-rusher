@@ -61,7 +61,7 @@ module.exports = Duck({
 	const { sequelize, Model } = RusherSequelize({
 		namespace: `${product.meta.namespace}_`,
 		storage: Workspace.resolve('database', finalOptions.database.rusher),
-		onLog: _ => console.log(_)
+		onLog: () => {}
 	});
 
 	injection.Sequelize = sequelize;

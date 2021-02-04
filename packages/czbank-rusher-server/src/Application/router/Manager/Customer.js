@@ -3,7 +3,7 @@ const { Router } = require('@produck/duck-web-koa-router');
 module.exports = Router(function CZBankRusherManagerFileRouter(router, {
 	Resource, Model
 }) {
-	router.get('/', async function hello(ctx) {
+	router.get('/performance', async function hello(ctx) {
 		const { manager } = ctx.state;
 		const { dateAs } = ctx.query;
 
