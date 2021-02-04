@@ -148,7 +148,7 @@ export default {
 		},
 		dateAsOptionList() {
 			if (this.fileListSortedByDateAs.length === 0) {
-				return [{ value: null, text: '无可用的时点数据' }];
+				return [{ value: null, text: '无可用的时点' }];
 			} else {
 				return this.fileListSortedByDateAs.map(file => {
 					return { value: file.plan.dateAs, text: file.plan.dateAs };

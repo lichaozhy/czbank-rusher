@@ -40,6 +40,17 @@ export default {
 			getProduct() {
 				return agent.get('/').then(pickData);
 			},
+			Customer: Object.assign(function ICustomer() {
+
+			}, {
+				Performance: {
+					query({ dateAs }) {
+						return agent.get('/customer/performance', {
+							params: { dateAs }
+						}).then(pickData);
+					}
+				}
+			}),
 			Manager: Object.assign(function IManager(managerId) {
 				return {
 					delete() {

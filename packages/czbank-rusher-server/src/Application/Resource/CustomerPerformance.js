@@ -1,13 +1,17 @@
-module.exports = function CustomerPerformance(customerData) {
+module.exports = function CustomerPerformance(contribution) {
 	const {
 		Customer: customer,
-		CustomerContribution: contribution
-	} = customerData;
+		Manager: manager
+	} = contribution.CustomerDatum;
 
 	return {
 		customer: {
 			id: customer.id,
 			name: customer.name
+		},
+		manager: {
+			id: manager.id,
+			name: manager.name
 		},
 		contribution: {
 			deposit: {

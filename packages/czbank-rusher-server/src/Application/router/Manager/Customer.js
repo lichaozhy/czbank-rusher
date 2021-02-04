@@ -7,17 +7,21 @@ module.exports = Router(function CZBankRusherManagerFileRouter(router, {
 		const { manager } = ctx.state;
 		const { dateAs } = ctx.query;
 
-		const list = await Model.CustomerData.findAll({
-			where: { managerId: manager.id },
-			include: [
-				Model.CustomerContribution,
-				Model.Customer,
-				{
-					model: Model.File,
-					include: [{ model: Model.Plan, where: { dateAs } }],
-					required: true
-				}
-			],
+		const list = await Model.CustomerContribution.findAll({
+			include: [{
+				model: Model.CustomerData,
+				where: { managerId: manager.id },
+				required: true,
+				include: [
+					{ model: Model.Customer },
+					{ model: Model.Manager },
+					{
+						model: Model.File,
+						include: [{ model: Model.Plan, where: { dateAs }, required: true }],
+						required: true
+					}
+				]
+			}]
 		});
 
 		ctx.body = list.map(customerData => Resource.CustomerPerformance(customerData));

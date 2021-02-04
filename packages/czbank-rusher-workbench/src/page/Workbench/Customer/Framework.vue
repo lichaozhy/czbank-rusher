@@ -3,6 +3,15 @@
 <b-container
 	class="mt-3"
 >
+	<b-breadcrumb>
+    <b-breadcrumb-item
+			:to="{ name: 'home' }"
+		>{{ $t('u.home') }}</b-breadcrumb-item>
+    <b-breadcrumb-item
+			active
+		>{{ $t('m.customer.label') }}</b-breadcrumb-item>
+	</b-breadcrumb>
+
 	<b-row>
 		<b-col
 			xxl="2"
@@ -13,6 +22,7 @@
 					:to="{ name: 'workbench.customer.overview' }"
 				>{{ $t('menu.customer.overview.label') }}</b-list-group-item>
 				<b-list-group-item
+					disabled
 					:to="{ name: 'workbench.customer.register' }"
 				>{{ $t('menu.customer.register.label') }}</b-list-group-item>
 			</b-list-group>
