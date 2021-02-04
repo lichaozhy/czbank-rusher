@@ -7,6 +7,19 @@ module.exports = Router(function CZBankRusherManagerRouter(router, {
 		const list = await Model.Manager.findAll();
 
 		ctx.body = list.map(manager => Resource.Manager(manager));
+	}).get('/preview', async function getManagerPerformance(ctx) {
+		const list = await Model.Manager.findAll({
+			include: [{
+				model: Model.ManagerData,
+				require: false,
+				include: [
+					{ model: Model.ManagerContribution },
+					{ model: Model.File, include: [{ model: Model.Plan }, Model.CustomerData] }
+				]
+			}]
+		});
+
+		ctx.body = list.map(manager => Resource.ManagerPreview(manager));
 	}).post('/', async function createManager(ctx) {
 		const { name, code } = ctx.request.body;
 

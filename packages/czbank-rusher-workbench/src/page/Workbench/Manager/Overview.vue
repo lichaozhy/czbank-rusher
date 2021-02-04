@@ -50,36 +50,76 @@
 		@row-selected="selectManager($event)"
 		@row-dblclicked="gotoManager($event.id)"
 	>
-		<template #cell(average)="row">
-			{{ row.item.average | numeralFloat }}
+		<template #cell(average)="{ item }">
+			<span
+				v-if="item.average !== null"
+			>{{ item.average | numeralFloat }}</span>
+			<span v-if="item.average === null">-</span>
 		</template>
 
-		<template #cell(balance)="row">
-			{{ row.item.balance | numeralFloat }}
+		<template #cell(balance)="{ item }">
+			<span
+				v-if="item.average !== null"
+			>{{ item.balance | numeralFloat }}</span>
+			<span v-if="item.average === null">-</span>
 		</template>
 
-		<template #cell(contribution)="row">
-			{{ row.item.contribution.toFixed(0) }}
+		<template #cell(contribution)="{ item }">
+			<span
+				v-if="item.contribution !== null"
+			>{{ item.contribution.toFixed(0) }}</span>
+			<span v-if="item.contribution === null">-</span>
 		</template>
 
-		<template #cell(depositRate)="row">
-			{{ (row.item.depositRate * 100).toFixed(2) + '%' }}
+		<template #cell(depositRate)="{ item }">
+			<span
+				v-if="item.depositRate !== null"
+			>{{ (item.depositRate * 100).toFixed(2) + '%' }}</span>
+			<span v-if="item.depositRate === null">-</span>
 		</template>
 
-		<template #cell(depositAverage)="row">
-			{{ row.item.depositAverage | numeralFloat }}
+		<template #cell(depositAverage)="{ item }">
+			<span
+				v-if="item.depositAverage !== null"
+			>{{ item.depositAverage | numeralFloat }}</span>
+			<span v-if="item.depositAverage === null">-</span>
 		</template>
 
-		<template #cell(depositBalance)="row">
-			{{ row.item.depositBalance | numeralFloat }}
+		<template #cell(depositBalance)="{ item }">
+			<span
+				v-if="item.depositBalance !== null"
+			>{{ item.depositBalance | numeralFloat }}</span>
+			<span v-if="item.depositBalance === null">-</span>
 		</template>
 
-		<template #cell(nonDepositAverage)="row">
-			{{ row.item.nonDepositAverage | numeralFloat }}
+		<template #cell(nonDepositAverage)="{ item }">
+			<span
+				v-if="item.nonDepositAverage !== null"
+			>{{ item.nonDepositAverage | numeralFloat }}</span>
+			<span v-if="item.nonDepositAverage === null">-</span>
 		</template>
 
-		<template #cell(nonDepositBalance)="row">
-			{{ row.item.nonDepositBalance | numeralFloat }}
+		<template #cell(nonDepositBalance)="{ item }">
+			<span
+				v-if="item.nonDepositBalance !== null"
+			>{{ item.nonDepositBalance | numeralFloat }}</span>
+			<span v-if="item.nonDepositBalance === null">-</span>
+		</template>
+
+		<template #cell(customerNumber)="{ item }">
+			<span
+				v-if="item.customerNumber !== null"
+			>{{ item.customerNumber | numeral }}</span>
+			<span v-if="item.customerNumber === null">-</span>
+		</template>
+
+		<template #cell(lastDateAs)="{ item }">
+			<span
+				v-if="item.lastDateAs !== null"
+			>{{ item.lastDateAs | numeral }}</span>
+			<b-link
+				:to="{ name: 'workbench.database.account-data-plan' }"
+			><em v-if="item.lastDateAs === null">上传报表</em></b-link>
 		</template>
 
 	</b-table>
@@ -88,13 +128,11 @@
 </template>
 
 <script>
-import Matrix from './Detail/matrix';
-
 export default {
 	data() {
 		return {
 			keyword: '',
-			managerList: [],
+			managerPreviewList: [],
 			selectedManagerId: null
 		};
 	},
@@ -104,11 +142,11 @@ export default {
 				return false;
 			}
 
-			const manager = this.managerList.find(manager => {
-				return manager.id === this.selectedManagerId;
+			const preview = this.managerPreviewList.find(preview => {
+				return preview.manager.id === this.selectedManagerId;
 			});
 
-			return manager.customerNumber === 0;
+			return preview.customerNumber === null;
 		},
 		managerTableField() {
 			return [
@@ -179,7 +217,7 @@ export default {
 					class: 'col-matrix'
 				},
 				{
-					key: 'lastUploadedDateAs',
+					key: 'lastDateAs',
 					label: '最新时点',
 					class: 'col-last-upload',
 					sortable: true
@@ -192,23 +230,23 @@ export default {
 			];
 		},
 		managerItemList() {
-			return this.managerList.map(manager => {
-				const matrix = Matrix(manager.abstract);
+			return this.managerPreviewList.map(preview => {
+				const { manager, contribution } = preview;
 
 				return {
 					id: manager.id,
 					name: manager.name,
 					code: manager.code,
-					customerNumber: manager.customerNumber,
-					average: matrix.average,
-					balance: matrix.balance,
-					contribution: matrix.contribution,
-					depositRate: matrix.depositRate,
-					depositAverage: matrix.deposit.average,
-					depositBalance: matrix.deposit.balance,
-					nonDepositAverage: matrix.nonDeposit.average,
-					nonDepositBalance: matrix.nonDeposit.balance,
-					lastUploadedDateAs: manager.lastUploadedDateAs
+					average: contribution.average,
+					balance: contribution.balance,
+					contribution: contribution.value,
+					depositRate: contribution.rate,
+					depositAverage: contribution.deposit.average,
+					depositBalance: contribution.deposit.balance,
+					nonDepositAverage: contribution.other.average,
+					nonDepositBalance: contribution.other.balance,
+					customerNumber: preview.customerNumber,
+					lastDateAs: preview.lastDateAs
 				};
 			});
 		}
@@ -218,7 +256,7 @@ export default {
 			this.selectedManagerId = rows.length > 0 ? rows[0].id : null;
 		},
 		async getManagerList() {
-			this.managerList = await this.$rusher.backend.Manager.query();
+			this.managerPreviewList = await this.$rusher.backend.Manager.Preview.query();
 		},
 		async deleteManager(managerId) {
 			this.selectedManagerId = null;

@@ -56,13 +56,6 @@ export default {
 							code
 						}).then(pickData);
 					},
-					File: Object.assign(function IManagerFile() {
-
-					}, {
-						query() {
-							return agent.get(`/manager/${managerId}/file`).then(pickData);
-						}
-					}),
 					Customer: Object.assign(function IManagerCustomer() {
 
 					}, {
@@ -74,6 +67,11 @@ export default {
 					})
 				};
 			}, {
+				Preview: {
+					query() {
+						return agent.get('/manager/preview').then(pickData);
+					}
+				},
 				query() {
 					return agent.get('/manager').then(pickData);
 				},

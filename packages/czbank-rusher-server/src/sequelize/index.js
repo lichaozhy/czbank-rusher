@@ -109,6 +109,8 @@ module.exports = function CZBankRusherSequelize(options) {
 	Model.ManagerProductData.belongsTo(Model.ManagerData, FK('managerDataId'));
 	Model.ManagerData.belongsTo(Model.File, FK('fileId'));
 	Model.File.hasMany(Model.ManagerData, FK('fileId'));
+	Model.ManagerContribution.belongsTo(Model.ManagerData, FK('managerDataId'));
+	Model.ManagerData.hasOne(Model.ManagerContribution, FK('managerDataId'));
 
 	Model.Product.hasOne(Model.ProductDataSetting, FK('productId'));
 	Model.ProductDataSetting.belongsTo(Model.Product, FK('productId'));

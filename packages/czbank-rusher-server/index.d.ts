@@ -106,6 +106,7 @@ declare namespace CZBankRusher {
 		CustomerPerformance: (data: Sequelize.Model) => Object
 		Manager: (data: Sequelize.Model) => Object
 		ManagerPerformance: (data: Sequelize.Model) => Object
+		ManagerPreview: (data: Sequelize.Model) => Object
 		File: (data: Sequelize.Model) => Object
 		Plan: (data: Sequelize.Model) => Object
 		Activity: (data: Sequelize.Model) => Object

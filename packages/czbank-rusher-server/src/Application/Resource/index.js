@@ -3,5 +3,7 @@ module.exports = {
 	Manager: require('./Manager'),
 	Product: require('./Product'),
 	Customer: require('./Customer'),
-	Plan: require('./Plan')
+	Plan: require('./Plan'),
+	ManagerPerformance: require('./ManagerPerformance'),
+	ManagerPreview: require('./ManagerPreview')
 };
