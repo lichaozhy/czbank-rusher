@@ -59,7 +59,7 @@ module.exports = Router(function CZBankRusherManagerRouter(router, {
 			include: [
 				{ model: Model.Manager },
 				{ model: Model.ManagerContribution },
-				{ model: Model.File, include: [{ model: Model.Plan }, Model.CustomerData] }
+				{ model: Model.File, include: [{ model: Model.Plan }] }
 			]
 		});
 

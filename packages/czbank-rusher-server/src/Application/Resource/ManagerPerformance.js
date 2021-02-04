@@ -25,7 +25,7 @@ module.exports = function ManagerPerformance(managerData) {
 			rate: contribution.rate,
 			value: contribution.contribution
 		},
-		customerNumber: file.CustomerData.length,
+		customerNumber: file.customerNumber,
 		dateAs: file.Plan.dateAs
 	};
 };

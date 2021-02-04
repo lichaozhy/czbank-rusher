@@ -2,20 +2,10 @@ module.exports = function ManagerPreview(manager) {
 	const { ManagerData } = manager;
 
 	const preview = {
-		manager: {
-			id: manager.id,
-			name: manager.name,
-			code: manager.code
-		},
+		manager: { id: manager.id, name: manager.name, code: manager.code },
 		contribution: {
-			deposit: {
-				balance: null,
-				average: null
-			},
-			other: {
-				balance: null,
-				average: null
-			},
+			deposit: { balance: null, average: null },
+			other: { balance: null, average: null },
 			average: null,
 			balance: null,
 			rate: null,
@@ -41,7 +31,7 @@ module.exports = function ManagerPreview(manager) {
 		preview.contribution.rate = c.rate;
 		preview.contribution.value = c.contribution;
 
-		preview.customerNumber = File.CustomerData.length;
+		preview.customerNumber = File.customerNumber;
 		preview.lastDateAs = File.Plan.dateAs;
 	}
 

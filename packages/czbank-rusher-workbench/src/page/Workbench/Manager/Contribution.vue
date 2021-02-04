@@ -31,8 +31,8 @@
 		:items="itemList"
 		small
 		bordered
+		hover
 	>
-
 		<template
 			v-for="manager in Manager.list"
 			v-slot:[`head(${manager.id})`]
@@ -47,15 +47,13 @@
 </template>
 
 <script>
-const DEPOSIT_PRODUCT_CODE = 'DEPOSIT';
-
 export default {
 	data() {
 		return {
 			dateAs: null,
 			Manager: {
 				list: [],
-				customerListMap: {}
+				customerContributionListMap: {}
 			},
 			itemList: [],
 			planList: [],
@@ -70,9 +68,9 @@ export default {
 			this.fetching = true;
 
 			for(const manager of this.Manager.list) {
-				this.Manager.customerListMap[manager.id] =
+				this.Manager.customerContributionListMap[manager.id] =
 					await this.$rusher.backend.Manager(manager.id)
-						.Customer.query({ dateAs: this.dateAs });
+						.Customer.Contribution.query({ dateAs: this.dateAs });
 
 				this.computeItemList();
 			}
@@ -83,43 +81,18 @@ export default {
 			this.planList = await this.$rusher.backend.Plan.query();
 			this.dateAs = this.planList[0].dateAs;
 		},
-		getContributeFromData(data) {
-			const clone = Object.assign({}, data);
-			const average = { deposit: 0, nonDeposit: 0 };
-
-			if (clone[DEPOSIT_PRODUCT_CODE]) {
-				average.deposit = clone[DEPOSIT_PRODUCT_CODE].averageDeposit;
-			}
-
-			delete clone[DEPOSIT_PRODUCT_CODE];
-
-			for(const productCode in clone) {
-				average.nonDeposit += clone[productCode].averageDeposit;
-			}
-
-			return Math.round((average.deposit * 2 + average.nonDeposit) / 10000);
-		},
 		computeItemList() {
-			const contributionOfManagerCustomerListMap = {};
-
-			for(const managerId in this.Manager.customerListMap) {
-				const contributionList = this.Manager.customerListMap[managerId]
-					.map(customer => this.getContributeFromData(customer.data));
-
-				contributionOfManagerCustomerListMap[managerId] = contributionList;
-			}
-
 			const itemList = this.rangeList.map(range => {
 				const { from, to } = range;
 
 				return {
 					range: `[${from}, ${to})`,
-					hit: (contribution) => contribution >= from && contribution < to
+					hit: value => value >= from && value < to
 				};
 			}).reverse();
 
-			for(const managerId in contributionOfManagerCustomerListMap) {
-				const contributionList = contributionOfManagerCustomerListMap[managerId];
+			for(const managerId in this.Manager.customerContributionListMap) {
+				const contributionList = this.Manager.customerContributionListMap[managerId];
 
 				itemList.forEach(item => item[managerId] = 0);
 
@@ -154,12 +127,9 @@ export default {
 			});
 
 			return [{
-				key: 'range',
-				label: '贡献度分段',
-				class: 'col-range'
+				key: 'range', label: '贡献度分段', class: 'col-range'
 			}].concat(managerField).concat([{
-				key: 'blank',
-				label: '',
+				key: 'blank', label: ''
 			}]);
 		},
 		rangeList() {

@@ -65,6 +65,13 @@ export default {
 									params: { dateAs }
 								}).then(pickData);
 							}
+						},
+						Contribution: {
+							query({ dateAs }) {
+								return agent.get(`/manager/${managerId}/customer/contribution`, {
+									params: { dateAs }
+								}).then(pickData);
+							}
 						}
 					}),
 					Performance: Object.assign(function IManagerPerformance() {
