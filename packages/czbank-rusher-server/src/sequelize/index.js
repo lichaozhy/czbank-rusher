@@ -8,6 +8,7 @@ const ModelFactory = {
 	CustomerPointAdjustmentByActivity: require('./model/Customer/Point/AdjustmentBy/Activity'),
 	CustomerPointAdjustmentByManual: require('./model/Customer/Point/AdjustmentBy/Manual'),
 	CustomerPointAdjustmentByPlan: require('./model/Customer/Point/AdjustmentBy/Plan'),
+	CustomerPointAdjustmentByPlanVariation: require('./model/Customer/Point/AdjustmentBy/PlanVariation'),
 	CustomerPointAdjustmentByPresent: require('./model/Customer/Point/AdjustmentBy/Present'),
 	CustomerPointAdjustment: require('./model/Customer/Point/Adjustment'),
 	CustomerContribution: require('./model/Customer/Contribution'),

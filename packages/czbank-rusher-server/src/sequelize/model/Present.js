@@ -12,8 +12,11 @@ module.exports = function Present(sequelize, namespace) {
 		name: DataTypes.CHAR(64),
 		price: DataTypes.FLOAT,
 		point: DataTypes.INTEGER,
+		enabled: DataTypes.BOOLEAN,
 		description: DataTypes.STRING,
+		createdAt: DataTypes.DATE,
+		updatedAt: DataTypes.DATE
 	}, {
 		tableName: `${namespace}present`
 	});
-}
+};

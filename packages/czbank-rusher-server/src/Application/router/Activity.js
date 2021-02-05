@@ -7,7 +7,7 @@ module.exports = Router(function CZBRusherActivityRouter(router, {
 		const options = { include: [Model.CustomerPointAdjustmentByActivity] };
 
 		if (id) {
-			options.where = {id};
+			options.where = { id };
 		}
 
 		return options;
@@ -29,14 +29,15 @@ module.exports = Router(function CZBRusherActivityRouter(router, {
 		ctx.body = list.map(activity => Resource.Activity(activity));
 	}).post('/', async function createActivity(ctx) {
 		const { name, description = '', startedAt, endedAt } = ctx.request.body;
-		const id = Utils.encodeSHA256(`activity-${Date.now}-name`);
+		const id = Utils.encodeSHA256(`activity-${Date.now}-${name}`);
+		const now = new Date();
 
 		await Model.Activity.create({
 			id, name, description,
 			startedAt: new Date(startedAt),
 			endedAt: endedAt ? new Date(endedAt) : null,
-			createdAt: new Date(),
-			updatedAt: new Date()
+			createdAt: now,
+			updatedAt: now
 		});
 
 		const activity = await Model.Activity.findOne(QueryOptions(id));
@@ -77,6 +78,11 @@ module.exports = Router(function CZBRusherActivityRouter(router, {
 		activity.updatedAt = new Date();
 		await activity.save();
 		ctx.body = Resource.Activity(activity);
+	}).delete('/:activityId', ensureNotUsed, async function deleteActivity(ctx) {
+		const { activity } = ctx.state;
+
+		await activity.destroy();
+		ctx.body = Resource.Activity(activity);
 	}).put('/:activityId/endedAt', async function delayActivity(ctx) {
 		const { activity } = ctx.state;
 		const { value } = ctx.request.body;
@@ -89,11 +95,5 @@ module.exports = Router(function CZBRusherActivityRouter(router, {
 		activity.endedAt = endedAt;
 		await activity.save();
 		ctx.body = { value: endedAt };
-	}).delete('/:activityId', ensureNotUsed, async function deleteActivity(ctx) {
-		const { activity } = ctx.state;
-
-		await activity.destroy();
-
-		ctx.body = Resource.Activity(activity);
 	});
 });
