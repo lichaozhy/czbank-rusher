@@ -56,9 +56,9 @@ module.exports = Router(function CZBankRusherAPIRouter(router, {
 		}
 
 		if (fieldIndex) {
-			const { averageDeposit, balance } = fieldIndex;
+			const { average, balance } = fieldIndex;
 
-			setting.fieldIndexOfAverageDeposit = averageDeposit;
+			setting.fieldIndexOfAverage = average;
 			setting.fieldIndexOfBalance = balance;
 			setting.save();
 		}

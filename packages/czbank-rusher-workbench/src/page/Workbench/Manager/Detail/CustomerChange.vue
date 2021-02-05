@@ -61,7 +61,7 @@ export default {
 					label: '姓名',
 				},
 				{
-					key: 'averageDeposit',
+					key: 'average',
 					label: '金融资产日均',
 					sortable: true
 				},

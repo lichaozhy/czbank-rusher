@@ -6,5 +6,6 @@ module.exports = {
 	Plan: require('./Plan'),
 	ManagerPerformance: require('./ManagerPerformance'),
 	CustomerPerformance: require('./CustomerPerformance'),
-	ManagerPreview: require('./ManagerPreview')
+	ManagerPreview: require('./ManagerPreview'),
+	Activity: require('./Activity')
 };

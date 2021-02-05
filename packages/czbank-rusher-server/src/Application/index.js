@@ -29,16 +29,12 @@ module.exports = DuckWebKoa(function CZBankRusherApplication(app, {
 			Router: Router.Api,
 			use: [
 				{
-					prefix: '/account',
-					Router: Router.Account
-				},
-				{
-					prefix: '/account/data',
-					Router: Router.AccountData
+					prefix: '/activity',
+					Router: Router.Activity
 				},
 				{
 					prefix: '/plan',
-					Router: Router.AccountDataPlan
+					Router: Router.Plan
 				},
 				{
 					prefix: '/file',

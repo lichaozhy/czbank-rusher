@@ -14,6 +14,7 @@ module.exports = function Activity(sequelize, namespace) {
 		startedAt: DataTypes.DATE,
 		endedAt: DataTypes.DATE,
 		createdAt: DataTypes.DATE,
+		updatedAt: DataTypes.DATE
 	}, {
 		tableName: `${namespace}activity`
 	});
