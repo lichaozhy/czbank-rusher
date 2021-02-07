@@ -197,6 +197,41 @@ export default {
 
 					return agent.post('/plan', { name, dateAs, description }).then(pickData);
 				}
+			}),
+			Present: Object.assign(function IPresent(presentId) {
+				return {
+					get() {
+						return agent.get(`/present/${presentId}`).then(pickData);
+					},
+					update(options) {
+						return agent.put(`/present/${presentId}`, {
+							name: options.name,
+							price: options.price,
+							point: options.point,
+							description: options.description
+						}).then(pickData);
+					},
+					delete() {
+						return agent.delete(`/present/${presentId}`).then(pickData);
+					},
+					setEnabled(flag = true) {
+						return agent.put(`/present/${presentId}/enabled`, {
+							value: flag
+						}).then(pickData);
+					}
+				};
+			}, {
+				query() {
+					return agent.get('/present').then(pickData);
+				},
+				create(options) {
+					return agent.post('/present', {
+						name: options.name,
+						price: options.price,
+						point: options.point,
+						description: options.description
+					}).then(pickData);
+				}
 			})
 		});
 

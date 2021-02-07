@@ -19,7 +19,7 @@ module.exports = Router(function CZBRusherPresentRouter(router, {
 	}
 
 	async function ensureNotUsed(ctx, next) {
-		const { activity: present } = ctx.state;
+		const { present } = ctx.state;
 
 		if (present.CustomerPointAdjustmentByPresents.length > 0) {
 			return ctx.throw(403, 'This present has been used.');
@@ -46,17 +46,17 @@ module.exports = Router(function CZBRusherPresentRouter(router, {
 		const now = new Date();
 
 		await Model.Present.create({
-			id, price, point, description,
+			id, name, price, point, description,
 			enabled: true,
 			createdAt: now,
 			updatedAt: now
 		});
 
-		const present = await Model.Present.findOne(QueryOptions(id));
+		const present = await Model.Present.findOne(QueryOptions({ id }));
 
 		ctx.body = Resource.Present(present);
 	}).param('presentId', async function fetchPresent(id, ctx, next) {
-		const present = await Model.Present.findOne(QueryOptions(id));
+		const present = await Model.Present.findOne(QueryOptions({ id }));
 
 		if (!present) {
 			return ctx.throw(404);

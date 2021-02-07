@@ -33,6 +33,10 @@ module.exports = DuckWebKoa(function CZBankRusherApplication(app, {
 					Router: Router.Activity
 				},
 				{
+					prefix: '/present',
+					Router: Router.Present
+				},
+				{
 					prefix: '/plan',
 					Router: Router.Plan
 				},

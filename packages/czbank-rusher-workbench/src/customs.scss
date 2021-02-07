@@ -41,6 +41,24 @@ table.table.b-table td {
 	width: 2em;
 }
 
+.col-datetime {
+	width: 12em;
+}
+
+.col-short-number {
+	width: 6em;
+	text-align: right;
+}
+
+.col-number {
+	width: 8em;
+	text-align: right;
+}
+
+.col-short-string {
+	width: 8em;
+}
+
 // #czbank-rusher-workbench {
 // 	.nav-link .b-icon.bi {
 // 		font-size: 100%;

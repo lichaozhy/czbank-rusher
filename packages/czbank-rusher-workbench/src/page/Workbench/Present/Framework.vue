@@ -3,6 +3,15 @@
 <b-container
 	class="mt-3"
 >
+	<b-breadcrumb>
+    <b-breadcrumb-item
+			:to="{ name: 'home' }"
+		>{{ $t('u.home') }}</b-breadcrumb-item>
+    <b-breadcrumb-item
+			active
+		>{{ $t('m.present.label') }}</b-breadcrumb-item>
+	</b-breadcrumb>
+
 	<b-row>
 		<b-col
 			xxl="2"
@@ -21,7 +30,7 @@
 			xxl="10"
 			xl="9"
 		>
-			<router-view>Database Function Panel</router-view>
+			<router-view>Present Panel</router-view>
 		</b-col>
 	</b-row>
 </b-container>
