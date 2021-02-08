@@ -26,15 +26,24 @@
 				button-variant="primary"
 				:reset-value="null"
 				:placeholder="selectedActivityEndedAtPlaceholder"
-				style="width:16em"
-				v-model="endedAt"
+				style="width:14em"
+				v-model="endedAt.date"
 				:disabled="!selectedActivity"
+				:date-disabled-fn="endedAtDisabled"
 			></b-form-datepicker>
+			<b-form-timepicker
+				v-model="endedAt.time"
+				name="activity-endedAt-time"
+				:disabled="!selectedActivity || endedAt.date === ''"
+				placeholder="选择时间"
+				:hour12="false"
+				style="width:8em"
+			/>
 
 			<b-input-group-append>
 				<b-button
 					variant="primary"
-					@click="setActivityEndedAt(endedAt)"
+					@click="setActivityEndedAt(endedAtDatetime)"
 					:disabled="!selectedActivity"
 				>调整</b-button>
 			</b-input-group-append>
@@ -44,7 +53,7 @@
 			class="mr-auto"
 			variant="danger"
 			@click="setActivityEndedAt()"
-			:disabled="!selectedActivity || isSelectedActivityOver"
+			:disabled="!selectedActivity || isSelectedActivityOver || !isSelectedActivityStarted"
 		>立即结束</b-button>
 
 		<b-button
@@ -56,7 +65,7 @@
 	</b-button-toolbar>
 
 	<b-table
-		id="present-table"
+		id="activity-table"
 		class="mt-3"
 		ref="activity-table"
 		:fields="activityTableFieldList"
@@ -68,6 +77,35 @@
 		select-mode="single"
 		@row-selected="selectActivity"
 	>
+		<template #cell(stage)="{ item }">
+			<b-progress
+				v-if="item.stage === 'waiting'"
+				max="1"
+				value="1"
+				variant="primary"
+			></b-progress>
+			<b-progress
+				v-if="item.stage === 'running'"
+				max="1"
+				value="1"
+				animated
+				variant="success"
+			></b-progress>
+			<b-progress
+				v-if="item.stage === 'finished'"
+				max="1"
+				value="1"
+				variant="secondary"
+			></b-progress>
+			<b-progress
+				v-if="item.stage === 'error'"
+				max="1"
+				value="1"
+				animated
+				variant="danger"
+			></b-progress>
+		</template>
+
 		<template #cell(updatedAt)="{ item }">
 			{{ item.updatedAt | localDatetime }}
 		</template>
@@ -90,23 +128,66 @@
 </template>
 
 <script>
+function getStage(now, startedAt, endedAt) {
+	now = new Date(now);
+	startedAt = new Date(startedAt);
+	endedAt = endedAt === null ? endedAt : new Date(endedAt);
+
+	if (now < startedAt) {
+		return 'waiting';
+	}
+
+	if (endedAt === null || now < endedAt) {
+		return 'running';
+	}
+
+	if (now > endedAt) {
+		return 'finished';
+	}
+
+	return 'error';
+}
+
+function NullEndedAt() {
+	return { date: '', time: '' };
+}
+
 export default {
 	data() {
 		return {
 			now: new Date(),
 			activityList: [],
 			selectedActivityId: null,
-			endedAt: null
+			endedAt: NullEndedAt()
 		};
 	},
 	methods: {
+		endedAtDisabled(ymd) {
+			if (!this.selectedActivity) {
+				return true;
+			}
+
+			const startedAtYMD = this.$rusher.Utils.localDate(new Date(this.selectedActivity.startedAt));
+
+			return ymd < startedAtYMD;
+		},
 		selectActivity(rows) {
 			if (rows.length > 0) {
+				const endedAt = rows[0].endedAt;
+
 				this.selectedActivityId = rows[0].id;
-				this.endedAt = this.selectedActivity.endedAt;
+
+				if (endedAt !== null) {
+					this.endedAt = {
+						date: this.$rusher.Utils.localDate(endedAt),
+						time: this.$rusher.Utils.localTime(endedAt)
+					};
+				} else {
+					this.endedAt = NullEndedAt();
+				}
 			} else {
 				this.selectedActivityId = null;
-				this.endedAt = null;
+				this.endedAt = NullEndedAt();
 			}
 		},
 		async getActivityList() {
@@ -125,6 +206,13 @@ export default {
 		}
 	},
 	computed: {
+		endedAtDatetime() {
+			if (this.endedAt.date === '') {
+				return null;
+			}
+
+			return new Date(`${this.endedAt.date} ${this.endedAt.time}`);
+		},
 		selectedActivity() {
 			return this.activityList.find(activity => activity.id === this.selectedActivityId);
 		},
@@ -164,6 +252,7 @@ export default {
 		activityTableFieldList() {
 			return [
 				{ key: 'name', label: '名称', class: 'col-string' },
+				{ key: 'stage', label: '阶段', class: 'col-stage', sortable: true },
 				{ key: 'startedAt', label: '开始于', sortable: true, class: 'col-datetime' },
 				{ key: 'endedAt', label: '截止于', sortable: true, class: 'col-datetime' },
 				{ key: 'participation', label: '参与人数', sortable: true, class: 'col-short-number' },
@@ -179,6 +268,7 @@ export default {
 					id: activity.id,
 					name: activity.name,
 					startedAt: new Date(activity.startedAt),
+					stage: getStage(this.now, activity.startedAt, activity.endedAt),
 					endedAt: activity.endedAt ? new Date(activity.endedAt) : null,
 					participation: activity.participation,
 					description: activity.description,
@@ -199,6 +289,11 @@ export default {
 };
 </script>
 
-<style>
-
+<style lang="scss">
+#activity-table {
+	.col-stage {
+		width: 4em;
+		text-align: center;
+	}
+}
 </style>

@@ -93,6 +93,7 @@ module.exports = Router(function CZBRusherActivityRouter(router, {
 		}
 
 		activity.endedAt = endedAt;
+		activity.updatedAt = new Date();
 		await activity.save();
 		ctx.body = { value: endedAt };
 	});

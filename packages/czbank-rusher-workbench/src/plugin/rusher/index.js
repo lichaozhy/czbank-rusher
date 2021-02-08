@@ -271,7 +271,11 @@ export default {
 		});
 
 		Vue.prototype.$rusher = {
-			backend
+			backend,
+			Utils: {
+				localDate: localDate,
+				localTime: localTime
+			}
 		};
 	}
 };
