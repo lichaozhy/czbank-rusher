@@ -101,6 +101,7 @@ module.exports = Router(function CZBRusherPresentRouter(router, {
 		const enabled = Boolean(value);
 
 		present.enabled = enabled;
+		present.updatedAt = new Date();
 		await present.save();
 		ctx.body = { value: enabled };
 	});

@@ -13,7 +13,8 @@
 			class="mr-auto"
 			variant="primary"
 			:disabled="!selectedActivity || isSelectedActivityStarted"
-		>修改</b-button>
+			@click="requestUpdateActivity"
+		>事前修改</b-button>
 
 		<b-input-group
 			prepend="截止于"
@@ -123,36 +124,30 @@
 			<em v-if="item.endedAt === null">永久有效</em>
 		</template>
 	</b-table>
+
+	<b-modal
+		centered
+		title="事前修改活动"
+		:ok-title="$t('u.ok')"
+		:cancel-title="$t('u.cancel')"
+		ref="updating"
+		@ok="updateActivity()"
+	>
+		<ActivityUpdating
+			:activity-id="selectedActivityId"
+			ref="activity-updating-form"
+		/>
+	</b-modal>
 </div>
 
 </template>
 
 <script>
-function getStage(now, startedAt, endedAt) {
-	now = new Date(now);
-	startedAt = new Date(startedAt);
-	endedAt = endedAt === null ? endedAt : new Date(endedAt);
-
-	if (now < startedAt) {
-		return 'waiting';
-	}
-
-	if (endedAt === null || now < endedAt) {
-		return 'running';
-	}
-
-	if (now > endedAt) {
-		return 'finished';
-	}
-
-	return 'error';
-}
-
-function NullEndedAt() {
-	return { date: '', time: '' };
-}
+import Updating from './Updating';
+import { getStage, NullEndedAt } from './utils';
 
 export default {
+	components: { ActivityUpdating: Updating },
 	data() {
 		return {
 			now: new Date(),
@@ -203,6 +198,18 @@ export default {
 		async deleteActivity() {
 			await this.$rusher.backend.Activity(this.selectedActivityId).delete();
 			await this.getActivityList();
+		},
+		requestUpdateActivity() {
+			this.$refs.updating.show();
+		},
+		async updateActivity(event) {
+			try {
+				await this.$refs['activity-updating-form'].update();
+				await this.getActivityList();
+			} catch (err) {
+				console.log(err);
+				event.preventDefault();
+			}
 		}
 	},
 	computed: {
