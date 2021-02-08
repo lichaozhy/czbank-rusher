@@ -24,6 +24,12 @@
 		/>{{ $t('menu.customer.label') }}</b-nav-item>
 
 		<b-nav-item
+			:to="{ name: 'workbench.point' }"
+		><b-icon-star-fill
+			class="mr-1"
+		/>{{ $t('menu.point.label') }}</b-nav-item>
+
+		<b-nav-item
 			:to="{ name: 'workbench.manager' }"
 		><b-icon-person-badge
 			class="mr-1"
@@ -34,12 +40,6 @@
 		><b-icon-gift-fill
 			class="mr-1"
 		/>{{ $t('menu.present.label') }}</b-nav-item>
-
-		<b-nav-item
-			:to="{ name: 'workbench.point' }"
-		><b-icon-star-fill
-			class="mr-1"
-		/>{{ $t('menu.point.label') }}</b-nav-item>
 
 		<b-nav-item
 			:to="{ name: 'workbench.activity' }"

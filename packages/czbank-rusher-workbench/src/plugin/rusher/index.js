@@ -232,6 +232,41 @@ export default {
 						description: options.description
 					}).then(pickData);
 				}
+			}),
+			Activity: Object.assign(function IActivity(activityId) {
+				return {
+					get() {
+						return agent.get(`/activity/${activityId}`).then(pickData);
+					},
+					update(options) {
+						return agent.put(`/activity/${activityId}`, {
+							name: options.name,
+							startedAt: options.startedAt,
+							endedAt: options.endedAt ? new Date(options.endedAt) : null,
+							description: options.description
+						}).then(pickData);
+					},
+					delete() {
+						return agent.delete(`/activity/${activityId}`).then(pickData);
+					},
+					delayTo(endedAt) {
+						return agent.put(`/activity/${activityId}/ended-at`, {
+							value: endedAt === null ? endedAt: new Date(endedAt)
+						}).then(pickData);
+					}
+				};
+			}, {
+				query() {
+					return agent.get('/activity').then(pickData);
+				},
+				create(options) {
+					return agent.post('/activity', {
+						name: options.name,
+						startedAt: options.startedAt,
+						endedAt: options.endedAt ? new Date(options.endedAt) : null,
+						description: options.description
+					}).then(pickData);
+				}
 			})
 		});
 

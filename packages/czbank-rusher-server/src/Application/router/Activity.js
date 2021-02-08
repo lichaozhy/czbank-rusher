@@ -43,7 +43,7 @@ module.exports = Router(function CZBRusherActivityRouter(router, {
 		const activity = await Model.Activity.findOne(QueryOptions(id));
 
 		ctx.body = Resource.Activity(activity);
-	}).param('activity', async function fetchActivity(id, ctx, next) {
+	}).param('activityId', async function fetchActivity(id, ctx, next) {
 		const activity = await Model.Activity.findOne(QueryOptions(id));
 
 		if (!activity) {
@@ -83,13 +83,13 @@ module.exports = Router(function CZBRusherActivityRouter(router, {
 
 		await activity.destroy();
 		ctx.body = Resource.Activity(activity);
-	}).put('/:activityId/endedAt', async function delayActivity(ctx) {
+	}).put('/:activityId/ended-at', async function delayActivity(ctx) {
 		const { activity } = ctx.state;
 		const { value } = ctx.request.body;
-		const endedAt = new Date(value);
+		const endedAt = value === null ? value : new Date(value);
 
-		if (endedAt < activity.startedAt) {
-			return ctx.throw(400, '`endedAt` of a activity MUST be later than `startedAt`');
+		if (endedAt !== null && endedAt < activity.startedAt) {
+			return ctx.throw(400, '`endedAt` of a activity MUST be later than `startedAt` or a `null`.');
 		}
 
 		activity.endedAt = endedAt;
