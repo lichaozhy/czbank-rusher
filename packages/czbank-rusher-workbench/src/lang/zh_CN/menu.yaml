@@ -52,8 +52,17 @@ activity:
 point:
   label: 积分
   adjustment:
-    label: 人工调整
-    description:
+    label: 调整
+    manual:
+      label: 手动追加
+    plan:
+      label: 指定时点换算
+    planVariation:
+      label: 指定2个时点差量换算
+    present:
+      label: 兑换礼品
+    activity:
+      label: 参加活动
   overview:
     label: 客户积分总览
     description:
