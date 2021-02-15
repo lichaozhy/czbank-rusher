@@ -9,8 +9,19 @@ declare module '@produck/duck' {
 		Utils: CZBankRusher.Utils
 		Model: CZBankRusher.Model
 		Resource: CZBankRusher.Resource
-		ReportResolver: CZBankRusher.Report.FileReader
-	};
+		ReportResolver: CZBankRusher.Report.FileReader,
+		Constant: {
+			ADJUSTMENT: {
+				TYPE: {
+					PLAN: 0x10,
+					PLAN_VARIATION: 0x20,
+					ACTIVITY: 0x30,
+					PRESENT: 0x40,
+					MANUAL: 0x50
+				}
+			}
+		}
+	}
 }
 
 declare namespace CZBankRusher {
@@ -116,6 +127,7 @@ declare namespace CZBankRusher {
 		Product: (data: Sequelize.Model) => Object
 		CustomerPerformance: (data: Sequelize.Model) => Object
 		PlanBatchPreview: (data: Sequelize.Model) => Object
+		PlanBatch: (data: Sequelize.Model) => Object
 	}
 }
 

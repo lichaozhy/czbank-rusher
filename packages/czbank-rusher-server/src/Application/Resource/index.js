@@ -9,5 +9,6 @@ module.exports = {
 	ManagerPreview: require('./ManagerPreview'),
 	Activity: require('./Activity'),
 	Present: require('./Present'),
-	PlanBatchPreview: require('./PlanBatchPreview')
+	PlanBatchPreview: require('./PlanBatchPreview'),
+	PlanBatch: require('./PlanBatch')
 };

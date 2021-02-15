@@ -10,6 +10,7 @@ const normlize = require('./src/normalize');
 const RusherSequelize = require('./src/sequelize');
 const utils = require('./src/utils');
 const ReportResolver = require('./src/ReportResolver');
+const constant = require('./src/constant');
 
 require('sqlite3');
 
@@ -67,6 +68,7 @@ module.exports = Duck({
 	injection.Sequelize = sequelize;
 	injection.Model = Model;
 	injection.options = finalOptions;
+	injection.Constant = constant;
 
 	Log();
 

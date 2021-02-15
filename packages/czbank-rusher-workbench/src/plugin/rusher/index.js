@@ -280,6 +280,17 @@ export default {
 								params: { planId }
 							}).then(pickData);
 						}
+					},
+					Batch: {
+						query() {
+							return agent.get('/point/plan/batch').then(pickData);
+						},
+						create(options) {
+							return agent.post('/point/plan/batch', {
+								planId: options.planId,
+								description: options.description
+							}).then(pickData);
+						}
 					}
 				}),
 				PlanVariation: Object.assign(function IPointPlanVariation() {

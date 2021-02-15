@@ -21,6 +21,8 @@ module.exports = function CustomerPointAdjustmentByPlan(sequelize, namespace) {
 		},
 		planId: DataTypes.CHAR(64),
 		point: DataTypes.INTEGER,
+		customerCount: DataTypes.INTEGER,
+		pending: DataTypes.BOOLEAN,
 		description: DataTypes.STRING,
 		createdAt: DataTypes.DATE
 	}, {

@@ -11,14 +11,18 @@
 
 	<h2>发放历史</h2>
 	<b-table
-		:items="batchList"
+		:items="itemListOfBatch"
 		:fields="fieldListOfBatch"
 		small
 		bordered
 		hover
 		select-mode="single"
 		selectable
-	></b-table>
+	>
+		<template #cell(createdAt)="row">
+			{{ row.item.createdAt | localDatetime }}
+		</template>
+	</b-table>
 
 	<h2 class="mt-3">创建时点批处理</h2>
 	<ul class="list-unstyled">
@@ -63,85 +67,88 @@
 				class="mr-0 align-self-end"
 				variant="success"
 				:disabled="!isFormValid"
+				@click="createBatch"
 			>确定并创建</b-button>
 		</b-button-toolbar>
 	</b-form>
 
-	<div
-		v-if="Preview.pending"
-	>
-		<h3 class="mt-3">受影响的客户</h3>
+	<h3 class="mt-3">受影响的客户</h3>
 
-		<b-button-toolbar class="mb-3">
-			<b-input-group
-				prepend="过滤"
-				class="mr-auto"
-				size="sm"
-			>
-				<b-form-input
-					v-model="Preview.filter.keyword"
-					placeholder="搜索客户"
-					lazy
-					name="manager-customer-search"
-					style="width: 8em"
-				/>
-			</b-input-group>
-
-			<b-pagination
-				class="m-0"
-				v-model="Preview.page.current"
-				:total-rows="Preview.page.total"
-				:per-page="Preview.page.per"
-				aria-controls="my-table"
-				size="sm"
-			></b-pagination>
-		</b-button-toolbar>
-
-		<b-table
-			:items="itemListOfPreview"
-			:fields="fieldListOfPreview"
-			small
-			bordered
-			hover
-			select-mode="single"
-			selectable
-			:per-page="Preview.page.per"
-			:current-page="Preview.page.current"
-			:filter="Preview.filter.keyword"
-			ref="preview-table"
-			@filtered="updatePreviewPageTotal"
+	<b-button-toolbar class="mb-3">
+		<b-input-group
+			prepend="过滤"
+			class="mr-auto"
+			size="sm"
 		>
-			<template #thead-top>
-				<b-tr>
-					<b-th></b-th>
-					<b-th colspan="3" class="text-center">积分情况</b-th>
-					<b-th colspan="5" class="text-center">业绩摘要</b-th>
-					<b-th></b-th>
-				</b-tr>
-			</template>
+			<b-form-input
+				v-model="Preview.filter.keyword"
+				placeholder="搜索客户"
+				lazy
+				name="manager-customer-search"
+				style="width: 8em"
+				:disabled="!Preview.pending"
+			/>
+		</b-input-group>
 
-			<template #cell(variation)="row">
-				{{ row.item.variation + ' +' }}
-			</template>
+		<b-pagination
+			class="m-0"
+			v-model="Preview.page.current"
+			:total-rows="Preview.page.total"
+			:per-page="Preview.page.per"
+			aria-controls="my-table"
+			:disabled="!Preview.pending"
+			size="sm"
+		></b-pagination>
+	</b-button-toolbar>
 
-			<template #cell(average)="row">
-				{{ row.item.average | numeralFloat }}
-			</template>
+	<b-table
+		:items="itemListOfPreview"
+		:fields="fieldListOfPreview"
+		small
+		bordered
+		hover
+		select-mode="single"
+		selectable
+		:per-page="Preview.page.per"
+		:current-page="Preview.page.current"
+		:filter="Preview.filter.keyword"
+		ref="preview-table"
+		@filtered="updatePreviewPageTotal"
+		show-empty
+	>
+		<template #thead-top>
+			<b-tr>
+				<b-th></b-th>
+				<b-th colspan="3" class="text-center">积分情况</b-th>
+				<b-th colspan="5" class="text-center">业绩摘要</b-th>
+				<b-th></b-th>
+			</b-tr>
+		</template>
 
-			<template #cell(balance)="row">
-				{{ row.item.balance | numeralFloat }}
-			</template>
+		<template #cell(variation)="row">
+			{{ row.item.variation + ' +' }}
+		</template>
 
-			<template #cell(depositAverage)="row">
-				{{ row.item.depositAverage | numeralFloat }}
-			</template>
+		<template #cell(average)="row">
+			{{ row.item.average | numeralFloat }}
+		</template>
 
-			<template #cell(otherAverage)="row">
-				{{ row.item.otherAverage | numeralFloat }}
-			</template>
+		<template #cell(balance)="row">
+			{{ row.item.balance | numeralFloat }}
+		</template>
 
-		</b-table>
-	</div>
+		<template #cell(depositAverage)="row">
+			{{ row.item.depositAverage | numeralFloat }}
+		</template>
+
+		<template #cell(otherAverage)="row">
+			{{ row.item.otherAverage | numeralFloat }}
+		</template>
+
+		<template #empty>
+			<em>在指定时点后，点击“预览结果”以查看</em>
+		</template>
+	</b-table>
 </div>
 
 </template>
@@ -187,7 +194,7 @@ export default {
 				{ key: 'customerCount', label: '影响客户数', class: 'col-number', sortable: true },
 				{ key: 'totalPoint', label: '总发放积分', class: 'col-number', sortable: true },
 				{ key: 'description', label: '描述' },
-				{ key: 'createdAt', label: '创建于', class: 'col-datetime' },
+				{ key: 'createdAt', label: '发放于', class: 'col-datetime' },
 				{ key: 'customerList', label: '' },
 				{ key: 'blank', label: '', class: 'col-blank' }
 			];
@@ -222,12 +229,36 @@ export default {
 					otherAverage: preview.contribution.other.average
 				};
 			});
+		},
+		itemListOfBatch() {
+			return this.batchList.map(batch => {
+				return {
+					id: batch.id,
+					description: batch.description,
+					customerCount: batch.customerCount,
+					totalPoint: batch.point,
+					dateAs: batch.dateAs,
+					createdAt: new Date(batch.createdAt)
+				};
+			});
 		}
 	},
 	methods: {
 		resetPreviewList() {
 			this.Preview.list = [];
 			this.Preview.pending = false;
+		},
+		async getBatchList() {
+			this.batchList = await this.$rusher.backend.Point.Plan.Batch.query();
+		},
+		async createBatch() {
+			await this.$rusher.backend.Point.Plan.Batch.create({
+				planId: this.form.planId,
+				description: this.form.description
+			});
+
+			this.resetPreviewList();
+			await this.getBatchList();
 		},
 		async getPreviewList() {
 			this.Preview.list = await this.$rusher.backend.Point.Plan.Preview.query({
@@ -246,6 +277,7 @@ export default {
 	},
 	mounted() {
 		this.getPlanList();
+		this.getBatchList();
 	}
 };
 </script>
