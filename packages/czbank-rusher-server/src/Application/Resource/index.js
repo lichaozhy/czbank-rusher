@@ -8,5 +8,6 @@ module.exports = {
 	CustomerPerformance: require('./CustomerPerformance'),
 	ManagerPreview: require('./ManagerPreview'),
 	Activity: require('./Activity'),
-	Present: require('./Present')
+	Present: require('./Present'),
+	PlanBatchPreview: require('./PlanBatchPreview')
 };

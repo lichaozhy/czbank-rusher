@@ -267,6 +267,30 @@ export default {
 						description: options.description
 					}).then(pickData);
 				}
+			}),
+			Point: Object.assign(function IPoint() {
+
+			}, {
+				Plan: Object.assign(function IPointPlan() {
+
+				}, {
+					Preview: {
+						query({ planId }) {
+							return agent.get('/point/plan/preview', {
+								params: { planId }
+							}).then(pickData);
+						}
+					}
+				}),
+				PlanVariation: Object.assign(function IPointPlanVariation() {
+
+				}),
+				Present: Object.assign(function IPointPresent() {
+
+				}),
+				Activity: Object.assign(function IPointActivity() {
+
+				})
 			})
 		});
 

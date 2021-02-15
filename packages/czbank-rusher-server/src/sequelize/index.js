@@ -58,6 +58,7 @@ module.exports = function CZBankRusherSequelize(options) {
 		CustomerPointAdjustmentByManual: sequelize.model('CustomerPointAdjustmentByManual'),
 		CustomerPointAdjustmentByPlan: sequelize.model('CustomerPointAdjustmentByPlan'),
 		CustomerPointAdjustmentByPresent: sequelize.model('CustomerPointAdjustmentByPresent'),
+		CustomerPointAdjustmentByPlanVariation: sequelize.model('CustomerPointAdjustmentByPlanVariation'),
 		CustomerPointAdjustment: sequelize.model('CustomerPointAdjustment'),
 		CustomerContribution: sequelize.model('CustomerContribution'),
 		CustomerData: sequelize.model('CustomerData'),
@@ -75,7 +76,9 @@ module.exports = function CZBankRusherSequelize(options) {
 		Manager: sequelize.model('Manager'),
 		Plan: sequelize.model('Plan'),
 		Present: sequelize.model('Present'),
-		Product: sequelize.model('Product')
+		Product: sequelize.model('Product'),
+		PointBatchByPlan: sequelize.model('PointBatchByPlan'),
+		PointBatchByPlanVariation: sequelize.model('PointBatchByPlanVariation')
 	};
 
 	Model.File.belongsTo(Model.Manager, FK('managerId'));
@@ -122,17 +125,23 @@ module.exports = function CZBankRusherSequelize(options) {
 	Model.CustomerPointAdjustment.hasMany(Model.CustomerPointAdjustmentByManual, adjustmentFK);
 	Model.CustomerPointAdjustment.hasMany(Model.CustomerPointAdjustmentByPlan, adjustmentFK);
 	Model.CustomerPointAdjustment.hasMany(Model.CustomerPointAdjustmentByPresent, adjustmentFK);
+	Model.CustomerPointAdjustment.hasMany(Model.CustomerPointAdjustmentByPlanVariation, adjustmentFK);
 	Model.CustomerPointAdjustmentByActivity.belongsTo(Model.CustomerPointAdjustment, adjustmentFK);
 	Model.CustomerPointAdjustmentByManual.belongsTo(Model.CustomerPointAdjustment, adjustmentFK);
 	Model.CustomerPointAdjustmentByPlan.belongsTo(Model.CustomerPointAdjustment, adjustmentFK);
 	Model.CustomerPointAdjustmentByPresent.belongsTo(Model.CustomerPointAdjustment, adjustmentFK);
+	Model.CustomerPointAdjustmentByPlanVariation.belongsTo(Model.CustomerPointAdjustment, adjustmentFK);
 
-	Model.CustomerPointAdjustmentByPlan.belongsTo(Model.Plan, FK('planId'));
 	Model.CustomerPointAdjustmentByPresent.belongsTo(Model.Present, FK('presentId'));
 	Model.CustomerPointAdjustmentByActivity.belongsTo(Model.Activity, FK('activityId'));
-	Model.Plan.hasOne(Model.CustomerPointAdjustmentByPlan, FK('planId'));
+
 	Model.Present.hasMany(Model.CustomerPointAdjustmentByPresent, FK('presentId'));
 	Model.Activity.hasMany(Model.CustomerPointAdjustmentByActivity, FK('activityId'));
+
+	Model.Plan.hasMany(Model.PointBatchByPlan, FK('planId'));
+	Model.PointBatchByPlan.belongsTo(Model.Plan, FK('planId'));
+	Model.CustomerPointAdjustmentByPlan.belongsTo(Model.PointBatchByPlan, FK('batchId'));
+	Model.PointBatchByPlan.hasMany(Model.CustomerPointAdjustmentByPlan, FK('batchId'));
 
 	return { sequelize, Model };
 };

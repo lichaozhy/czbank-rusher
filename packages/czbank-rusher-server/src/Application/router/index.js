@@ -10,5 +10,7 @@ module.exports = {
 	ManagerPreview: require('./Manager/Preview'),
 	ManagerPerformance: require('./Manager/Performance'),
 	Activity: require('./Activity'),
-	Present: require('./Present')
+	Present: require('./Present'),
+	Point: require('./Point'),
+	PointPlan: require('./Point/Plan')
 };

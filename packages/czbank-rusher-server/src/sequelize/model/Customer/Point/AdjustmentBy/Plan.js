@@ -9,9 +9,21 @@ module.exports = function CustomerPointAdjustmentByPlan(sequelize, namespace) {
 			type: DataTypes.CHAR(64),
 			primaryKey: true
 		},
-		planId: DataTypes.CHAR(64),
-		description: DataTypes.STRING
+		batchId: DataTypes.CHAR(64),
 	}, {
 		tableName: `${namespace}customer_point_adjustment_by_plan`
+	});
+
+	sequelize.define('PointBatchByPlan', {
+		id: {
+			type: DataTypes.CHAR(64),
+			primaryKey: true
+		},
+		planId: DataTypes.CHAR(64),
+		point: DataTypes.INTEGER,
+		description: DataTypes.STRING,
+		createdAt: DataTypes.DATE
+	}, {
+		tableName: `${namespace}point_batch_by_plan`
 	});
 };

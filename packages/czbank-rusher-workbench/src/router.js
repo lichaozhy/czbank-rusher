@@ -29,7 +29,7 @@ export default new VueRouter({
 				principalRequired: true
 			},
 			redirect: {
-				name: 'workbench.database'
+				name: 'workbench.manager'
 			},
 			children: [
 				{
@@ -187,7 +187,7 @@ export default new VueRouter({
 					path: 'point',
 					component: Page.Workbench.Point.Framework,
 					redirect: {
-						name: 'workbench.point.history'
+						name: 'workbench.point.overview'
 					},
 					children: [
 						{
@@ -201,9 +201,29 @@ export default new VueRouter({
 							component: Page.Workbench.Point.History
 						},
 						{
-							name: 'workbench.point.adjustment',
-							path: 'adjustment',
-							component: Page.Workbench.Point.Adjustment
+							name: 'workbench.point.adjustment.plan',
+							path: 'adjustment/plan',
+							component: Page.Workbench.Point.Adjustment.Plan
+						},
+						{
+							name: 'workbench.point.adjustment.plan-variation',
+							path: 'adjustment/plan-variation',
+							component: Page.Workbench.Point.Adjustment.PlanVariation
+						},
+						{
+							name: 'workbench.point.adjustment.activity',
+							path: 'adjustment/activity',
+							component: Page.Workbench.Point.Adjustment.Activity
+						},
+						{
+							name: 'workbench.point.adjustment.present',
+							path: 'adjustment/present',
+							component: Page.Workbench.Point.Adjustment.Present
+						},
+						{
+							name: 'workbench.point.adjustment.manual',
+							path: 'adjustment/manual',
+							component: Page.Workbench.Point.Adjustment.Manual
 						}
 					]
 				},

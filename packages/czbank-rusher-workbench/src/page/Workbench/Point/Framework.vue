@@ -24,11 +24,11 @@
 			>
 				<b-list-group flush>
 					<b-list-group-item
-						:to="{ name: 'workbench.point.history' }"
-					>{{ $t('menu.point.history.label') }}</b-list-group-item>
-					<b-list-group-item
 						:to="{ name: 'workbench.point.overview' }"
-					>{{ $t('menu.point.overview.label') }}</b-list-group-item>
+					>{{ $t('m.point.overview.label') }}</b-list-group-item>
+					<b-list-group-item
+						:to="{ name: 'workbench.point.history' }"
+					>{{ $t('m.point.history.label') }}</b-list-group-item>
 				</b-list-group>
 			</b-card>
 
@@ -39,20 +39,20 @@
 			>
 				<b-list-group flush>
 					<b-list-group-item
-						:to="{ name: 'workbench.manager.overview' }"
-					>{{ $t('menu.point.adjustment.plan.label') }}</b-list-group-item>
+						:to="{ name: 'workbench.point.adjustment.plan' }"
+					>{{ $t('m.point.adjustment.plan.label') }}</b-list-group-item>
 					<b-list-group-item
-						:to="{ name: 'workbench.manager.contribution' }"
-					>{{ $t('menu.point.adjustment.planVariation.label') }}</b-list-group-item>
+						:to="{ name: 'workbench.point.adjustment.plan-variation' }"
+					>{{ $t('m.point.adjustment.planVariation.label') }}</b-list-group-item>
 					<b-list-group-item
-						:to="{ name: 'workbench.manager.contribution' }"
-					>{{ $t('menu.point.adjustment.present.label') }}</b-list-group-item>
+						:to="{ name: 'workbench.point.adjustment.present' }"
+					>{{ $t('m.point.adjustment.present.label') }}</b-list-group-item>
 					<b-list-group-item
-						:to="{ name: 'workbench.manager.contribution' }"
-					>{{ $t('menu.point.adjustment.activity.label') }}</b-list-group-item>
+						:to="{ name: 'workbench.point.adjustment.activity' }"
+					>{{ $t('m.point.adjustment.activity.label') }}</b-list-group-item>
 					<b-list-group-item
-						:to="{ name: 'workbench.point.adjustment' }"
-					>{{ $t('menu.point.adjustment.manual.label') }}</b-list-group-item>
+						:to="{ name: 'workbench.point.adjustment.manual' }"
+					>{{ $t('m.point.adjustment.manual.label') }}</b-list-group-item>
 				</b-list-group>
 			</b-card>
 		</b-col>

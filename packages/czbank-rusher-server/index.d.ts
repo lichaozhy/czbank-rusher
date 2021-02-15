@@ -99,6 +99,8 @@ declare namespace CZBankRusher {
 		Plan: typeof Sequelize.Model
 		Present: typeof Sequelize.Model
 		Product: typeof Sequelize.Model
+		PointBatchByPlan: typeof Sequelize.Model
+		PointBatchByPlanVariation: typeof Sequelize.Model
 	}
 
 	interface Resource {
@@ -113,6 +115,7 @@ declare namespace CZBankRusher {
 		Present: (data: Sequelize.Model) => Object
 		Product: (data: Sequelize.Model) => Object
 		CustomerPerformance: (data: Sequelize.Model) => Object
+		PlanBatchPreview: (data: Sequelize.Model) => Object
 	}
 }
 

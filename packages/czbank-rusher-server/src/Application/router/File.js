@@ -29,6 +29,13 @@ module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
 			};
 		}), BULK_CREATING_OPTIONS);
 
+		await Model.CustomerPoint.bulkCreate(Customer.list.map(customer => {
+			return {
+				customerId: customer.customerId,
+				value: 0
+			};
+		}), BULK_CREATING_OPTIONS);
+
 		const accountDataList = [];
 		const accountProductDataList = [];
 

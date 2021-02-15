@@ -41,8 +41,16 @@ table.table.b-table td {
 	width: 2em;
 }
 
+.col-auto-blank {
+	min-width: 2em;
+}
+
 .col-datetime {
 	width: 12em;
+}
+
+.col-date {
+	width: 6em;
 }
 
 .col-short-number {
