@@ -10,5 +10,7 @@ module.exports = {
 	Activity: require('./Activity'),
 	Present: require('./Present'),
 	PlanBatchPreview: require('./PlanBatchPreview'),
-	PlanBatch: require('./PlanBatch')
+	PlanBatch: require('./PlanBatch'),
+	PlanVariationBatchPreview: require('./PlanVariationBatchPreview'),
+	PlanVariationBatch: require('./PlanVariationBatch')
 };

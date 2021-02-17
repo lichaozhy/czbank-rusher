@@ -3,6 +3,6 @@ const BASIC_OPTIONS = {
 	constraints: false
 };
 
-exports.FK = function ForeignKeyOptions(foreignKey) {
-	return Object.assign({ foreignKey }, BASIC_OPTIONS);
+exports.FK = function ForeignKeyOptions(foreignKey, other = {}) {
+	return Object.assign({ foreignKey }, other, BASIC_OPTIONS);
 };

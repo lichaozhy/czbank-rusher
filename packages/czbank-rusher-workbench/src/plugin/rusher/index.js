@@ -295,6 +295,31 @@ export default {
 				}),
 				PlanVariation: Object.assign(function IPointPlanVariation() {
 
+				}, {
+					Preview: {
+						query({ planId }) {
+							return agent.get('/point/plan-variation/preview', {
+								params: {
+									basePlanId: planId.base,
+									targetPlanId: planId.target
+								}
+							}).then(pickData);
+						}
+					},
+					Batch: {
+						query() {
+							return agent.get('/point/plan-variation/batch').then(pickData);
+						},
+						create(options) {
+							return agent.post('/point/plan-variation/batch', {
+								plan: {
+									base: { id: options.plan.base.id },
+									target: { id: options.plan.target.id }
+								},
+								description: options.description
+							}).then(pickData);
+						}
+					}
 				}),
 				Present: Object.assign(function IPointPresent() {
 

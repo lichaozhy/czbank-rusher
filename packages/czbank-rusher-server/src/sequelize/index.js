@@ -143,5 +143,15 @@ module.exports = function CZBankRusherSequelize(options) {
 	Model.CustomerPointAdjustmentByPlan.belongsTo(Model.PointBatchByPlan, FK('batchId'));
 	Model.PointBatchByPlan.hasMany(Model.CustomerPointAdjustmentByPlan, FK('batchId'));
 
+	const basePlanFK = FK('baseId', { as: 'basePlan' });
+	const targetPlanFK = FK('targetId', { as: 'targetPlan' });
+
+	Model.Plan.hasMany(Model.PointBatchByPlanVariation, basePlanFK);
+	Model.Plan.hasMany(Model.PointBatchByPlanVariation, targetPlanFK);
+	Model.PointBatchByPlanVariation.belongsTo(Model.Plan, basePlanFK);
+	Model.PointBatchByPlanVariation.belongsTo(Model.Plan, targetPlanFK);
+	Model.CustomerPointAdjustmentByPlanVariation.belongsTo(Model.PointBatchByPlanVariation, FK('batchId'));
+	Model.PointBatchByPlanVariation.hasMany(Model.CustomerPointAdjustmentByPlanVariation, FK('batchId'));
+
 	return { sequelize, Model };
 };

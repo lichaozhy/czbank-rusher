@@ -6,7 +6,7 @@
 		<li>贡献度<code class="mx-1">&lt;1</code>的客户，将不被累积积分</li>
 		<li>符合要求的用户将被追加<code
 			class="mx-1"
-		>point = ROUND(Average<sub>deposit</sub> × 2 + Average<sub>other</sub> × 1) × 1</code>个积分</li>
+		>point = (Average<sub>deposit</sub> × 2 + Average<sub>other</sub> × 1) × 1</code>个积分</li>
 	</ul>
 
 	<h2>发放历史</h2>
@@ -157,7 +157,6 @@
 export default {
 	data() {
 		return {
-			previewing: false,
 			batchList: [],
 			planList: [],
 			form: {
@@ -178,7 +177,7 @@ export default {
 		},
 		dateAsOptionList() {
 			if (this.planList.length === 0) {
-				return [{ value: null, text: '无可用的时点数据' }];
+				return [{ value: null, text: '无可用的时点' }];
 			} else {
 				const placeholder = [{ value: null, text: '请选择时点' }];
 				const optionList = this.planList.map(plan => {

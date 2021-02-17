@@ -91,6 +91,7 @@ declare namespace CZBankRusher {
 		CustomerPointAdjustmentByActivity: typeof Sequelize.Model
 		CustomerPointAdjustmentByManual: typeof Sequelize.Model
 		CustomerPointAdjustmentByPlan: typeof Sequelize.Model
+		CustomerPointAdjustmentByPlanVariation: typeof Sequelize.Model
 		CustomerPointAdjustmentByPresent: typeof Sequelize.Model
 		CustomerPointAdjustment: typeof Sequelize.Model
 		CustomerContribution: typeof Sequelize.Model
@@ -128,6 +129,8 @@ declare namespace CZBankRusher {
 		CustomerPerformance: (data: Sequelize.Model) => Object
 		PlanBatchPreview: (data: Sequelize.Model) => Object
 		PlanBatch: (data: Sequelize.Model) => Object
+		PlanVariationBatchPreview: (data: Sequelize.Model) => Object
+		PlanVariationBatch: (data: Sequelize.Model) => Object
 	}
 }
 

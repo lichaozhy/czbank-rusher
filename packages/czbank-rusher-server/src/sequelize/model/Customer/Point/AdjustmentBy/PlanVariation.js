@@ -9,8 +9,7 @@ module.exports = function CustomerPointAdjustmentByPlanVariation(sequelize, name
 			type: DataTypes.CHAR(64),
 			primaryKey: true
 		},
-		originPlanId: DataTypes.CHAR(64),
-		targetPlanId: DataTypes.CHAR(64),
+		batchId: DataTypes.CHAR(64),
 	}, {
 		tableName: `${namespace}customer_point_adjustment_by_plan_variation`
 	});
@@ -23,6 +22,7 @@ module.exports = function CustomerPointAdjustmentByPlanVariation(sequelize, name
 		baseId: DataTypes.CHAR(64),
 		targetId: DataTypes.CHAR(64),
 		point: DataTypes.INTEGER,
+		customerCount: DataTypes.INTEGER,
 		description: DataTypes.STRING,
 		createdAt: DataTypes.DATE
 	}, {
