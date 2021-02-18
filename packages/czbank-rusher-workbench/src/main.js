@@ -12,12 +12,16 @@ import router from './router';
 import i18n from './i18n';
 import store from './store';
 
+import CustomerPointSelector from './components/CustomerPointSelector';
+
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue, bvOptions);
 Vue.use(BootstrapVueIcons);
 Vue.use(Rusher);
 Vue.use(Vuelidate);
+
+Vue.component('CustomerPointSelector', CustomerPointSelector);
 
 new Vue({
 	router,
