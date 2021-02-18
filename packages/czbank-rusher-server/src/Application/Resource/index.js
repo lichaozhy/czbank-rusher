@@ -12,5 +12,7 @@ module.exports = {
 	PlanBatchPreview: require('./PlanBatchPreview'),
 	PlanBatch: require('./PlanBatch'),
 	PlanVariationBatchPreview: require('./PlanVariationBatchPreview'),
-	PlanVariationBatch: require('./PlanVariationBatch')
+	PlanVariationBatch: require('./PlanVariationBatch'),
+	PresentExchange: require('./PresentExchange'),
+	CustomerPoint: require('./CustomerPoint')
 };

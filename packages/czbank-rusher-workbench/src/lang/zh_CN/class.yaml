@@ -24,6 +24,12 @@ manager:
   code: 工号
   customerNumber: 客户数
 
+present:
+  className: 礼品
+
+customer:
+  className: 客户
+
 product:
   className: 产品
   name: 产品名

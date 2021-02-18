@@ -44,9 +44,9 @@ export default {
 
 			}, {
 				Performance: {
-					query({ dateAs }) {
+					query({ dateAs, customerId }) {
 						return agent.get('/customer/performance', {
-							params: { dateAs }
+							params: { dateAs, customerId }
 						}).then(pickData);
 					}
 				}
@@ -271,6 +271,9 @@ export default {
 			Point: Object.assign(function IPoint() {
 
 			}, {
+				query() {
+					return agent.get('/point').then(pickData);
+				},
 				Plan: Object.assign(function IPointPlan() {
 
 				}, {
@@ -323,6 +326,18 @@ export default {
 				}),
 				Present: Object.assign(function IPointPresent() {
 
+				}, {
+					query() {
+						return agent.get('/point/present').then(pickData);
+					},
+					create(options) {
+						return agent.post('/point/present/exchange', {
+							amount: options.amount,
+							description: options.description,
+							customer: { id: options.customerId },
+							present: { id: options.presentId }
+						}).then(pickData);
+					}
 				}),
 				Activity: Object.assign(function IPointActivity() {
 

@@ -33,6 +33,10 @@ table.table.b-table td {
 	vertical-align: middle;
 }
 
+.b-table-sticky-header > .table.b-table > thead > tr > th {
+	top: -1px;
+}
+
 .custom-switch .custom-control-label {
 	vertical-align: middle;
 }

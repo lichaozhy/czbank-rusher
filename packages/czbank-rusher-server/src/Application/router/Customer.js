@@ -8,22 +8,26 @@ module.exports = Router(function CZBankRusherCustomerRouter(router, {
 
 
 	}).get('/performance', async function getCustomerPerformanceRouter(ctx) {
-		const { dateAs } = ctx.query;
-
-		if (dateAs === undefined) {
-			return ctx.throw(400);
-		}
+		const { dateAs, customerId } = ctx.query;
 
 		const list = await Model.CustomerContribution.findAll({
 			include: [{
 				model: Model.CustomerData,
 				required: true,
 				include: [
-					{ model: Model.Customer },
+					{
+						model: Model.Customer,
+						where: customerId ? { id: customerId } : {},
+						required: true
+					},
 					{ model: Model.Manager },
 					{
 						model: Model.File,
-						include: [{ model: Model.Plan, where: { dateAs }, required: true }],
+						include: [{
+							model: Model.Plan,
+							where: dateAs ? { dateAs } : {},
+							required: true
+						}],
 						required: true
 					}
 				]

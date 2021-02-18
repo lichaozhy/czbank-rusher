@@ -1,8 +1,11 @@
 module.exports = function CustomerPerformance(contribution) {
 	const {
 		Customer: customer,
-		Manager: manager
+		Manager: manager,
+		File: file,
 	} = contribution.CustomerDatum;
+
+	const { Plan: plan } = file;
 
 	return {
 		customer: {
@@ -26,6 +29,7 @@ module.exports = function CustomerPerformance(contribution) {
 			balance: contribution.balance,
 			rate: contribution.rate,
 			value: contribution.contribution
-		}
+		},
+		dateAs: plan.dateAs
 	};
 };

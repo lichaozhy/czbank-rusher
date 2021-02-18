@@ -1,6 +1,6 @@
 <template>
 
-<div>
+<div style="min-height: 1000px">
 	<h1>{{ $t('menu.point.adjustment.planVariation.label') }}</h1><hr>
 	<ul class="list-unstyled">
 		<li>贡献度降低的客户，将不被累积积分</li>

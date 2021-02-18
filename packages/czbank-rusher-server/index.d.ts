@@ -1,4 +1,5 @@
 import '@produck/duck'
+import '@produck/duck-web-koa-router'
 import Sequelize from 'sequelize'
 import http from 'http'
 import https from 'https'
@@ -8,7 +9,6 @@ declare module '@produck/duck' {
 		Sequelize: Sequelize.Sequelize
 		Utils: CZBankRusher.Utils
 		Model: CZBankRusher.Model
-		Resource: CZBankRusher.Resource
 		ReportResolver: CZBankRusher.Report.FileReader,
 		Constant: {
 			ADJUSTMENT: {
@@ -21,6 +21,12 @@ declare module '@produck/duck' {
 				}
 			}
 		}
+	}
+}
+
+declare module '@produck/duck-web-koa-router' {
+	interface DuckWebKoaRouterInstanceInjection {
+		Resource: CZBankRusher.Resource
 	}
 }
 
@@ -131,6 +137,8 @@ declare namespace CZBankRusher {
 		PlanBatch: (data: Sequelize.Model) => Object
 		PlanVariationBatchPreview: (data: Sequelize.Model) => Object
 		PlanVariationBatch: (data: Sequelize.Model) => Object
+		PresentExchange: (data: Sequelize.Model) => Object
+		CustomerPoint: (data: Sequelize.Model) => Object
 	}
 }
 
