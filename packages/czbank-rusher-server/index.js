@@ -25,7 +25,7 @@ module.exports = Duck({
 		DuckWeb([
 			{
 				id: 'rusher',
-				Application: require('./src/Application')
+				Application: require('./src/Application/Administrator')
 			}
 		]),
 		DuckLog({

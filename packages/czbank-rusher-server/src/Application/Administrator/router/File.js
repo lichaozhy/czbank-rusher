@@ -1,7 +1,7 @@
 const { Router } = require('@produck/duck-web-koa-router');
 const fs = require('fs-extra');
 
-const DEFAULT_SETTING = require('../../../../../script/product');
+const DEFAULT_SETTING = require('../../../../../../script/product');
 const BULK_CREATING_OPTIONS = { ignoreDuplicates: true };
 
 module.exports = Router(function CZBankRusherAccountDataFileRouter(router, {
