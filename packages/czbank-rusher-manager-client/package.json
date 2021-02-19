@@ -1,5 +1,5 @@
 {
-  "name": "czbank-rusher-manager-client",
+  "name": "@czbank/czbank-rusher-manager-client",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,8 +9,10 @@
   },
   "dependencies": {
     "core-js": "^3.9.0",
+    "onsenui": "^2.11.2",
     "register-service-worker": "^1.7.2",
     "vue": "^2.6.12",
+    "vue-onsenui": "^2.6.2",
     "vue-router": "^3.5.1",
     "vuex": "^3.6.2"
   },
@@ -30,7 +32,7 @@
     "eslint-plugin-standard": "^5.0.0",
     "eslint-plugin-vue": "^7.6.0",
     "sass": "^1.32.8",
-    "sass-loader": "^11.0.1",
+    "sass-loader": "10.1.1",
     "vue-template-compiler": "^2.6.12"
   }
 }

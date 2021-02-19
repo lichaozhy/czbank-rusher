@@ -11,7 +11,8 @@ module.exports = {
     // **optional** default: `[{ root: './' }]`
     // support monorepos
     projects: [
-      './packages/czbank-rusher-workbench', // shorthand for only root.
+      './packages/czbank-rusher-workbench',
+      './packages/czbank-rusher-manager-client', // shorthand for only root.
     //   {
     //     // **required**
     //     // Where is your project?
@@ -40,4 +41,3 @@ module.exports = {
     //   }
     ]
   }
-  
