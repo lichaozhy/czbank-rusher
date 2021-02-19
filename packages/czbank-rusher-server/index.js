@@ -24,8 +24,12 @@ module.exports = Duck({
 		DuckWorkspace(),
 		DuckWeb([
 			{
-				id: 'rusher',
+				id: 'rusher.administrator',
 				Application: require('./src/Application/Administrator')
+			},
+			{
+				id: 'rusher.manager',
+				Application: require('./src/Application/Manager')
 			}
 		]),
 		DuckLog({
@@ -72,7 +76,7 @@ module.exports = Duck({
 
 	Log();
 
-	const app = Web.Application('rusher');
+	const app = Web.Application('rusher.administrator');
 	const requestListener =  DuckLog.Adapter.HttpServer(app, _ => Log.access(_));
 
 	return {

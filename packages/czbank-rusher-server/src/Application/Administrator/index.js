@@ -18,7 +18,7 @@ module.exports = DuckWebKoa(function CZBankRusherApplication(app, {
 	});
 
 	app
-		.use(serve(path.resolve('www')))
+		.use(serve(path.resolve('www/administrator')))
 		.use(bodyparser)
 		.use(AppRouter().routes());
 }, {
