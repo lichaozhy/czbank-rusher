@@ -139,6 +139,7 @@ declare namespace CZBankRusher {
 		PlanVariationBatch: (data: Sequelize.Model) => Object
 		PresentExchange: (data: Sequelize.Model) => Object
 		CustomerPoint: (data: Sequelize.Model) => Object
+		ActivityReward: (data: Sequelize.Model) => Object
 	}
 }
 

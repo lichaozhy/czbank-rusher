@@ -81,6 +81,10 @@ module.exports = DuckWebKoa(function CZBankRusherApplication(app, {
 						{
 							prefix: '/present',
 							Router: Router.PointPresent
+						},
+						{
+							prefix: '/activity',
+							Router: Router.PointActivity
 						}
 					]
 				}

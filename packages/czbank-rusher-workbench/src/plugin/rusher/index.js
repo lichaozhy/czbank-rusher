@@ -256,8 +256,10 @@ export default {
 					}
 				};
 			}, {
-				query() {
-					return agent.get('/activity').then(pickData);
+				query(options = {}) {
+					return agent.get('/activity', {
+						params: { pending: options.pending }
+					}).then(pickData);
 				},
 				create(options) {
 					return agent.post('/activity', {
@@ -341,6 +343,18 @@ export default {
 				}),
 				Activity: Object.assign(function IPointActivity() {
 
+				}, {
+					query() {
+						return agent.get('/point/activity').then(pickData);
+					},
+					create(options) {
+						return agent.post('/point/activity/reward', {
+							point: options.point,
+							description: options.description,
+							customer: { id: options.customerId },
+							activity: { id: options.activityId }
+						}).then(pickData);
+					}
 				})
 			})
 		});

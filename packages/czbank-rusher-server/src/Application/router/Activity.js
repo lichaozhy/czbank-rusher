@@ -24,9 +24,17 @@ module.exports = Router(function CZBRusherActivityRouter(router, {
 	}
 
 	router.get('/', async function getActivityList(ctx) {
-		const list = await Model.Activity.findAll(QueryOptions());
+		const options = { include: [Model.CustomerPointAdjustmentByActivity] };
+		const { pending } = ctx.query;
+		const list = await Model.Activity.findAll(options);
+		const now = new Date();
 
-		ctx.body = list.map(activity => Resource.Activity(activity));
+		const filteredList = pending === 'true' ? list.filter(activity => {
+			return activity.startedAt < now &&
+				(now < activity.endedAt || activity.endedAt === null);
+		}) : list;
+
+		ctx.body = filteredList.map(activity => Resource.Activity(activity));
 	}).post('/', async function createActivity(ctx) {
 		const { name, description = '', startedAt, endedAt } = ctx.request.body;
 		const id = Utils.encodeSHA256(`activity-${Date.now}-${name}`);

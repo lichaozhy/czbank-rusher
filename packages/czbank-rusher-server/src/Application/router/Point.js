@@ -7,8 +7,7 @@ module.exports = Router(function CZBRusherPointRouter(router, {
 	router.get('/', async function getCustomerPointList(ctx) {
 		const list = await Model.Customer.findAll({
 			include: [{
-				model: Model.CustomerPoint,
-				where: { value: { [Op.gt]: 0 } }
+				model: Model.CustomerPoint
 			}]
 		});
 

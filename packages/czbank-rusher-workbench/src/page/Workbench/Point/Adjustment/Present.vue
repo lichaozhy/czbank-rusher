@@ -1,6 +1,6 @@
 <template>
 
-<div>
+<div style="min-height: 1000px">
 	<h1>{{ $t('menu.point.adjustment.present.label') }}</h1><hr>
 
 	<customer-point-selector

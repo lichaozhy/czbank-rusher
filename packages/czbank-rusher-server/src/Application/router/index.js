@@ -14,5 +14,6 @@ module.exports = {
 	Point: require('./Point'),
 	PointPlan: require('./Point/Plan'),
 	PointPlanVariation: require('./Point/PlanVariation'),
-	PointPresent: require('./Point/Present')
+	PointPresent: require('./Point/Present'),
+	PointActivity: require('./Point/Activity')
 };
