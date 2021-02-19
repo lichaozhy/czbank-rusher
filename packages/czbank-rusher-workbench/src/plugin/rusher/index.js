@@ -357,8 +357,10 @@ export default {
 					}
 				}),
 				Adjustment: {
-					query() {
-						return agent.get('/point/adjustment').then(pickData);
+					query(options) {
+						return agent.get('/point/adjustment', {
+							params: { customerId: options.customerId }
+						}).then(pickData);
 					}
 				}
 			})

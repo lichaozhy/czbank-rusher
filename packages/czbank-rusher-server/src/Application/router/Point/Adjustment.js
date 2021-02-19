@@ -11,9 +11,18 @@ module.exports = Router(function CZBRusherPointAdjustmentRouter(router, {
 	}
 
 	router.get('/', async function getPointAdjustmentList(ctx) {
-		const list = await Model.CustomerPointAdjustment.findAll({
-			include: [Model.Customer]
-		});
+		const { customerId } = ctx.query;
+		const where = {};
+		const options = {
+			include: [{ model: Model.Customer }],
+			where
+		};
+
+		if (customerId) {
+			where.customerId = customerId;
+		}
+
+		const list = await Model.CustomerPointAdjustment.findAll(options);
 
 		list.forEach(data => data.typeCode = mapOfAdjustmentTypeValueToCode[data.type]);
 		ctx.body = list.map(data => Resource.PointAdjustment(data));
