@@ -121,11 +121,11 @@ module.exports = function CZBankRusherSequelize(options) {
 
 	const adjustmentFK = FK('adjustmentId');
 
-	Model.CustomerPointAdjustment.hasMany(Model.CustomerPointAdjustmentByActivity, adjustmentFK);
-	Model.CustomerPointAdjustment.hasMany(Model.CustomerPointAdjustmentByManual, adjustmentFK);
-	Model.CustomerPointAdjustment.hasMany(Model.CustomerPointAdjustmentByPlan, adjustmentFK);
-	Model.CustomerPointAdjustment.hasMany(Model.CustomerPointAdjustmentByPresent, adjustmentFK);
-	Model.CustomerPointAdjustment.hasMany(Model.CustomerPointAdjustmentByPlanVariation, adjustmentFK);
+	Model.CustomerPointAdjustment.hasOne(Model.CustomerPointAdjustmentByActivity, adjustmentFK);
+	Model.CustomerPointAdjustment.hasOne(Model.CustomerPointAdjustmentByManual, adjustmentFK);
+	Model.CustomerPointAdjustment.hasOne(Model.CustomerPointAdjustmentByPlan, adjustmentFK);
+	Model.CustomerPointAdjustment.hasOne(Model.CustomerPointAdjustmentByPresent, adjustmentFK);
+	Model.CustomerPointAdjustment.hasOne(Model.CustomerPointAdjustmentByPlanVariation, adjustmentFK);
 	Model.CustomerPointAdjustmentByActivity.belongsTo(Model.CustomerPointAdjustment, adjustmentFK);
 	Model.CustomerPointAdjustmentByManual.belongsTo(Model.CustomerPointAdjustment, adjustmentFK);
 	Model.CustomerPointAdjustmentByPlan.belongsTo(Model.CustomerPointAdjustment, adjustmentFK);

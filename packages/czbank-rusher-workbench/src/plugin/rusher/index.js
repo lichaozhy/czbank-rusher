@@ -355,7 +355,12 @@ export default {
 							activity: { id: options.activityId }
 						}).then(pickData);
 					}
-				})
+				}),
+				Adjustment: {
+					query() {
+						return agent.get('/point/adjustment').then(pickData);
+					}
+				}
 			})
 		});
 
@@ -364,6 +369,17 @@ export default {
 			Utils: {
 				localDate: localDate,
 				localTime: localTime
+			},
+			enum: {
+				ADJUSTMENT: {
+					TYPE: {
+						PLAN: '指定时点',
+						PLAN_VARIATION: '时点差量',
+						ACTIVITY: '参加活动',
+						PRESENT: '兑换礼品',
+						MANUAL: '手动'
+					}
+				}
 			}
 		};
 	}

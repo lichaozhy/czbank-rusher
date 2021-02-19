@@ -19,7 +19,10 @@ module.exports = Router(function CZBRusherPointActivityRouter(router, {
 		ctx.body = list.map(data => Resource.ActivityReward(data));
 	}).post('/reward', async function createActivityReward(ctx) {
 		const body = ctx.request.body;
-		const activity = await Model.Activity.findOne({ where: { id: body.activity.id } });
+
+		const activity = await Model.Activity.findOne({
+			where: { id: body.activity.id }
+		});
 
 		if (!activity) {
 			return ctx.throw(400, 'No activity');
