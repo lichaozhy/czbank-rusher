@@ -39,7 +39,22 @@ module.exports = Duck({
 					AppenderList: [
 						DuckLog.Appender.Console(),
 						DuckLog.Appender.File({
-							file: { pathname: Workspace.resolve('log', 'access.log') }
+							file: {
+								pathname: Workspace.resolve('log', 'administrator/access.log')
+							}
+						})
+					]
+				};
+			},
+			manager({ Workspace }) {
+				return {
+					format: DuckLog.Format.ApacheECLF(),
+					AppenderList: [
+						DuckLog.Appender.Console(),
+						DuckLog.Appender.File({
+							file: {
+								pathname: Workspace.resolve('log', 'manager/access.log')
+							}
 						})
 					]
 				};
@@ -76,15 +91,28 @@ module.exports = Duck({
 
 	Log();
 
-	const app = Web.Application('rusher.administrator');
-	const requestListener =  DuckLog.Adapter.HttpServer(app, _ => Log.access(_));
+	const Application = {
+		administrator: Web.Application('rusher.administrator'),
+		manager: Web.Application('rusher.manager'),
+	};
+
+	const RequestListener = {
+		administrator: DuckLog.Adapter.HttpServer(Application.administrator, _ => Log.access(_)),
+		manager: DuckLog.Adapter.HttpServer(Application.manager, _ => Log.manager(_))
+	};
 
 	return {
-		HttpServer() {
-			return http.createServer(requestListener);
+		AdministratorHttpServer() {
+			return http.createServer(RequestListener.administrator);
 		},
-		HttpsServer() {
-			return https.createServer(requestListener);
+		AdministratorHttpsServer() {
+			return https.createServer(RequestListener.administrator);
+		},
+		ManagerHttpServer() {
+			return http.createServer(RequestListener.manager);
+		},
+		ManagerHttpsServer() {
+			return https.createServer(RequestListener.manager);
 		},
 		async install(options) {
 			await Workspace.buildAll();

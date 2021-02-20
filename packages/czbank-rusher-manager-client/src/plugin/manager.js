@@ -18,7 +18,7 @@ function pickData(res) {
 	return res.data;
 }
 
-export default {
+const plugin = {
 	install(Vue) {
 		Vue.filter('localDatetime', localDatetime);
 		Vue.filter('localDate', localDate);
@@ -57,7 +57,14 @@ export default {
 				};
 			}, {
 				query() {
-					return agent('/present').then(pickData);
+					return agent.get('/present').then(pickData);
+				},
+				exchange(options) {
+					return agent.post('/present/exchange', {
+						customerId: options.customerId,
+						presentId: options.presentId,
+						amount: options.amount
+					}).then(pickData);
 				}
 			}),
 			Activity: Object.assign(function IActivity(activityId) {
@@ -69,6 +76,13 @@ export default {
 			}, {
 				query() {
 					return agent.get('/activity').then(pickData);
+				},
+				reward(options) {
+					return agent.post('/present/exchange', {
+						customerId: options.customerId,
+						activityId: options.activityId,
+						point: options.point
+					}).then(pickData);
 				}
 			}),
 			Manager: {
@@ -81,5 +95,10 @@ export default {
 		Vue.prototype.$manager = {
 			backend
 		};
-	}
+
+		plugin.backend = backend;
+	},
+	backend: null
 };
+
+export default plugin;

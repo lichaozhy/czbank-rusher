@@ -80,8 +80,10 @@ declare namespace CZBankRusher {
 	}
 
 	interface CZBankRusher {
-		HttpServer(): http.Server
-		HttpsServer(): https.Server
+		AdministratorHttpServer(): http.Server
+		AdministratorHttpsServer(): http.Server
+		ManagerHttpServer(): https.Server
+		ManagerHttpsServer(): https.Server
 		install(): Promise<void>
 		readonly sequelize: Sequelize.Sequelize
 	}

@@ -57,7 +57,7 @@
 		><b-icon-people-fill /></h6>找客户</b-button>
 
 		<b-button
-			variant="primary"
+			variant="secondary"
 			class="w-100"
 			:to="{ name: 'workbench.manager' }"
 		><h6

@@ -5,10 +5,9 @@ const rusher = CZBRusher({
 		onLog: () => {}
 	}
 });
-const server = rusher.HttpServer();
 
+rusher.AdministratorHttpServer().listen(3000);
+rusher.ManagerHttpServer().listen(3001);
 
-server.listen(3000);
-
-console.log('server running on 3000.')
-// rusher.install();
+console.log('Administrator server running on 3000.');
+console.log('Manager server running on 3001.');
