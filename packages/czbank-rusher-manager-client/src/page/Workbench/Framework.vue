@@ -65,7 +65,7 @@
 			v-if="customer !== null"
 		><h6
 			class="my-1"
-		><b-icon-people-fill
+		><b-icon-person-check-fill
 			animation="fade"
 		/></h6>{{ customer.name }}</b-button>
 

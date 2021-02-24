@@ -15,6 +15,34 @@ module.exports = Router(function CZBankManagerCustomer(router, {
 		};
 	}
 
+	function Performance(data) {
+		const {
+			CustomerContribution: contribution,
+			File: file
+		} = data;
+
+		const { Plan: plan } = file;
+
+		return {
+			customerId: data.customerId,
+			contribution: {
+				deposit: {
+					balance: contribution.depositBalance,
+					average: contribution.depositAverage
+				},
+				other: {
+					balance: contribution.otherBalance,
+					average: contribution.otherAverage
+				},
+				average: contribution.average,
+				balance: contribution.balance,
+				rate: contribution.rate,
+				value: contribution.contribution
+			},
+			dateAs: plan.dateAs
+		}
+	}
+
 	router.get('/', $AC('customer.query'), async ctx => {
 		const { managerId } = ctx.session;
 		const { name } = ctx.query;
@@ -54,11 +82,11 @@ module.exports = Router(function CZBankManagerCustomer(router, {
 			where: { customerId: ctx.state.customer.id },
 			include: [
 				Model.CustomerContribution,
-				Model.CustomerProductData,
+				// Model.CustomerProductData,
 				{ model: Model.File, include: Model.Plan }
 			]
 		});
 
-		ctx.body = list.map();
+		ctx.body = list.map(data => Performance(data));
 	});
 });
