@@ -17,7 +17,7 @@
 		<b-collapse id="app-menu" is-nav>
       <b-navbar-nav>
         <b-nav-item
-					:to="{ name: 'home' }"
+					@click="signout"
 				>登出</b-nav-item>
       </b-navbar-nav>
 		</b-collapse>
@@ -52,17 +52,30 @@
 			variant="primary"
 			class="w-100"
 			:to="{ name: 'workbench.customer' }"
+			v-if="customer === null"
 		><h6
 			class="my-1"
 		><b-icon-people-fill /></h6>找客户</b-button>
 
 		<b-button
-			variant="secondary"
+			variant="primary"
+			class="w-100"
+			:to="{ name: 'workbench.customer' }"
+			@contextmenu.prevent="resetCurrentCustomerAndJump"
+			v-if="customer !== null"
+		><h6
+			class="my-1"
+		><b-icon-people-fill
+			animation="fade"
+		/></h6>{{ customer.name }}</b-button>
+
+		<b-button
+			variant="primary"
 			class="w-100"
 			:to="{ name: 'workbench.manager' }"
 		><h6
 			class="my-1"
-		><b-icon-person-badge /></h6>我的</b-button>
+		><b-icon-person-badge /></h6><b>{{ manager.name }}</b></b-button>
 	</b-button-group>
 </div>
 
@@ -70,7 +83,43 @@
 
 <script>
 export default {
-
+	data() {
+		return {
+			customer: null
+		};
+	},
+	watch: {
+		customerId(value) {
+			if (value === null) {
+				this.customer = null;
+			} else {
+				this.getCustomer();
+			}
+		}
+	},
+	computed: {
+		manager() {
+			return this.$store.state.manager;
+		},
+		customerId() {
+			return this.$store.state.customerId;
+		}
+	},
+	methods: {
+		async signout() {
+			await this.$manager.backend.Principal.delete();
+			this.$router.replace({ name: 'home' });
+		},
+		async getCustomer() {
+			this.customer = await this.$manager.backend.Customer(this.customerId).get();
+		},
+		resetCurrentCustomerAndJump() {
+			if (this.$route.name !== 'workbench.customer') {
+				this.$store.commit('setCustomer', null);
+				this.$router.replace({ name: 'workbench.customer' });
+			}
+		}
+	}
 };
 </script>
 

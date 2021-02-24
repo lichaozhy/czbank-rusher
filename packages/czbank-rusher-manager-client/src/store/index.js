@@ -15,9 +15,8 @@ export default function AppStore(options) {
 			customerId: null
 		},
 		getters: {
-			hasPrincipal: state => {
-				return state.manager.id !== null;
-			}
+			hasPrincipal: state => state.manager.id !== null,
+			hasCustomerSelected: state => state.customerId !== null
 		},
 		mutations: {
 			setPrincipal(state, payload) {
@@ -31,6 +30,9 @@ export default function AppStore(options) {
 				state.manager.id = null;
 				state.manager.name = null;
 				state.manager.code = null;
+			},
+			setCustomer(state, payload) {
+				state.customerId = payload;
 			}
 		},
 		actions: {

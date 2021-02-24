@@ -89,6 +89,11 @@ const plugin = {
 				get() {
 					return agent.get('/manager').then(pickData);
 				}
+			},
+			Principal: {
+				delete() {
+					return agent.delete('/principal').then(pickData);
+				}
 			}
 		});
 
