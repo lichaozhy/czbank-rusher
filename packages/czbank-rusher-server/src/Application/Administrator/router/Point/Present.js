@@ -35,15 +35,19 @@ module.exports = Router(function CZBRusherPointPresentRouter(router, {
 
 		const now = new Date();
 		const id = Utils.encodeSHA256(`exchange-${now.getTime()}`);
-		const detal = present.point * body.amount * -1;
+		const delta = present.point * body.amount * -1;
 
-		customerPoint.value += detal;
+		if (customerPoint.value + delta < 0) {
+			return ctx.throw(400, 'No enough point.');
+		}
+
+		customerPoint.value += delta;
 		await customerPoint.save();
 
 		await Model.CustomerPointAdjustment.create({
 			id,
 			customerId: customerPoint.customerId,
-			value: detal,
+			value: delta,
 			type: ADJUSTMENT.TYPE.PRESENT,
 			createdAt: now
 		});

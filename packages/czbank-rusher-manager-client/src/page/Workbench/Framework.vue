@@ -19,6 +19,9 @@
         <b-nav-item
 					@click="signout"
 				>登出</b-nav-item>
+        <b-nav-item
+					@click="reload"
+				>重启客户端</b-nav-item>
       </b-navbar-nav>
 		</b-collapse>
 	</b-navbar>
@@ -46,7 +49,7 @@
 			:to="{ name: 'workbench.activity' }"
 		><h6
 			class="my-1"
-		><b-icon-calendar2-date /></h6>活动登记</b-button>
+		><b-icon-calendar2-date /></h6>活动奖励</b-button>
 
 		<b-button
 			variant="primary"
@@ -118,6 +121,9 @@ export default {
 				this.$store.commit('setCustomer', null);
 				this.$router.replace({ name: 'workbench.customer' });
 			}
+		},
+		reload() {
+			window.location.reload();
 		}
 	}
 };

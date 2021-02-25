@@ -63,7 +63,8 @@ const plugin = {
 					return agent.post('/present/exchange', {
 						customerId: options.customerId,
 						presentId: options.presentId,
-						amount: options.amount
+						amount: options.amount,
+						description: options.description
 					}).then(pickData);
 				}
 			}),

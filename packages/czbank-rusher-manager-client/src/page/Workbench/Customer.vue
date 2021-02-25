@@ -21,13 +21,16 @@
 		class="mt-3 flex-grow-1 overflow-auto"
 	>
 		<div
-			class="text-center h-100"
+			class="text-center"
 			v-show="customerList.length === 0"
 		>
 			<p>没有找到符合要求的客户</p>
 		</div>
 
-		<div class="w-100 h-100 overflow-hidden">
+		<div
+			class="w-100 h-100 overflow-hidden"
+			v-if="customerList.length > 0"
+		>
 			<b-form-row
 				class="justify-content-center align-items-center overflow-auto h-100"
 			>
@@ -63,7 +66,6 @@
 			:items="[currentCustomer]"
 			head-variant="light"
 			small
-			bordered
 		>
 			<template
 				#cell(age)="{item}"
@@ -134,20 +136,22 @@
 		:disabled="selected === null"
 		@click="setCurrentCustomer"
 		v-if="!hasCurrentCustomer"
-	>确认选择该客户作为<b class="mx-1">当前客户</b>并查看</b-button>
+		size="lg"
+	>作为<b class="mx-1">当前客户</b>并查看</b-button>
 
 	<b-button
 		class="mt-3"
 		variant="danger"
 		v-if="hasCurrentCustomer"
 		@click="resetCurrentCustomer"
+		size="lg"
 	>重新选择客户</b-button>
 </div>
 
 </template>
 
 <script>
-import customer from './customer';
+import customer from './mixin/customer';
 
 export default {
 	name: 'Workbench.Customer',
