@@ -90,6 +90,11 @@ const plugin = {
 			Manager: {
 				get() {
 					return agent.get('/manager').then(pickData);
+				},
+				Performance: {
+					query() {
+						return agent.get('/manager/performance').then(pickData);
+					}
 				}
 			},
 			Principal: {

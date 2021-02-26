@@ -24,6 +24,7 @@ module.exports = Router(function CZBankManagerCustomer(router, {
 		const { Plan: plan } = file;
 
 		return {
+			id: data.id,
 			customerId: data.customerId,
 			contribution: {
 				deposit: {
@@ -40,7 +41,7 @@ module.exports = Router(function CZBankManagerCustomer(router, {
 				value: contribution.contribution
 			},
 			dateAs: plan.dateAs
-		}
+		};
 	}
 
 	router.get('/', $AC('customer.query'), async ctx => {

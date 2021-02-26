@@ -12,6 +12,7 @@ import Rusher from './plugin/manager';
 import bvOptions from './bvOptions.json';
 
 import App from './App.vue';
+import Performance from './components/Performance';
 
 Vue.config.productionTip = false;
 
@@ -19,6 +20,8 @@ Vue.use(BootstrapVue, bvOptions);
 Vue.use(BootstrapVueIcons);
 Vue.use(Rusher);
 Vue.use(Vuelidate);
+
+Vue.component('AppPerformance', Performance);
 
 const store = AppStore({
 	async fetchPrincipal() {
