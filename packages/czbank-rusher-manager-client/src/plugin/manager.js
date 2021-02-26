@@ -79,10 +79,11 @@ const plugin = {
 					return agent.get('/activity').then(pickData);
 				},
 				reward(options) {
-					return agent.post('/present/exchange', {
+					return agent.post('/activity/reward', {
 						customerId: options.customerId,
 						activityId: options.activityId,
-						point: options.point
+						point: options.point,
+						description: options.description
 					}).then(pickData);
 				}
 			}),
