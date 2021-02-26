@@ -12,8 +12,9 @@ program
 const options = program.opts();
 
 const rusher = CZBankPusher({});
-const server = rusher.HttpServer();
 
-server.listen(options.port, options.host);
+rusher.AdministratorHttpServer().listen(3000);
+rusher.ManagerHttpServer().listen(3001);
 
-console.log('server running on: ' + options.port);
+console.log('Administrator server running on 3000.');
+console.log('Manager server running on 3001.');

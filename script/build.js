@@ -9,10 +9,14 @@ const PACKAGES = [
 		name: 'CZBRusher',
 		pathname: path.join(__dirname, '../packages/czbank-rusher-server'),
 		async builded() {
-			const workbenchDistPath = path.join(__dirname, '../packages/czbank-rusher-workbench/dist');
-			const wwwPath = path.join(publicPath, 'www');
+			const DistPath = {
+				administrator:  path.join(__dirname, '../packages/czbank-rusher-workbench/dist'),
+				manager: path.join(__dirname, '../packages/czbank-rusher-manager-client/dist')
+			};
 
-			await fs.copy(workbenchDistPath, wwwPath);
+			for (const name in DistPath) {
+				await fs.copy(DistPath[name], path.join(publicPath, `www/${name}`));
+			}
 
 			// const sqlite3Path = require.resolve('leveldown');
 			// const prebuildsPath = path.join(sqlite3Path, '../prebuilds');
