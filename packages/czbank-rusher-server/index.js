@@ -11,6 +11,7 @@ const RusherSequelize = require('./src/sequelize');
 const utils = require('./src/utils');
 const ReportResolver = require('./src/ReportResolver');
 const constant = require('./src/constant');
+const Ticket = require('./src/Ticket');
 
 require('sqlite3');
 
@@ -66,14 +67,14 @@ module.exports = Duck({
 	]
 }, function CZBankRusher({
 	injection, Log, Web, Workspace, product
-}, options) {
+}, options = {}) {
 	injection.Utils = utils;
 	injection.ReportResolver = ReportResolver;
 
 	const finalOptions = normlize(options);
 
 	Workspace.root = finalOptions.workspace.root;
-	Workspace.setPath('database', finalOptions.workspace.database);
+	Workspace.setPath('database', finalOptions.database.path);
 	Workspace.setPath('log', finalOptions.workspace.log);
 	Workspace.setPath('file', finalOptions.workspace.file);
 	Workspace.setPath('temp', finalOptions.workspace.temp);
@@ -88,6 +89,7 @@ module.exports = Duck({
 	injection.Model = Model;
 	injection.options = finalOptions;
 	injection.Constant = constant;
+	injection.Ticket = Ticket({ timeout: finalOptions.ticket.timeout });
 
 	Log();
 
@@ -101,7 +103,26 @@ module.exports = Duck({
 		manager: DuckLog.Adapter.HttpServer(Application.manager, _ => Log.manager(_))
 	};
 
-	return {
+	const rusher = {
+		start() {
+			const _ = finalOptions;
+
+			rusher.AdministratorHttpServer()
+				.listen(_.server.administrator.port.http, _.server.administrator.host);
+
+			rusher.ManagerHttpServer()
+				.listen(_.server.manager.port.http, _.server.manager.host);
+
+			if (finalOptions.server.administrator.cert) {
+				rusher.AdministratorHttpsServer()
+					.listen(_.server.administrator.port.https, _.server.administrator.host);
+			}
+
+			if (finalOptions.server.manager.cert) {
+				rusher.ManagerHttpsServer()
+					.listen(_.server.manager.port.https, _.server.manager.host);
+			}
+		},
 		AdministratorHttpServer() {
 			return http.createServer(RequestListener.administrator);
 		},
@@ -114,7 +135,7 @@ module.exports = Duck({
 		ManagerHttpsServer() {
 			return https.createServer(RequestListener.manager);
 		},
-		async install(options) {
+		async install() {
 			await Workspace.buildAll();
 			await sequelize.sync({ force: true });
 		},
@@ -122,4 +143,6 @@ module.exports = Duck({
 			return sequelize;
 		}
 	};
+
+	return rusher;
 });

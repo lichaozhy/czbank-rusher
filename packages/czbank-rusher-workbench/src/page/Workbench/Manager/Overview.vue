@@ -16,6 +16,15 @@
 		</b-input-group>
 
 		<b-button
+			variant="success"
+			class="mr-4"
+			:disabled="selectedManagerId === null"
+			@click="requestTicketAndShow"
+		><b-icon-emoji-sunglasses
+			class="mr-1"
+		/>签到</b-button>
+
+		<b-button
 			variant="primary"
 			class="mr-auto"
 			:disabled="selectedManagerId === null"
@@ -24,7 +33,7 @@
 				params: { managerId: selectedManagerId }
 			}"
 		><b-icon-person-fill
-			class="mr-2"
+			class="mr-1"
 		/>查看客户经理</b-button>
 
 		<b-button
@@ -33,7 +42,7 @@
 			:disabled="!isDeletable"
 			@click="deleteManager(selectedManagerId)"
 		><b-icon-person-dash-fill
-			class="mr-2"
+			class="mr-1"
 		/>{{ $t('c.base.delete') }}</b-button>
 	</b-button-toolbar>
 
@@ -123,17 +132,38 @@
 		</template>
 
 	</b-table>
+
+	<b-modal
+		title="请扫描您的登陆二维码"
+		ref="ticket"
+		size="sm"
+		centered
+		hide-header-close
+		hide-footer
+		header-class="text-center d-block"
+	>
+		<div class="text-center">
+			<canvas
+				width="128"
+				height="128"
+				ref="qrcode"
+			></canvas>
+		</div>
+	</b-modal>
 </div>
 
 </template>
 
 <script>
+import qrcode from 'qrcode';
+
 export default {
 	data() {
 		return {
 			keyword: '',
 			managerPreviewList: [],
-			selectedManagerId: null
+			selectedManagerId: null,
+			service: { origin: '', path: '' }
 		};
 	},
 	computed: {
@@ -252,6 +282,20 @@ export default {
 		}
 	},
 	methods: {
+		async requestTicketAndShow() {
+			const ticket = await this.$rusher.backend.Ticket.create({
+				managerId: this.selectedManagerId
+			});
+
+			await this.$refs.ticket.show();
+			const url = `${this.service.origin}${this.service.path}${ticket.key}`;
+
+			qrcode.toCanvas(this.$refs.qrcode, url, err => {
+				if (err !== null) {
+					console.log(err);
+				}
+			});
+		},
 		selectManager(rows) {
 			this.selectedManagerId = rows.length > 0 ? rows[0].id : null;
 		},
@@ -268,10 +312,14 @@ export default {
 				name: 'workbench.manager.detail',
 				params: { managerId }
 			});
+		},
+		async getManagerServiceMeta() {
+			this.service = await this.$rusher.backend.Meta.Manager.get();
 		}
 	},
 	mounted() {
 		this.getManagerList();
+		this.getManagerServiceMeta();
 	}
 };
 </script>

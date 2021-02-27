@@ -6,10 +6,12 @@ import https from 'https'
 
 declare module '@produck/duck' {
 	interface InstalledInjection {
+		options: object
 		Sequelize: Sequelize.Sequelize
 		Utils: CZBankRusher.Utils
 		Model: CZBankRusher.Model
-		ReportResolver: CZBankRusher.Report.FileReader,
+		ReportResolver: CZBankRusher.Report.FileReader
+		Ticket: CZBankRusher.TicketRegistry
 		Constant: {
 			ADJUSTMENT: {
 				TYPE: {
@@ -80,6 +82,7 @@ declare namespace CZBankRusher {
 	}
 
 	interface CZBankRusher {
+		start(): void
 		AdministratorHttpServer(): http.Server
 		AdministratorHttpsServer(): http.Server
 		ManagerHttpServer(): https.Server
@@ -91,6 +94,11 @@ declare namespace CZBankRusher {
 	interface Utils {
 		encodeSHA256(raw: Buffer | string): string
 		randomInt(from: number, to: number): number
+	}
+
+	interface TicketRegistry {
+		get(key: string): any
+		request(data: any): string
 	}
 
 	interface Model {

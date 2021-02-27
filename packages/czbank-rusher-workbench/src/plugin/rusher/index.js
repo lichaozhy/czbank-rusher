@@ -40,6 +40,20 @@ export default {
 			getProduct() {
 				return agent.get('/').then(pickData);
 			},
+			Meta: {
+				Manager: {
+					get() {
+						return agent.get('/meta/manager').then(pickData);
+					}
+				}
+			},
+			Ticket: {
+				create(options) {
+					return agent.post('/ticket', {
+						managerId: options.managerId
+					}).then(pickData);
+				}
+			},
 			Customer: Object.assign(function ICustomer() {
 
 			}, {

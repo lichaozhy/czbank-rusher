@@ -1,11 +1,16 @@
 const { Router } = require('@produck/duck-web-koa-router');
 
 module.exports = Router(function CZBankManagerPrincipal(router, {
-	Model, AccessControl: $AC
+	Model, AccessControl: $AC, Ticket
 }) {
 	router.get('/:token', $AC('principal.authenticate'), async (ctx) => {
 		const { token } = ctx.params;
-		const manager = await Model.Manager.findOne();
+		const managerId = Ticket.get(token);
+		const manager = await Model.Manager.findOne({ where: { id: managerId } });
+
+		if (!manager) {
+			throw new Error('Manager ID invalid.');
+		}
 
 		ctx.session.managerId = manager.id;
 		ctx.redirect('/');
