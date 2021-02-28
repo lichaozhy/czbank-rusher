@@ -18,11 +18,19 @@
 				/>
 			</b-input-group>
 
+			<b-pagination
+				class="my-1"
+				size="sm"
+				limit="3"
+				v-model="page.current"
+				:total-rows="page.total"
+				:per-page="page.per"
+			></b-pagination>
+
 			<b-table
-				sticky-header
 				head-variant="light"
 				id="customer-table"
-				class="w-auto mt-2 border"
+				class="w-100 mt-1"
 				:fields="fieldListOfCustomerPoint"
 				:items="itemListOfCustomerPoint"
 				small
@@ -32,7 +40,10 @@
 				select-mode="single"
 				:filter="keyword"
 				@row-selected="select"
-				style="min-height:360px"
+				:per-page="page.per"
+				:current-page="page.current"
+				@filtered="updateTotal"
+				ref="selector"
 			>
 			</b-table>
 		</b-col>
@@ -96,7 +107,12 @@ export default {
 			list: [],
 			keyword: '',
 			selectedId: null,
-			performanceList: []
+			performanceList: [],
+			page: {
+				current: 1,
+				total: 0,
+				per: 10
+			}
 		};
 	},
 	watch: {
@@ -166,12 +182,16 @@ export default {
 		}
 	},
 	methods: {
+		updateTotal() {
+			this.page.total = this.$refs.selector.filteredItems.length;
+		},
 		select(rows) {
 			this.selectedId = rows.length ? rows[0].id : null;
 			this.$emit('select', this.selectedCustomer);
 		},
-		refresh() {
-			this.getCustomerPointList();
+		async refresh() {
+			await this.getCustomerPointList();
+			this.updateTotal();
 		},
 		async getCustomerPointList() {
 			this.list = await this.$rusher.backend.Point.query();

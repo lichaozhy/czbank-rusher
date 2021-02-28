@@ -6,6 +6,11 @@ module.exports = Router(function CZBankManagerPrincipal(router, {
 	router.get('/:token', $AC('principal.authenticate'), async (ctx) => {
 		const { token } = ctx.params;
 		const managerId = Ticket.get(token);
+
+		if (managerId === null) {
+			throw new Error('Invalid token');
+		}
+
 		const manager = await Model.Manager.findOne({ where: { id: managerId } });
 
 		if (!manager) {
