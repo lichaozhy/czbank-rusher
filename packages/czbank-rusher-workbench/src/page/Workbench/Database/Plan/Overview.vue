@@ -7,11 +7,15 @@
 	<h2>计划总览</h2>
 	<b-button-toolbar>
 		<b-button
-			variant="danger"
+			class="mr-1"
+			variant="success"
+			@click="requestCreatingPlan"
+		>新建计划</b-button>
+		<b-button
 			class="mr-auto"
-			:disabled="selectedPlanId === null"
-			@click="deletePlan"
-		>废除计划</b-button>
+			variant="primary"
+			@click="getPlanList"
+		>刷新</b-button>
 
 		<b-button
 			variant="primary"
@@ -28,17 +32,11 @@
 		>上传到计划</b-button>
 
 		<b-button
-			class="mr-1"
-			variant="primary"
-			@click="getPlanList"
-		>刷新</b-button>
-
-		<b-button
+			variant="danger"
 			class="mr-0"
-			variant="success"
-			@click="requestCreatingPlan"
-		>新建计划</b-button>
-
+			:disabled="selectedPlanId === null"
+			@click="deletePlan"
+		>废除计划</b-button>
 	</b-button-toolbar>
 
 	<b-table

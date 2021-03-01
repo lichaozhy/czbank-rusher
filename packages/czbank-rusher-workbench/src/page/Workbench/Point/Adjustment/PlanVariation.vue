@@ -3,7 +3,7 @@
 <div style="min-height: 1000px">
 	<h1>{{ $t('menu.point.adjustment.planVariation.label') }}</h1><hr>
 	<ul class="list-unstyled">
-		<li>贡献度降低的客户，将不被累积积分</li>
+		<li>贡献度降低的客户，将不被累积积分，也不会被扣除积分</li>
 		<li>符合要求的用户将被追加<code
 			class="mx-1"
 		>point = Contribution<sub>target</sub> - Contribution<sub>base</sub></code>个积分</li>

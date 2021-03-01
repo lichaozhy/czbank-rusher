@@ -3,6 +3,10 @@
 <div>
 	<h1>客户总览</h1><hr>
 
+	<ul class="list-unstyled">
+		<li>{{ $t('d.contributionExp') }}</li>
+	</ul>
+
 	<b-button-toolbar>
 		<b-input-group
 			prepend="过滤"

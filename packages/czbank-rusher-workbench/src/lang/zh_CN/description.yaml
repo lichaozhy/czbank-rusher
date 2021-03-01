@@ -20,3 +20,5 @@ plan:
 
 file:
   description: 补充该文件的其他情况
+
+contributionExp: 贡献度 = 四舍五入((存款日均×2 + 非存款日均×1) / 10000)
