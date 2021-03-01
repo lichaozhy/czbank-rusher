@@ -115,6 +115,11 @@
 		></b-pagination>
 	</b-button-toolbar>
 
+	<ul class="list-unstyled">
+		<li>总计受影响客户：<b class="mx-1">{{ itemListOfPreview.length }}</b>位</li>
+		<li>总共发放积分：<b class="mx-1">{{ totalPoint }}</b>点</li>
+	</ul>
+
 	<b-table
 		head-variant="light"
 		:items="itemListOfPreview"
@@ -295,6 +300,9 @@ export default {
 					createdAt: new Date(batch.createdAt)
 				};
 			});
+		},
+		totalPoint() {
+			return this.Preview.list.reduce((sum, preview) => sum + preview.delta, 0);
 		},
 		itemListOfPreview() {
 			return this.Preview.list.map(preview => {

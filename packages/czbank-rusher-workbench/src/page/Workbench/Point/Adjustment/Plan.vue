@@ -75,6 +75,11 @@
 
 	<h3 class="mt-3">受影响的客户</h3>
 
+	<ul class="list-unstyled">
+		<li>总计受影响客户：<b class="mx-1">{{ itemListOfPreview.length }}</b>位</li>
+		<li>总共发放积分：<b class="mx-1">{{ totalPoint }}</b>点</li>
+	</ul>
+
 	<b-button-toolbar class="mb-3">
 		<b-input-group
 			prepend="过滤"
@@ -215,6 +220,9 @@ export default {
 				{ key: 'otherAverage', label: '非存款日均', sortable: true, class: 'col-number' },
 				{ key: 'blank', label: '', class: 'col-auto-blank' }
 			];
+		},
+		totalPoint() {
+			return this.Preview.list.reduce((sum, preview) => sum + preview.contribution.value, 0);
 		},
 		itemListOfPreview() {
 			return this.Preview.list.map(preview => {
