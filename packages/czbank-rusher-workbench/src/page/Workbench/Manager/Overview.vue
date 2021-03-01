@@ -47,6 +47,7 @@
 	</b-button-toolbar>
 
 	<b-table
+		head-variant="light"
 		id="manager-overview-table"
 		class="mt-3"
 		:fields="managerTableField"
@@ -183,79 +184,79 @@ export default {
 				{
 					key: 'name',
 					label: this.$t('c.manager.name'),
-					class: 'col-manager-name',
+					class: 'col-tiny-string',
 					sortable: true
 				},
 				{
 					key: 'code',
 					label: this.$t('c.manager.code'),
-					class: 'col-manager-code',
+					class: 'col-short-string',
 					sortable: true
 				},
 				{
 					key: 'customerNumber',
 					label: this.$t('c.manager.customerNumber'),
-					class: 'col-matrix',
+					class: 'col-short-number',
 					sortable: true,
 				},
 				{
 					key: 'average',
 					label: '金融资产日均',
 					sortable: true,
-					class: 'col-matrix'
+					class: 'col-number'
 				},
 				{
 					key: 'balance',
 					label: '金融资产余额',
 					sortable: true,
-					class: 'col-matrix'
+					class: 'col-number'
 				},
 				{
 					key: 'contribution',
 					label: '贡献度',
 					sortable: true,
-					class: 'col-matrix'
+					class: 'col-short-number'
 				},
 				{
 					key: 'depositRate',
 					label: '存款占比',
 					sortable: true,
-					class: 'col-matrix'
+					class: 'col-short-number'
 				},
 				{
 					key: 'depositAverage',
 					label: '存款日均',
 					sortable: true,
-					class: 'col-matrix'
+					class: 'col-short-number'
 				},
 				{
 					key: 'depositBalance',
 					label: '存款余额',
 					sortable: true,
-					class: 'col-matrix'
+					class: 'col-short-number'
 				},
 				{
 					key: 'nonDepositAverage',
 					label: '非存款日均',
 					sortable: true,
-					class: 'col-matrix'
+					class: 'col-short-number'
 				},
 				{
 					key: 'nonDepositBalance',
 					label: '非存款余额',
 					sortable: true,
-					class: 'col-matrix'
+					class: 'col-short-number'
 				},
 				{
 					key: 'lastDateAs',
 					label: '最新时点',
-					class: 'col-last-upload',
+					class: 'col-short-string',
 					sortable: true
 				},
 				{
 					key: 'blank',
 					label: '',
-					class: 'col-blank',
+					class: 'col-auto-blank',
 				}
 			];
 		},

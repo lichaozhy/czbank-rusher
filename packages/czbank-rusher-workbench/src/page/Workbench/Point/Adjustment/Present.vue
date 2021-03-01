@@ -10,6 +10,7 @@
 
 	<h3 class="mt-3">可用的{{ $t('c.present.className') }}</h3>
 	<b-table
+		head-variant="light"
 		id="present-table"
 		class="mt-3"
 		ref="present-table"
@@ -161,7 +162,7 @@ export default {
 				{ key: 'point', label: '积分单价', sortable: true, class: 'col-short-number' },
 				{ key: 'price', label: '采购单价', sortable: true, class: 'col-short-number' },
 				{ key: 'usageCount', label: '已送出', sortable: true, class: 'col-short-number' },
-				{ key: 'blank', label: '', class: 'col-blank' }
+				{ key: 'blank', label: '', class: 'col-auto-blank' }
 			];
 		},
 		itemListOfPresent() {

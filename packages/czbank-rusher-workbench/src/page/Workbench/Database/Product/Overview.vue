@@ -51,6 +51,7 @@
 	</b-button-toolbar>
 
 	<b-table
+		head-variant="light"
 		id="product-list"
 		class="mt-3"
 		bordered

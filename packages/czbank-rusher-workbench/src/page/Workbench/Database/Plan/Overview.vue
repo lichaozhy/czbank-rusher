@@ -42,6 +42,7 @@
 	</b-button-toolbar>
 
 	<b-table
+		head-variant="light"
 		id="plan-list"
 		class="mt-3"
 		ref="plan-table"

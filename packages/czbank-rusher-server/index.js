@@ -138,6 +138,7 @@ module.exports = Duck({
 		async install() {
 			await Workspace.buildAll();
 			await sequelize.sync({ force: true });
+			injection.Ticket.destroy();
 		},
 		get sequelize() {
 			return sequelize;

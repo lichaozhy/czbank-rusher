@@ -33,6 +33,7 @@
 	</b-button-toolbar>
 
 	<b-table
+		head-variant="light"
 		:items="fileItemList"
 		:fields="fileTableFieldList"
 		:filter="keyword"

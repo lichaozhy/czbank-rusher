@@ -11,6 +11,7 @@
 
 	<h2>发放历史</h2>
 	<b-table
+		head-variant="light"
 		:items="itemListOfBatch"
 		:fields="fieldListOfBatch"
 		small
@@ -115,6 +116,7 @@
 	</b-button-toolbar>
 
 	<b-table
+		head-variant="light"
 		:items="itemListOfPreview"
 		:fields="fieldListOfPreview"
 		small

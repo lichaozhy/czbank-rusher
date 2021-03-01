@@ -66,6 +66,7 @@
 	</b-button-toolbar>
 
 	<b-table
+		head-variant="light"
 		id="activity-table"
 		class="mt-3"
 		ref="activity-table"

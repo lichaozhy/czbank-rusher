@@ -74,6 +74,7 @@
 	</b-button-toolbar>
 
 	<b-table
+		head-variant="light"
 		id="manager-customer-table"
 		class="mt-3"
 		small
@@ -177,16 +178,16 @@ export default {
 		},
 		customerFieldList() {
 			return [
-				{ key: 'name', label: '姓名', },
-				{ key: 'contribution', label: '贡献度', sortable: true, class: 'text-right' },
-				{ key: 'rate', label: '存款占比', sortable: true, class: 'col-rate text-right' },
+				{ key: 'name', label: '姓名', class: 'col-short-string' },
+				{ key: 'contribution', label: '贡献度', sortable: true, class: 'col-short-number' },
+				{ key: 'rate', label: '存款占比', sortable: true, class: 'col-short-number text-right' },
 				{ key: 'average', label: '金融资产日均', sortable: true, class: 'col-total' },
 				{ key: 'balance', label: '金融资产余额', sortable: true, class: 'col-total' },
 				{ key: 'depositAverage', label: '存款日均', sortable: true, class: 'col-item' },
 				{ key: 'depositBalance', label: '存款余额', sortable: true, class: 'col-item' },
 				{ key: 'otherAverage', label: '非存款日均', sortable: true, class: 'col-item' },
 				{ key: 'otherBalance', label: '非存款余额', sortable: true, class: 'col-item' },
-				{ key: 'blank', label: '', class: 'col-blank' }
+				{ key: 'blank', label: '', class: 'col-auto-blank' }
 			];
 		}
 	},

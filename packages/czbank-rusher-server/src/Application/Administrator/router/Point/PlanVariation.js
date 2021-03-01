@@ -86,13 +86,13 @@ module.exports = Router(function CZBRusherPointPlanVariationRouter(router, {
 			createdAt: now
 		});
 
-		const adjustmentList = filteredList.map((preview, index) => {
+		const adjustmentList = filteredList.map((adjustment, index) => {
 			const nowtime = now.getTime();
 
 			return {
-				id: Utils.encodeSHA256(`adjustment-${preview.Customer.id}-${index}-${nowtime}`),
-				customerId: preview.Customer.id,
-				value: preview.CustomerContribution.contribution,
+				id: Utils.encodeSHA256(`adjustment-${adjustment.Customer.id}-${index}-${nowtime}`),
+				customerId: adjustment.Customer.id,
+				value: adjustment.delta,
 				type: ADJUSTMENT.TYPE.PLAN_VARIATION,
 				createdAt: now
 			};

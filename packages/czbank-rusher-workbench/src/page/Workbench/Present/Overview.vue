@@ -38,6 +38,7 @@
 	</b-button-toolbar>
 
 	<b-table
+		head-variant="light"
 		id="present-table"
 		class="mt-3"
 		ref="present-table"

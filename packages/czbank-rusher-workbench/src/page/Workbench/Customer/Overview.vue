@@ -42,6 +42,7 @@
 	</b-button-toolbar>
 
 	<b-table
+		head-variant="light"
 		id="customer-table"
 		class="mt-3"
 		small
@@ -148,17 +149,18 @@ export default {
 		},
 		customerFieldList() {
 			return [
-				{ key: 'name', label: '姓名', class: 'col-name'},
-				{ key: 'contribution', label: '贡献度', sortable: true, class: 'text-right' },
-				{ key: 'managerName', label: '客户经理', class: 'col-name'},
-				{ key: 'rate', label: '存款占比', sortable: true, class: 'col-rate text-right' },
-				{ key: 'average', label: '金融资产日均', sortable: true, class: 'col-total' },
-				{ key: 'balance', label: '金融资产余额', sortable: true, class: 'col-total' },
-				{ key: 'depositAverage', label: '存款日均', sortable: true, class: 'col-item' },
-				{ key: 'depositBalance', label: '存款余额', sortable: true, class: 'col-item' },
-				{ key: 'otherAverage', label: '非存款日均', sortable: true, class: 'col-item' },
-				{ key: 'otherBalance', label: '非存款余额', sortable: true, class: 'col-item' },
-				{ key: 'blank', label: '', class: 'col-blank' }
+				{ key: 'name', label: '姓名', class: 'col-tiny-string'},
+				{ key: 'contribution', label: '贡献度', sortable: true, class: 'col-short-number' },
+				{ key: 'point', label: '积分余额', sortable: true, class: 'col-short-number' },
+				{ key: 'managerName', label: '客户经理', class: 'col-short-string'},
+				{ key: 'rate', label: '存款占比', sortable: true, class: 'col-short-number' },
+				{ key: 'average', label: '金融资产日均', sortable: true, class: 'col-number' },
+				{ key: 'balance', label: '金融资产余额', sortable: true, class: 'col-number' },
+				{ key: 'depositAverage', label: '存款日均', sortable: true, class: 'col-number' },
+				{ key: 'depositBalance', label: '存款余额', sortable: true, class: 'col-number' },
+				{ key: 'otherAverage', label: '非存款日均', sortable: true, class: 'col-number' },
+				{ key: 'otherBalance', label: '非存款余额', sortable: true, class: 'col-number' },
+				{ key: 'blank', label: '', class: 'col-auto-blank' }
 			];
 		},
 		customerItem() {

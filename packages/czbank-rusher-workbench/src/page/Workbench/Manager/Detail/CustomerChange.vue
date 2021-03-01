@@ -3,6 +3,7 @@
 <div>
 	客户经理客户总览
 	<b-table
+		head-variant="light"
 		small
 		bordered
 		:fields="customerFieldList"
