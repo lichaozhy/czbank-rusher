@@ -63,13 +63,9 @@ const PRODUCT_LIST = [
 
 const { program } = require('commander');
 const CZBankRusher = require('../');
-const rusher = CZBankRusher();
 const utils = require('../src/utils');
 const fs = require('fs').promises;
 const path = require('path');
-
-const Product = rusher.sequelize.model('Product');
-const ProductDataSetting = rusher.sequelize.model('ProductDataSetting');
 
 program
 	.option('-c, --config', 'Config file path')
@@ -77,6 +73,11 @@ program
 
 (async function install() {
 	await fs.rmdir(path.resolve('public'), { recursive: true });
+
+	const rusher = CZBankRusher();
+	const Product = rusher.sequelize.model('Product');
+	const ProductDataSetting = rusher.sequelize.model('ProductDataSetting');
+
 	await rusher.install();
 
 	PRODUCT_LIST.forEach(options => {

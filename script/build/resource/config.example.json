@@ -1,0 +1,7 @@
+{
+	"server": {
+		"manager": {
+			"origin": "http://rusher.czbank.com:8000"
+		}
+	}
+}

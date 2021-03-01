@@ -11,7 +11,7 @@
     "deps:clean": "lerna clean -y",
     "build:administrator": "lerna run --scope=@czbank/czbank-rusher-workbench build",
     "build:manager": "lerna run --scope=@czbank/czbank-rusher-manager-client build",
-    "build:pkg": "node ./script/build.js",
+    "build:pkg": "node ./script/build",
     "build": "npm run deps:install && npm run build:administrator && npm run build:manager && npm run build:pkg"
   },
   "repository": {
