@@ -142,6 +142,13 @@ module.exports = Duck({
 		},
 		get sequelize() {
 			return sequelize;
+		},
+		get manifest() {
+			return {
+				'port.administrator': finalOptions.server.administrator.port.http,
+				'port.manager': finalOptions.server.manager.port.http,
+				'manager.origin': finalOptions.server.manager.origin
+			};
 		}
 	};
 

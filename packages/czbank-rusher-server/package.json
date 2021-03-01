@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/lichaozhy/czbank-rusher/issues"
   },
-  "bin": "bin/start.js",
+  "bin": "bin/rusher.js",
   "dependencies": {
     "@koa/router": "^10.0.0",
     "@produck/duck": "^0.6.4",
