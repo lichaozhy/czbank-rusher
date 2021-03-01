@@ -4,13 +4,23 @@ module.exports = Router(function CZBankRusherManagerPreviewRouter(router, {
 	Model, Resource
 }) {
 	router.get('/', async function getManagerPreviewList(ctx) {
+		const { dateAs } = ctx.query;
+
 		const list = await Model.Manager.findAll({
 			include: [{
 				model: Model.ManagerData,
 				require: false,
 				include: [
 					{ model: Model.ManagerContribution },
-					{ model: Model.File, include: [{ model: Model.Plan }] }
+					{
+						model: Model.File,
+						include: [{
+							model: Model.Plan,
+							where: dateAs ? { dateAs } : {},
+							required: true
+						}],
+						required: true
+					}
 				]
 			}]
 		});

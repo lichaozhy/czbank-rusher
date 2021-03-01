@@ -12,14 +12,9 @@ module.exports = function ManagerPreview(manager) {
 			value: null
 		},
 		customerNumber: null,
-		lastDateAs: null
 	};
 
 	if (ManagerData.length > 0) {
-		ManagerData.sort((managerDataA, managerDataB) => {
-			return managerDataA.File.Plan.dateAs - managerDataB.File.Plan.dateAs;
-		});
-
 		const { ManagerContribution: c, File } = ManagerData[0];
 
 		preview.contribution.deposit.balance = c.depositBalance;
@@ -32,7 +27,6 @@ module.exports = function ManagerPreview(manager) {
 		preview.contribution.value = c.contribution;
 
 		preview.customerNumber = File.customerNumber;
-		preview.lastDateAs = File.Plan.dateAs;
 	}
 
 	return preview;

@@ -118,8 +118,10 @@ export default {
 				};
 			}, {
 				Preview: {
-					query() {
-						return agent.get('/manager/preview').then(pickData);
+					query(options) {
+						return agent.get('/manager/preview', {
+							params: { dateAs: options.dateAs }
+						}).then(pickData);
 					}
 				},
 				query() {

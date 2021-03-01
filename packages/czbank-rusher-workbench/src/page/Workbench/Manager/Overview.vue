@@ -6,12 +6,25 @@
 	<b-button-toolbar>
 		<b-input-group
 			prepend="过滤"
-			class="mr-auto"
+			class="mr-1"
 			size="sm"
 		>
 			<b-form-input
 				v-model="keyword"
 				:placeholder="`${$t('c.manager.name')} / ${$t('c.manager.code')}`"
+			/>
+		</b-input-group>
+
+		<b-input-group
+			prepend="选择时点"
+			class="mr-auto"
+		>
+			<b-form-select
+				name="manager-name"
+				:options="dateAsOptionList"
+				v-model="dateAs"
+				:disabled="dateAs === null"
+				style="width:10em"
 			/>
 		</b-input-group>
 
@@ -164,7 +177,9 @@ export default {
 			keyword: '',
 			managerPreviewList: [],
 			selectedManagerId: null,
-			service: { origin: '', path: '' }
+			service: { origin: '', path: '' },
+			planList: [],
+			dateAs: null
 		};
 	},
 	computed: {
@@ -227,31 +242,25 @@ export default {
 					key: 'depositAverage',
 					label: '存款日均',
 					sortable: true,
-					class: 'col-short-number'
+					class: 'col-number'
 				},
 				{
 					key: 'depositBalance',
 					label: '存款余额',
 					sortable: true,
-					class: 'col-short-number'
+					class: 'col-number'
 				},
 				{
 					key: 'nonDepositAverage',
 					label: '非存款日均',
 					sortable: true,
-					class: 'col-short-number'
+					class: 'col-number'
 				},
 				{
 					key: 'nonDepositBalance',
 					label: '非存款余额',
 					sortable: true,
-					class: 'col-short-number'
-				},
-				{
-					key: 'lastDateAs',
-					label: '最新时点',
-					class: 'col-short-string',
-					sortable: true
+					class: 'col-number'
 				},
 				{
 					key: 'blank',
@@ -280,9 +289,25 @@ export default {
 					lastDateAs: preview.lastDateAs
 				};
 			});
+		},
+		dateAsOptionList() {
+			if (this.planListSortedByDateAs.length === 0) {
+				return [{ value: null, text: '无可用的时点' }];
+			} else {
+				return this.planListSortedByDateAs.map(plan => {
+					return { value: plan.dateAs, text: plan.dateAs };
+				});
+			}
+		},
+		planListSortedByDateAs() {
+			return this.planList.slice(0).sort((a, b) => a.dateAs < b.dateAs ? 1 : -1);
 		}
 	},
 	methods: {
+		async getPlanList() {
+			this.planList = await this.$rusher.backend.Plan.query();
+			this.dateAs = this.planListSortedByDateAs[0].dateAs;
+		},
 		async requestTicketAndShow() {
 			const ticket = await this.$rusher.backend.Ticket.create({
 				managerId: this.selectedManagerId
@@ -301,7 +326,9 @@ export default {
 			this.selectedManagerId = rows.length > 0 ? rows[0].id : null;
 		},
 		async getManagerList() {
-			this.managerPreviewList = await this.$rusher.backend.Manager.Preview.query();
+			this.managerPreviewList = await this.$rusher.backend.Manager.Preview.query({
+				dateAs: this.dateAs === null ? undefined : this.dateAs
+			});
 		},
 		async deleteManager(managerId) {
 			this.selectedManagerId = null;
@@ -318,8 +345,17 @@ export default {
 			this.service = await this.$rusher.backend.Meta.Manager.get();
 		}
 	},
+	watch: {
+		dateAs(value) {
+			if (value === null) {
+				this.managerPreviewList = [];
+			} else {
+				this.getManagerList();
+			}
+		}
+	},
 	mounted() {
-		this.getManagerList();
+		this.getPlanList();
 		this.getManagerServiceMeta();
 	}
 };
