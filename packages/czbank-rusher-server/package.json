@@ -26,7 +26,6 @@
     "@produck/duck-web-koa-acl": "^0.2.7",
     "@produck/duck-web-koa-router": "^0.3.1",
     "@produck/duck-workspace": "^0.1.0",
-    "commander": "^7.1.0",
     "fs-extra": "^9.1.0",
     "koa": "^2.13.1",
     "koa-body": "^4.2.0",
@@ -37,6 +36,7 @@
     "koa-static": "^5.0.0",
     "sequelize": "^6.5.0",
     "sqlite3": "^5.0.2",
-    "xlsx": "^0.16.9"
+    "xlsx": "^0.16.9",
+    "yargs": "^16.2.0"
   }
 }

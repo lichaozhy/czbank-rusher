@@ -1,4 +1,4 @@
-const PRODUCT_LIST = [
+module.exports = [
 	{
 		name: '增金宝',
 		code: 'ZENG_JIN_BAO',
@@ -60,36 +60,3 @@ const PRODUCT_LIST = [
 		averageIndex: 'AD'
 	}
 ];
-
-const { program } = require('commander');
-const CZBankRusher = require('../');
-const utils = require('../src/utils');
-const fs = require('fs').promises;
-const path = require('path');
-
-program
-	.option('-c, --config', 'Config file path')
-	.parse(process.argv);
-
-(async function install() {
-	await fs.rmdir(path.resolve('public'), { recursive: true });
-
-	const rusher = CZBankRusher();
-	const Product = rusher.sequelize.model('Product');
-	const ProductDataSetting = rusher.sequelize.model('ProductDataSetting');
-
-	await rusher.install();
-
-	PRODUCT_LIST.forEach(options => {
-		const { name, code, balanceIndex, averageIndex } = options;
-		const id = utils.encodeSHA256(`${name}${code}${Date.now()}`);
-
-		Product.create({ id, name, code, description: name });
-
-		ProductDataSetting.create({
-			productId: id,
-			fieldIndexOfAverage: averageIndex,
-			fieldIndexOfBalance: balanceIndex
-		});
-	});
-}());
